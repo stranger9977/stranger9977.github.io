@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://stranger9977.github.io/sitemap.xml

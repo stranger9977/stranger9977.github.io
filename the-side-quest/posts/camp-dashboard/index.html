@@ -337,6 +337,21 @@
     .teamgrid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 6px; }
     .card2 .top .rt { margin-left: 0; }
   }
+
+  /* Site nav — from any post, the way back to the rest of the site has to be
+     obvious. Bracket nav mirrors the index pages; colour is the post's own link
+     token so it sits inside the article's theme instead of fighting it. */
+  .sitenav { display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+    gap:0 2px; margin-top:12px; position:relative;
+    font-family:"Courier New",Courier,monospace; font-size:.8rem; }
+  .sitenav a { display:inline-flex; align-items:center; min-height:44px; padding:0 .5em;
+    color:var(--honey-text); text-decoration:none; border:1px solid transparent; }
+  .sitenav a::before { content:"[ "; }
+  .sitenav a::after  { content:" ]"; }
+  .sitenav a:hover { border-color:currentColor; outline:1px solid currentColor; outline-offset:2px; }
+  .sitenav a:focus-visible { outline:2px solid currentColor; outline-offset:2px; border-color:currentColor; }
+  .sitenav .sep { color:var(--muted); }
+  @media (max-width:520px) { .sitenav .sep { display:none; } }
 </style>
 </head>
 <body class="viz-root">
@@ -351,6 +366,15 @@
        dated record loaded and there is nothing to stamp -->
   <div class="issue">Companion to No. 001 · Fantasy Football<span id="issue-stamp"></span></div>
   <div class="stripe"></div>
+      <nav class="sitenav" aria-label="Site navigation">
+        <a href="../../index.html">home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../../blog/index.html">blog</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../../tools/index.html">tools</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../../prior-work/index.html">prior work</a>
+      </nav>
 </div>
 
 <div class="kicker">All 32 Clubs · One Board</div>

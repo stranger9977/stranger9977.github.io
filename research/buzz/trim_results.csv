@@ -1,0 +1,7 @@
+floor,floor_label,buzz_hits,buzz_n,silent_hits,silent_n,buzz_rate,silent_rate,stratum_lift,mh_pooled_lift,raw_pooled_lift
+1_none,no floor,18,125,45,3986,14.4,1.129,12.76,9.91,11.38
+2_played_ppr_gt0,>=1 game with >0 PPR prior yr,15,102,40,2207,14.71,1.812,8.11,8.38,8.73
+3_ppg_ge1_g4,PPG>=1 (>=4 games) prior yr,15,91,37,1542,16.48,2.399,6.87,7.84,8.04
+4_ppg_ge2_g4,PPG>=2 (>=4 games),15,89,34,1224,16.85,2.778,6.07,7.44,7.7
+5_ppg_ge4_g4,PPG>=4 (>=4 games),11,63,24,641,17.46,3.744,4.66,6.88,7.43
+6_week1_53,on week-1 53-man (study season),18,109,43,1551,16.51,2.772,5.96,7.26,7.48

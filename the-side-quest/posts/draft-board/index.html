@@ -237,6 +237,21 @@
     html { scroll-behavior:auto; }
     * { transition:none !important; animation:none !important; }
   }
+
+  /* Site nav — from any post, the way back to the rest of the site has to be
+     obvious. Bracket nav mirrors the index pages; colour is the post's own link
+     token so it sits inside the article's theme instead of fighting it. */
+  .sitenav { display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+    gap:0 2px; margin-top:12px; position:relative;
+    font-family:"Courier New",Courier,monospace; font-size:.8rem; }
+  .sitenav a { display:inline-flex; align-items:center; min-height:44px; padding:0 .5em;
+    color:var(--accent); text-decoration:none; border:1px solid transparent; }
+  .sitenav a::before { content:"[ "; }
+  .sitenav a::after  { content:" ]"; }
+  .sitenav a:hover { border-color:currentColor; outline:1px solid currentColor; outline-offset:2px; }
+  .sitenav a:focus-visible { outline:2px solid currentColor; outline-offset:2px; border-color:currentColor; }
+  .sitenav .sep { color:var(--muted); }
+  @media (max-width:520px) { .sitenav .sep { display:none; } }
 </style></head>
 <body><div id="progress"></div>
 <div class="wrap">
@@ -244,11 +259,20 @@
 <div class="masthead">
   <div class="brand"><a href="../../index.html">THE SIDE QUEST<span class="dot">.</span></a></div>
   <div class="tag">Interactive sports analytics, one rabbit hole at a time.</div>
-  <div class="issue">No. 004 &middot; NFL Draft &middot; 2026</div>
+  <div class="issue">No. 005 &middot; NFL Draft &middot; 2026</div>
   <div class="stripe"></div>
+      <nav class="sitenav" aria-label="Site navigation">
+        <a href="../../index.html">home</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../../blog/index.html">blog</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../../tools/index.html">tools</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../../prior-work/index.html">prior work</a>
+      </nav>
 </div>
 
-<div class="kicker">No. 004 &middot; The Draft Board</div>
+<div class="kicker">No. 005 &middot; The Draft Board</div>
 <h1 class="headline">The Quasi-Sharpe Draft Board</h1>
 <p class="stub inline"><b>Dek &mdash; not written yet</b>The standfirst for this post is Nick&rsquo;s to write.</p>
 <!-- NICK TO WRITE: dek / standfirst, one or two lines under the headline -->

@@ -412,6 +412,89 @@
   .stub .lab { font-size:.66rem; font-weight:800; letter-spacing:.14em;
     text-transform:uppercase; color:var(--honey-text); }
   .stub .txt { font-size:.86rem; color:var(--muted); }
+
+  /* ── Lean meter ───────────────────────────────────────────────────────
+     The coloured fill has to encode the split. It used to be a hard 50/50
+     with only the needle moving, so the bar read "WR is winning" while the
+     copy said corner. --lean is the right side's share; left takes the rest. */
+  .meter { --lean: 50%; }
+  .meter .side.l { flex: 0 0 calc(100% - var(--lean)); min-width: 0; }
+  .meter .side.r { flex: 0 0 var(--lean); min-width: 0; }
+  @media (prefers-color-scheme: dark) {
+    .meter .side.r { background: #27323f; }
+    .meter { border: 1px solid var(--muted); } }
+  .meter .needle { left: calc(100% - var(--lean)); }
+  .meter .side .pct { font-variant-numeric: tabular-nums; opacity: .92; margin-left: 7px; }
+  .meter .side.r .pct { margin: 0 7px 0 0; order: -1; }
+
+  /* ── Who won the day (QB duel) ────────────────────────────────────── */
+  .dayw { margin: 12px 0 2px; }
+  .dayw-h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--honey-text); margin-bottom: 7px; }
+  .dayw-h .tally { color: var(--muted); letter-spacing: 0.06em; }
+  .dayw-row { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .dayw-row li { flex: 1; display: flex; flex-direction: column; align-items: stretch; min-width: 0; }
+  .dayw-row .bar { height: 40px; display: flex; align-items: center; justify-content: center;
+    font-family: system-ui, sans-serif; font-weight: 800; font-size: 0.74rem; border-radius: 6px; }
+  .dayw-row .jj .bar { background: #b8860b; color: #14100a; }
+  .dayw-row .km .bar { background: #6b4fae; color: #fff; }
+  .dayw-row .dt { font-family: system-ui, sans-serif; font-size: 0.62rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); text-align: center; margin-top: 5px; }
+  .dayw-note { font-family: system-ui, sans-serif; font-size: 0.7rem; color: var(--muted);
+    margin: 8px 0 0; }
+
+  /* ── Teal vs black jersey tracker (Hunter) ────────────────────────── */
+  .jers { margin: 12px 0 2px; }
+  .jers-h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--honey-text); margin-bottom: 7px; }
+  .jers-h .upd { color: var(--muted); letter-spacing: 0.06em; font-weight: 700; }
+  .jers-row { display: flex; gap: 6px; list-style: none; margin: 0 0 10px; padding: 0; }
+  .jers-row li { flex: 1; min-width: 0; }
+  .jers-row .chip { display: flex; height: 34px; border-radius: 6px; overflow: hidden; }
+  .jers-row .chip i { flex: 1; display: block; }
+  .jers-row .chip .teal { background: #006778; }
+  /* the club's black (#101820) is within a hair of the dark card surface, so the
+     black half of a chip read as empty space. Lift it in dark mode only; on cream
+     the true club colour is already unmistakable. */
+  .jers { --jet: #101820; }
+  @media (prefers-color-scheme: dark) { .jers { --jet: #27323f; } }
+  .jers-row .chip { border: 1px solid var(--muted); }
+  .jers-row .chip .black { background: var(--jet); border-left: 1px solid var(--muted); }
+  .jers-row .dt { display: block; font-family: system-ui, sans-serif; font-size: 0.62rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    text-align: center; margin-top: 5px; }
+  .jsbar { display: flex; height: 30px; border-radius: 6px; overflow: hidden;
+    font-family: system-ui, sans-serif; font-weight: 800; font-size: 0.7rem; }
+  .jsbar span { display: flex; align-items: center; white-space: nowrap; min-width: 0; }
+  .jsbar .off { background: #006778; color: #fff; padding-left: 10px; }
+  .jsbar { border: 1px solid var(--muted); }
+  .jsbar .def { background: var(--jet); color: #fff; justify-content: flex-end;
+    padding-right: 10px; border-left: 1px solid var(--muted); }
+  .jers-note { font-family: system-ui, sans-serif; font-size: 0.7rem; color: var(--muted);
+    margin: 8px 0 0; }
+  @media (max-width: 460px) {
+    .dayw-row .bar { height: 34px; font-size: 0.68rem; }
+    .jsbar { font-size: 0.64rem; }
+  }
+
+  /* Watchlist table: three columns of prose will not fit a phone, and this table
+     never got the stacking treatment the other pages did -- it pushed the page
+     ~17px sideways at 320px. Below 520px each row becomes a card. */
+  @media (max-width: 520px) {
+    table, tbody, tr, td { display: block; width: 100%; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+    tr { border: 1px solid var(--grid); padding: 10px 12px; margin: 0 0 10px; }
+    td { border-bottom: 0; padding: 4px 0; overflow-wrap: anywhere; }
+    td[data-label]::before { content: attr(data-label); display: block;
+      font-family: system-ui, sans-serif; font-size: 0.62rem; font-weight: 800;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 2px; }
+    td:first-child { font-weight: 700; }
+    td:first-child::before { display: none; }
+  }
 </style>
 </head>
 <body class="viz-root">
@@ -455,7 +538,21 @@
     <p>Nine months after the knee injury that ended his rookie year ten games early, Hunter is a full participant, ten pounds heavier, clocked at 22.6 mph. The tell from last summer: he leaned into one side of the ball early in camp before going two-way. So the tracker watches for the lean.</p>
     <div class="trk">
       <div class="trk-h"><span>WR ↔ CB Lean Meter</span><span class="upd">Updated Aug 2</span></div>
-      <div class="meter"><div class="side l">WR</div><div class="side r">CB</div><div class="needle cb" style="left:61%"></div></div>
+      <div class="meter" style="--lean:60.7%" role="img" aria-label="Snap split through four days: 22 offense, 39 percent; 34 defense, 61 percent. Lean: corner."><div class="side l">WR<span class="pct">39%</span></div><div class="side r">CB<span class="pct">61%</span></div><div class="needle cb"></div></div>
+      <div class="jers">
+        <div class="jers-h"><span>Teal vs black, by day</span><span class="upd">Through Aug 2</span></div>
+        <ol class="jers-row">
+          <li><span class="chip" role="img" aria-label="July 29: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Jul 29</span></li>
+          <li><span class="chip" role="img" aria-label="July 30: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Jul 30</span></li>
+          <li><span class="chip" role="img" aria-label="July 31: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Jul 31</span></li>
+          <li><span class="chip" role="img" aria-label="August 2: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Aug 2</span></li>
+        </ol>
+        <div class="jsbar" role="img" aria-label="Four-day snap total: 22 offense, 34 defense">
+          <span class="off" style="width:39.3%">22 off</span>
+          <span class="def" style="width:60.7%">34 def</span>
+        </div>
+        <p class="jers-note">Both jerseys every practice day so far. Only the four-day snap total is broken out by side &mdash; no per-day split is reported.</p>
+      </div>
       <ul class="trk-log">
         <li><span class="d">AUG 2</span>Two catches, one over his shoulder down the sideline and one on a deep over, plus an INT. "Maybe most impressive practice of his career." Snap tracker through four days: 34 defense, 22 offense (Michael DiRocco, ESPN). Judy Battista of NFL Network saw the same thing: "deep catches, interceptions."</li>
         <li><span class="d">AUG 2</span>"Travis Hunter day!" per Frank Frangie, the team's radio voice, from the sideline: "If you were here, you saw it. If not, you'll read plenty about it on social. But, wow." Which side of the ball made the wow? Tonight's reports will say.</li>
@@ -499,6 +596,15 @@
         <div class="bars"><div class="bar jj" style="width:81%">13/16 · 81%</div><div class="bar km" style="width:73%">16/22 · 73%</div></div>
         <span class="lbl">7-on-7</span>
         <div class="bars"><div class="bar jj" style="width:83%">10/12 · 83%</div><div class="bar km" style="width:33%">4/12 · 33%</div></div>
+      </div>
+      <div class="dayw">
+        <div class="dayw-h"><span>Who won the day</span><span class="tally">McCarthy 2 &middot; Murray 1</span></div>
+        <ol class="dayw-row">
+          <li class="jj"><span class="bar" role="img" aria-label="July 30: McCarthy">JJ</span><span class="dt">Jul 30</span></li>
+          <li class="jj"><span class="bar" role="img" aria-label="July 31: McCarthy">JJ</span><span class="dt">Jul 31</span></li>
+          <li class="km"><span class="bar" role="img" aria-label="August 1: Murray">KM</span><span class="dt">Aug 1</span></li>
+        </ol>
+        <p class="dayw-note">One column per practice day the log below attributes a winner to.</p>
       </div>
       <ul class="trk-log">
         <li><span class="d">AUG 1</span>Murray "wins the day" at the fan-open practice. Battle officially live.</li>
@@ -923,24 +1029,24 @@
 <table>
   <thead><tr><th>Player</th><th>What camp is saying</th><th>Why it matters</th></tr></thead>
   <tbody>
-    <tr><td>Jonathon Brooks<br><span class="q">CAR RB</span></td><td class="q"><a href="https://www.fantasypros.com/2026/07/fantasy-football-4-nfl-training-camp-risers-fallers-2026/" target="_blank" rel="noopener">"He looks like the guy that I remember"</a></td><td>First-team reps with Chuba Hubbard underperforming</td></tr>
-    <tr><td>Quinshon Judkins<br><span class="q">CLE RB</span></td><td class="q"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"all three downs"</a></td><td>That's his RB coach, Duce Staley, describing the role</td></tr>
-    <tr><td>Luther Burden III<br><span class="q">CHI WR</span></td><td class="q"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"buy stock in Luther Burden"</a></td><td>Head coach Ben Johnson said it out loud</td></tr>
-    <tr><td>Isaiah Likely<br><span class="q">NYG TE</span></td><td class="q"><a href="https://www.footballguys.com/article/2026-fantasy-stock-watch-training-camp-edition" target="_blank" rel="noopener">"being targeted on the regular by his new quarterback"</a></td><td>Could lead the Giants in targets if Nabers misses time</td></tr>
-    <tr><td>Braelon Allen<br><span class="q">NYJ RB</span></td><td class="q"><a href="https://wolfsports.com/fantasy/2026-fantasy-football-rankings-stock-up-stock-down-july-31/" target="_blank" rel="noopener">"bulked to 250 lbs, impressed in camp"</a></td><td>Case building for a sizable role</td></tr>
-    <tr><td>Blake Corum<br><span class="q">LAR RB</span></td><td class="q"><a href="https://wolfsports.com/fantasy/2026-fantasy-football-rankings-stock-up-stock-down-july-31/" target="_blank" rel="noopener">"stud"</a></td><td>Expected to be a big factor in the Rams backfield</td></tr>
-    <tr><td>Malik Washington<br><span class="q">MIA WR</span></td><td class="q"><a href="https://wolfsports.com/fantasy/2026-fantasy-football-rankings-stock-up-stock-down-july-31/" target="_blank" rel="noopener">"do-it-all weapon"</a></td><td>Being prioritized in Miami's offense</td></tr>
-    <tr><td>Bhayshul Tuten<br><span class="q">JAX RB</span></td><td class="q"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"picking up steam"</a></td><td>Committee opportunity with Chris Rodriguez hurt</td></tr>
-    <tr><td>Jaylin Noel<br><span class="q">HOU WR</span></td><td class="q"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"consistently making plays"</a></td><td>Depth receiver pushing into the rotation</td></tr>
-    <tr><td>Zachariah Branch<br><span class="q">ATL WR</span></td><td class="q"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"nightmare for opposing cornerbacks"</a></td><td>Deep-threat role forming</td></tr>
-    <tr><td>De'Zhaun Stribling<br><span class="q">SF WR</span></td><td class="q"><a href="https://www.fantasypros.com/2026/07/fantasy-football-4-nfl-training-camp-risers-fallers-2026/" target="_blank" rel="noopener">"great routes... strength and creating separation"</a></td><td>Christian Kirk's calf injury opened the door</td></tr>
-    <tr><td>Kaelon Black<br><span class="q">SF RB</span></td><td class="q"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"now No. 2 back behind McCaffrey"</a></td><td>Injuries ahead of him cleared the path</td></tr>
-    <tr><td>Matthew Golden<br><span class="q">GB WR · Aug 2 add</span></td><td class="q">"off to a strong start in camp"</td><td>Year-2 receiver stacking good practices</td></tr>
-    <tr><td>Dontayvion Wicks<br><span class="q">PHI WR · Aug 2 add</span></td><td class="q">"off to a nice start"</td><td>Fresh start in Philadelphia after the Green Bay logjam</td></tr>
-    <tr><td>Travis Hunter<br><span class="q">JAX WR · Aug 2 add</span></td><td class="q"><a href="https://x.com/ESPNdirocco" target="_blank" rel="noopener">"maybe most impressive practice of his career"</a></td><td>The catch for fantasy: DiRocco's snap tracker leans corner, 34 defense to 22 offense through four days</td></tr>
-    <tr><td>Malachi Fields<br><span class="q">NYG WR · Aug 2 add</span></td><td class="q">"received first-team snaps"</td><td>Deep name climbing the Giants depth chart</td></tr>
-    <tr><td>MarShawn Lloyd<br><span class="q">GB RB · Aug 2 add</span></td><td class="q">"ceiling play if Jacobs sidelined"</td><td>Josh Jacobs's legal situation could open the backfield</td></tr>
-    <tr><td>Noah Thomas<br><span class="q">CIN WR</span></td><td class="q"><a href="https://sports.yahoo.com/articles/bengals-udfa-turning-heads-training-200050478.html" target="_blank" rel="noopener">"That's another Tee Higgins"</a></td><td>The comp is from Ja'Marr Chase. He's also a UDFA, and UDFA buzz went 0-for-8 in this study. Longest shot on the board</td></tr>
+    <tr><td data-label="Player">Jonathon Brooks<br><span class="q">CAR RB</span></td><td class="q" data-label="What camp is saying"><a href="https://www.fantasypros.com/2026/07/fantasy-football-4-nfl-training-camp-risers-fallers-2026/" target="_blank" rel="noopener">"He looks like the guy that I remember"</a></td><td data-label="Why it matters">First-team reps with Chuba Hubbard underperforming</td></tr>
+    <tr><td data-label="Player">Quinshon Judkins<br><span class="q">CLE RB</span></td><td class="q" data-label="What camp is saying"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"all three downs"</a></td><td data-label="Why it matters">That's his RB coach, Duce Staley, describing the role</td></tr>
+    <tr><td data-label="Player">Luther Burden III<br><span class="q">CHI WR</span></td><td class="q" data-label="What camp is saying"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"buy stock in Luther Burden"</a></td><td data-label="Why it matters">Head coach Ben Johnson said it out loud</td></tr>
+    <tr><td data-label="Player">Isaiah Likely<br><span class="q">NYG TE</span></td><td class="q" data-label="What camp is saying"><a href="https://www.footballguys.com/article/2026-fantasy-stock-watch-training-camp-edition" target="_blank" rel="noopener">"being targeted on the regular by his new quarterback"</a></td><td data-label="Why it matters">Could lead the Giants in targets if Nabers misses time</td></tr>
+    <tr><td data-label="Player">Braelon Allen<br><span class="q">NYJ RB</span></td><td class="q" data-label="What camp is saying"><a href="https://wolfsports.com/fantasy/2026-fantasy-football-rankings-stock-up-stock-down-july-31/" target="_blank" rel="noopener">"bulked to 250 lbs, impressed in camp"</a></td><td data-label="Why it matters">Case building for a sizable role</td></tr>
+    <tr><td data-label="Player">Blake Corum<br><span class="q">LAR RB</span></td><td class="q" data-label="What camp is saying"><a href="https://wolfsports.com/fantasy/2026-fantasy-football-rankings-stock-up-stock-down-july-31/" target="_blank" rel="noopener">"stud"</a></td><td data-label="Why it matters">Expected to be a big factor in the Rams backfield</td></tr>
+    <tr><td data-label="Player">Malik Washington<br><span class="q">MIA WR</span></td><td class="q" data-label="What camp is saying"><a href="https://wolfsports.com/fantasy/2026-fantasy-football-rankings-stock-up-stock-down-july-31/" target="_blank" rel="noopener">"do-it-all weapon"</a></td><td data-label="Why it matters">Being prioritized in Miami's offense</td></tr>
+    <tr><td data-label="Player">Bhayshul Tuten<br><span class="q">JAX RB</span></td><td class="q" data-label="What camp is saying"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"picking up steam"</a></td><td data-label="Why it matters">Committee opportunity with Chris Rodriguez hurt</td></tr>
+    <tr><td data-label="Player">Jaylin Noel<br><span class="q">HOU WR</span></td><td class="q" data-label="What camp is saying"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"consistently making plays"</a></td><td data-label="Why it matters">Depth receiver pushing into the rotation</td></tr>
+    <tr><td data-label="Player">Zachariah Branch<br><span class="q">ATL WR</span></td><td class="q" data-label="What camp is saying"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"nightmare for opposing cornerbacks"</a></td><td data-label="Why it matters">Deep-threat role forming</td></tr>
+    <tr><td data-label="Player">De'Zhaun Stribling<br><span class="q">SF WR</span></td><td class="q" data-label="What camp is saying"><a href="https://www.fantasypros.com/2026/07/fantasy-football-4-nfl-training-camp-risers-fallers-2026/" target="_blank" rel="noopener">"great routes... strength and creating separation"</a></td><td data-label="Why it matters">Christian Kirk's calf injury opened the door</td></tr>
+    <tr><td data-label="Player">Kaelon Black<br><span class="q">SF RB</span></td><td class="q" data-label="What camp is saying"><a href="https://walterfootball.com/fantasy2026trainingcamp.php" target="_blank" rel="noopener">"now No. 2 back behind McCaffrey"</a></td><td data-label="Why it matters">Injuries ahead of him cleared the path</td></tr>
+    <tr><td data-label="Player">Matthew Golden<br><span class="q">GB WR · Aug 2 add</span></td><td class="q" data-label="What camp is saying">"off to a strong start in camp"</td><td data-label="Why it matters">Year-2 receiver stacking good practices</td></tr>
+    <tr><td data-label="Player">Dontayvion Wicks<br><span class="q">PHI WR · Aug 2 add</span></td><td class="q" data-label="What camp is saying">"off to a nice start"</td><td data-label="Why it matters">Fresh start in Philadelphia after the Green Bay logjam</td></tr>
+    <tr><td data-label="Player">Travis Hunter<br><span class="q">JAX WR · Aug 2 add</span></td><td class="q" data-label="What camp is saying"><a href="https://x.com/ESPNdirocco" target="_blank" rel="noopener">"maybe most impressive practice of his career"</a></td><td data-label="Why it matters">The catch for fantasy: DiRocco's snap tracker leans corner, 34 defense to 22 offense through four days</td></tr>
+    <tr><td data-label="Player">Malachi Fields<br><span class="q">NYG WR · Aug 2 add</span></td><td class="q" data-label="What camp is saying">"received first-team snaps"</td><td data-label="Why it matters">Deep name climbing the Giants depth chart</td></tr>
+    <tr><td data-label="Player">MarShawn Lloyd<br><span class="q">GB RB · Aug 2 add</span></td><td class="q" data-label="What camp is saying">"ceiling play if Jacobs sidelined"</td><td data-label="Why it matters">Josh Jacobs's legal situation could open the backfield</td></tr>
+    <tr><td data-label="Player">Noah Thomas<br><span class="q">CIN WR</span></td><td class="q" data-label="What camp is saying"><a href="https://sports.yahoo.com/articles/bengals-udfa-turning-heads-training-200050478.html" target="_blank" rel="noopener">"That's another Tee Higgins"</a></td><td data-label="Why it matters">The comp is from Ja'Marr Chase. He's also a UDFA, and UDFA buzz went 0-for-8 in this study. Longest shot on the board</td></tr>
   </tbody>
 </table>
 

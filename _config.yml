@@ -201,6 +201,7 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - scripts # dev tooling for the-side-quest/data, not part of the built site
 keep_files:
   - CNAME
   - .nojekyll

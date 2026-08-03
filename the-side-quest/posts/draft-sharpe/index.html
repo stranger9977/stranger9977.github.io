@@ -91,9 +91,20 @@ position?">
   #lb img { max-width:100%; max-height:100%; border-radius:8px; }
   /* footer nav */
   .postnav { margin-top:60px; border-top:1px solid var(--grid); padding-top:22px;
-    font-family:system-ui,sans-serif; font-size:.9rem; display:flex; flex-wrap:wrap; gap:14px;
-    justify-content:space-between; }
-  .postnav a { color:var(--accent); text-decoration:none; font-weight:650; }
+    font-family:system-ui,sans-serif; font-size:.9rem; display:flex; flex-wrap:wrap; gap:10px; }
+  .postnav a { display:inline-flex; align-items:center; min-height:44px; padding:0 15px;
+    border:1px solid var(--baseline); border-radius:999px; font-size:.82rem;
+    color:var(--accent); text-decoration:none; font-weight:650; }
+  .postnav a:hover, .postnav a:focus-visible { border-color:var(--accent); }
+  /* forward link to the interactive companion */
+  .companion { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:0 0 26px;
+    font-family:system-ui,sans-serif; }
+  .companion .lab { font-size:.66rem; font-weight:800; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); }
+  .companion a { display:inline-flex; align-items:center; min-height:44px; padding:0 15px;
+    border:1px solid var(--baseline); border-radius:999px; font-size:.82rem; font-weight:650;
+    color:var(--accent); text-decoration:none; }
+  .companion a:hover, .companion a:focus-visible { border-color:var(--accent); }
   .foot { margin-top:34px; font-family:system-ui,sans-serif; font-size:.78rem; color:var(--muted); }
 </style></head>
 <body><div id="progress"></div>
@@ -110,6 +121,11 @@ position?">
 position?</p>
 <div class="byline">By Nick Gurol - <a href="https://x.com/run_the_sims">X/Twitter</a> | <a href="https://www.linkedin.com/in/nick-gurol-87738a1b7/">LinkedIn</a></div>
 <div class="featured">As featured in Michael MacKelvie&rsquo;s video <a href="https://www.youtube.com/watch?v=H8rolEibsPg" target="_blank" rel="noopener">&ldquo;The Safest Pick is the Most Dangerous in the NFL&rdquo;</a>.</div>
+
+<div class="companion">
+  <span class="lab">Companion</span>
+  <a href="../draft-board/index.html">The Quasi-Sharpe Draft Board &mdash; interactive &rarr;</a>
+</div>
 <details class="toc"><summary>Contents</summary><ol><li><a href="#tldr">TL;DR</a></li><li><a href="#what-about-love-at-3">What About Love at 3?</a></li><li><a href="#the-setup">The Setup</a></li><li><a href="#the-formula">The Formula</a></li><li><a href="#what-does-a-hit-mean">What Does a “Hit” Mean?</a></li><li><a href="#supply-controlled-free-agency-replacement-cost">Supply-Controlled Free Agency Replacement Cost</a></li><li><a href="#sharpe-ratio-curves">Sharpe Ratio Curves</a></li><li><a href="#is-a-wr3-worth-more-than-an-elite-rb1">Is a WR3 Worth More Than an Elite RB1?</a></li><li><a href="#are-teams-drafting-optimally">Are Teams Drafting Optimally?</a></li><li><a href="#team-level-draft-efficiency">Team-Level Draft Efficiency</a></li><li><a href="#best-positional-bets-by-round">Best Positional Bets by Round</a></li><li><a href="#key-takeaways">Key Takeaways</a></li><li><a href="#player-surplus-leaderboard">Player Surplus Leaderboard</a></li><li><a href="#assumptions-potential-improvements">Assumptions &amp; Potential Improvements</a></li><li><a href="#appendix-the-case-for-trading-back">Appendix: The Case for Trading Back</a></li><li><a href="#appendix-does-sharpe-predict-what-teams-actually-draft">Appendix: Does Sharpe Predict What Teams Actually Draft?</a></li><li><a href="#appendix-round-1-surplus-leaderboard">Appendix: Round 1 Surplus Leaderboard</a></li><li><a href="#appendix-top-5-by-position-group">Appendix: Top 5 by Position Group</a></li><li><a href="#appendix-top-5-by-position-group-round-1-only">Appendix: Top 5 by Position Group (Round 1 Only)</a></li><li><a href="#appendix-full-sharpe-ratio-table">Appendix: Full Sharpe Ratio Table</a></li><li><a href="#appendix-team-position-strategy-since-2009">Appendix: Team Position Strategy Since 2009</a></li></ol></details>
 <div class="content">
 
@@ -2520,7 +2536,7 @@ players 2009-2022 with snap count data available (2013+).</em></p>
 
 
 </div>
-<div class="postnav"><a href="../camp-buzz/index.html">&larr; The Buzz Is Real</a><a href="../../index.html">The Side Quest &uarr;</a><a href="../sharpe-counter/index.html">What the Sharpe Ratio Can’t See &rarr;</a></div>
+<nav class="postnav" aria-label="Site navigation"><a href="../camp-buzz/index.html">&larr; The Buzz Is Real</a><a href="../../index.html">The Side Quest &uarr;</a><a href="../../blog/index.html">All posts</a><a href="../draft-board/index.html">The Quasi-Sharpe Draft Board &rarr;</a><a href="../sharpe-counter/index.html">What the Sharpe Ratio Can’t See &rarr;</a></nav>
 <div class="foot">&copy; 2026 The Side Quest &middot; <a href="https://x.com/run_the_sims" style="color:var(--accent)">@run_the_sims</a></div>
 </div>
 <div id="lb"><img alt=""></div>

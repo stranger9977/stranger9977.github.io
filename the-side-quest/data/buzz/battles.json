@@ -1,0 +1,101 @@
+{
+ "version": 1,
+ "generated": "2026-08-02",
+ "description": "Position-battle meters. Only battles where mentions.csv names every contender AND the source states numbers a share can be computed from. Battles named without a numeric split are deliberately absent — see schema.md.",
+ "count": 3,
+ "battles": [
+  {
+   "id": "battle-2021-hou-rb",
+   "team": "HOU",
+   "position": "RB",
+   "season": 2021,
+   "updated": "2021-08-17",
+   "date": "2021-08-17",
+   "date_precision": "day",
+   "contenders": [
+    {
+     "player": "Phillip Lindsay",
+     "share": 0.8,
+     "snaps": 8,
+     "note": null
+    },
+    {
+     "player": "Johnson",
+     "share": 0.2,
+     "snaps": 2,
+     "note": "Source names the surname only."
+    }
+   ],
+   "basis": "First-quarter snap split, 8 to 2, as reported. Shares are that split, not a projected season workload.",
+   "derived": true,
+   "mention_ids": [
+    "2021-0817-phillip-lindsay"
+   ],
+   "quote": "“played eight first quarter snaps to Johnson's two”",
+   "source": "2021 Fantasy Football preseason Believe It or Not: Phillip Lindsay and Malcolm Brown as lead backs · CBS Sports",
+   "source_url": "https://www.cbssports.com/fantasy/football/news/2021-fantasy-football-preseason-believe-it-or-not-phillip-lindsay-and-malcolm-brown-as-lead-backs/"
+  },
+  {
+   "id": "battle-2021-mia-rb",
+   "team": "MIA",
+   "position": "RB",
+   "season": 2021,
+   "updated": "2021-08-17",
+   "date": "2021-08-17",
+   "date_precision": "day",
+   "contenders": [
+    {
+     "player": "Malcolm Brown",
+     "share": 0.667,
+     "snaps": null,
+     "note": "Source quote says “Brown”; the article headline names Malcolm Brown."
+    },
+    {
+     "player": "Myles Gaskin",
+     "share": 0.333,
+     "snaps": null,
+     "note": null
+    }
+   ],
+   "basis": "Source states Brown doubled Gaskin in snaps with the starters — a 2:1 split.",
+   "derived": true,
+   "mention_ids": [
+    "2021-0817-myles-gaskin"
+   ],
+   "quote": "“Brown doubled Myles Gaskin in snaps with the starters”",
+   "source": "2021 Fantasy Football preseason Believe It or Not: Phillip Lindsay and Malcolm Brown as lead backs · CBS Sports",
+   "source_url": "https://www.cbssports.com/fantasy/football/news/2021-fantasy-football-preseason-believe-it-or-not-phillip-lindsay-and-malcolm-brown-as-lead-backs/"
+  },
+  {
+   "id": "battle-2021-was-rb",
+   "team": "WAS",
+   "position": "RB",
+   "season": 2021,
+   "updated": "2021-08-17",
+   "date": "2021-08-17",
+   "date_precision": "day",
+   "contenders": [
+    {
+     "player": "McKissic",
+     "share": 1.0,
+     "snaps": 3,
+     "note": "Source names the surname only."
+    },
+    {
+     "player": "Antonio Gibson",
+     "share": 0.0,
+     "snaps": 0,
+     "note": null
+    }
+   ],
+   "basis": "Third-down snaps on the first two drives, 3 to 0, as reported. A two-drive sample, not a season projection.",
+   "derived": true,
+   "mention_ids": [
+    "2021-0817-antonio-gibson"
+   ],
+   "quote": "“McKissic played three third down snaps on the team's first two drives and Gibson played zero”",
+   "source": "2021 Fantasy Football preseason Believe It or Not: Phillip Lindsay and Malcolm Brown as lead backs · CBS Sports",
+   "source_url": "https://www.cbssports.com/fantasy/football/news/2021-fantasy-football-preseason-believe-it-or-not-phillip-lindsay-and-malcolm-brown-as-lead-backs/"
+  }
+ ]
+}

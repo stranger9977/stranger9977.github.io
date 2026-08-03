@@ -1,32 +1,229 @@
-<!-- @dsCard group="Colors" name="Palette" subtitle="Paper, ink, honey + per-post accents" -->
+<!-- @dsCard group="Colors" name="Palette" subtitle="Retro site chrome + honey article layer + cover themes" -->
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Colors — The Side Quest DS</title><style>
   :root { color-scheme: light dark;
+
+    /* ── LAYER 1 · SITE CHROME (retro / old internet) ───────────────────
+       Owns: landing page, quest shelf, blog index, nav, footers.
+       Plain, neutral, square. Never honey — honey belongs to The Buzz. */
+    --c-canvas:#fcfcf9;   --c-panel:#ffffff;   --c-panel-2:#f2f1ea;
+    --c-ink:#16150f;      --c-ink-2:#4b4940;   --c-muted:#706d61;
+    --c-rule:#16150f;     --c-border:#c6c3b6;  --c-dotted:#9d9a8d;
+    --c-link:#0000cc;     --c-visited:#551a8b; --c-active:#cc0000;
+    --c-focus:#0000cc;    --c-live:#b3263c;    --c-stub:#8a6d00;
+
+    /* ── LAYER 2 · ARTICLE (The Buzz Is Real) — unchanged ──────────────
+       Owns: post interiors. Cream paper, ink, honey accent. */
     --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
     --grid:#eae1c8; --baseline:#cfc5a6; --honey:#eda100; --honey-text:#8a5d00;
     --green:#0c7a53; --crimson:#b3263c; }
+
   @media (prefers-color-scheme: dark) {
-    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
+    :root {
+      --c-canvas:#131311;   --c-panel:#1c1c19;   --c-panel-2:#232320;
+      --c-ink:#ecebe3;      --c-ink-2:#b3b0a4;   --c-muted:#8a877b;
+      --c-rule:#ecebe3;     --c-border:#3b3a34;  --c-dotted:#55534a;
+      --c-link:#8fb0ff;     --c-visited:#c9a6f5; --c-active:#ff9a8a;
+      --c-focus:#8fb0ff;    --c-live:#ff6b7f;    --c-stub:#d8b45a;
+
+      --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
       --grid:#2e2a1e; --baseline:#423b28; --honey-text:#eda100; } }
+
   * { box-sizing:border-box; }
-  body { margin:0; padding:24px; background:var(--page); color:var(--ink);
-    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6; }
-  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  body { margin:0; padding:24px 20px 40px; background:var(--c-canvas); color:var(--c-ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6;
+    overflow-wrap:break-word; }
+  .mono { font-family:"Courier New",Courier,monospace; }
+
+  h2 { font-size:.78rem; font-family:"Courier New",Courier,monospace; font-weight:700;
+    letter-spacing:.16em; text-transform:uppercase; margin:0 0 4px; }
+  .lede { font-size:.88rem; font-style:italic; color:var(--c-ink-2); margin:0 0 14px; }
+  section { margin-bottom:34px; }
+  section + section { border-top:1px dotted var(--c-dotted); padding-top:26px; }
+
+  .swatches { display:grid; gap:10px;
+    grid-template-columns:repeat(auto-fill,minmax(min(168px,100%),1fr)); }
+  .sw { border:1px solid var(--c-border); background:var(--c-panel); }
+  .chips { display:flex; height:52px; }
+  .chips i { flex:1 1 50%; display:block; }
+  .chips i + i { border-left:1px solid var(--c-border); }
+  .sw .lab { padding:7px 9px 9px; font-family:"Courier New",Courier,monospace; font-size:.7rem;
+    line-height:1.45; border-top:1px solid var(--c-border); }
+  .sw .lab b { display:block; font-weight:700; font-size:.72rem; }
+  .sw .lab span { display:block; color:var(--c-muted); }
+  .sw .lab em { display:block; font-family:Georgia,serif; font-style:italic; font-size:.74rem;
+    color:var(--c-ink-2); margin-top:3px; }
+
+  .modekey { display:flex; gap:14px; font-family:"Courier New",Courier,monospace; font-size:.68rem;
+    color:var(--c-muted); text-transform:uppercase; letter-spacing:.1em; margin:0 0 10px; }
+  .modekey span::before { content:""; display:inline-block; width:9px; height:9px; margin-right:5px;
+    border:1px solid var(--c-border); vertical-align:-1px; }
+  .modekey .l::before { background:#fcfcf9; }
+  .modekey .d::before { background:#131311; }
+
+  /* Live specimens: chrome links + a stub, so the tokens are seen in use. */
+  .demo { border:1px solid var(--c-border); background:var(--c-panel); padding:14px 16px;
+    margin-top:14px; font-size:.94rem; }
+  .demo a { color:var(--c-link); }
+  .demo a:visited { color:var(--c-visited); }
+  .demo a:active { color:var(--c-active); }
+  .demo a:focus-visible { outline:2px solid var(--c-focus); outline-offset:2px; }
+  .badge-live { font-family:"Courier New",monospace; font-size:.66rem; letter-spacing:.12em;
+    border:1px solid var(--c-live); color:var(--c-live); padding:1px 6px; text-transform:uppercase; }
+  .badge-stub { font-family:"Courier New",monospace; font-size:.66rem; letter-spacing:.12em;
+    border:1px dashed var(--c-stub); color:var(--c-stub); padding:1px 6px; text-transform:uppercase; }
+  .note { font-family:"Courier New",Courier,monospace; font-size:.72rem; color:var(--c-muted);
+    line-height:1.6; margin-top:12px; }
+  .covergrid { display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); }
+  .cover { border:1px solid var(--c-border); padding:14px; font-family:"Courier New",monospace; font-size:.7rem; }
+  .cover .name { font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+  .cover .row { display:flex; align-items:center; gap:8px; padding:2px 0; }
+  .cover .row i { width:16px; height:16px; display:block; border:1px solid rgba(128,128,128,.5); flex:0 0 auto; }
 </style></head>
 <body>
-<div class="sans" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px">
-<div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--page)"></div><div style="padding:8px 10px;font-size:.75rem"><b>paper</b><br><span style="color:var(--muted)">var(--page)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--surface)"></div><div style="padding:8px 10px;font-size:.75rem"><b>surface</b><br><span style="color:var(--muted)">var(--surface)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--ink)"></div><div style="padding:8px 10px;font-size:.75rem"><b>ink</b><br><span style="color:var(--muted)">var(--ink)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--ink2)"></div><div style="padding:8px 10px;font-size:.75rem"><b>ink-2</b><br><span style="color:var(--muted)">var(--ink2)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--muted)"></div><div style="padding:8px 10px;font-size:.75rem"><b>muted</b><br><span style="color:var(--muted)">var(--muted)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--grid)"></div><div style="padding:8px 10px;font-size:.75rem"><b>grid</b><br><span style="color:var(--muted)">var(--grid)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:#eda100"></div><div style="padding:8px 10px;font-size:.75rem"><b>honey #eda100</b><br><span style="color:var(--muted)">#eda100</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:var(--honey-text)"></div><div style="padding:8px 10px;font-size:.75rem"><b>honey text</b><br><span style="color:var(--muted)">var(--honey-text)</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:#0c7a53"></div><div style="padding:8px 10px;font-size:.75rem"><b>sharpe green</b><br><span style="color:var(--muted)">#0c7a53</span></div></div><div style="border:1px solid var(--grid);border-radius:10px;overflow:hidden;background:var(--surface)">
-<div style="height:56px;background:#b3263c"></div><div style="padding:8px 10px;font-size:.75rem"><b>counter crimson</b><br><span style="color:var(--muted)">#b3263c</span></div></div>
-</div>
-<p class="sans" style="font-size:.8rem;color:var(--muted);margin-top:14px">Cream paper light / near-black dark via prefers-color-scheme. Honey is the brand accent; each post gets its own accent (green = draft-sharpe, crimson = counter). Never use colored left-border accent bars.</p>
+
+<section>
+  <h2>Layer 1 · Site chrome</h2>
+  <p class="lede">Old-internet neutral. Landing page, quest shelf, blog index, nav, footer.</p>
+  <div class="modekey mono"><span class="l">light</span><span class="d">dark</span></div>
+  <div class="swatches">
+
+    <div class="sw"><div class="chips"><i style="background:#fcfcf9"></i><i style="background:#131311"></i></div>
+      <div class="lab"><b>--c-canvas</b><span>#fcfcf9 / #131311</span><em>page background</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#ffffff"></i><i style="background:#1c1c19"></i></div>
+      <div class="lab"><b>--c-panel</b><span>#ffffff / #1c1c19</span><em>bordered box fill</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#f2f1ea"></i><i style="background:#232320"></i></div>
+      <div class="lab"><b>--c-panel-2</b><span>#f2f1ea / #232320</span><em>zebra rows, inset fill</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#16150f"></i><i style="background:#ecebe3"></i></div>
+      <div class="lab"><b>--c-ink</b><span>#16150f / #ecebe3</span><em>body text</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#4b4940"></i><i style="background:#b3b0a4"></i></div>
+      <div class="lab"><b>--c-ink-2</b><span>#4b4940 / #b3b0a4</span><em>secondary text</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#706d61"></i><i style="background:#8a877b"></i></div>
+      <div class="lab"><b>--c-muted</b><span>#706d61 / #8a877b</span><em>Courier meta text</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#16150f"></i><i style="background:#ecebe3"></i></div>
+      <div class="lab"><b>--c-rule</b><span>#16150f / #ecebe3</span><em>masthead rules, heavy hairlines</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#c6c3b6"></i><i style="background:#3b3a34"></i></div>
+      <div class="lab"><b>--c-border</b><span>#c6c3b6 / #3b3a34</span><em>1px box borders</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#9d9a8d"></i><i style="background:#55534a"></i></div>
+      <div class="lab"><b>--c-dotted</b><span>#9d9a8d / #55534a</span><em>dotted separators</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#0000cc"></i><i style="background:#8fb0ff"></i></div>
+      <div class="lab"><b>--c-link</b><span>#0000cc / #8fb0ff</span><em>unvisited link</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#551a8b"></i><i style="background:#c9a6f5"></i></div>
+      <div class="lab"><b>--c-visited</b><span>#551a8b / #c9a6f5</span><em>visited link</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#cc0000"></i><i style="background:#ff9a8a"></i></div>
+      <div class="lab"><b>--c-active</b><span>#cc0000 / #ff9a8a</span><em>active link (alink)</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#0000cc"></i><i style="background:#8fb0ff"></i></div>
+      <div class="lab"><b>--c-focus</b><span>#0000cc / #8fb0ff</span><em>focus ring</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#b3263c"></i><i style="background:#ff6b7f"></i></div>
+      <div class="lab"><b>--c-live</b><span>#b3263c / #ff6b7f</span><em>LIVE badge outline</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#8a6d00"></i><i style="background:#d8b45a"></i></div>
+      <div class="lab"><b>--c-stub</b><span>#8a6d00 / #d8b45a</span><em>under-construction stub</em></div></div>
+
+  </div>
+
+  <div class="demo">
+    <p style="margin:0 0 8px">Chrome links in use:
+      <a href="#">unvisited</a> ·
+      <a href="#" style="color:var(--c-visited)">visited</a> ·
+      <a href="#" style="color:var(--c-active)">active</a></p>
+    <p class="mono" style="margin:0;font-size:.72rem;color:var(--c-muted)">
+      status chips: <span class="badge-live">live</span> <span class="badge-stub">under construction</span></p>
+  </div>
+  <p class="note">Square corners, solid 1&ndash;2px borders, dotted separators. No shadows, no radii,
+    no colored left-border bars.</p>
+</section>
+
+<section>
+  <h2>Layer 2 · Article — The Buzz</h2>
+  <p class="lede">Honey newsprint. Post interiors only; never the site chrome.</p>
+  <div class="modekey mono"><span class="l">light</span><span class="d">dark</span></div>
+  <div class="swatches">
+
+    <div class="sw"><div class="chips"><i style="background:#f9f4e6"></i><i style="background:#0e0c07"></i></div>
+      <div class="lab"><b>--page</b><span>#f9f4e6 / #0e0c07</span><em>cream paper</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#fefbf1"></i><i style="background:#1a1712"></i></div>
+      <div class="lab"><b>--surface</b><span>#fefbf1 / #1a1712</span><em>card surface</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#1c1304"></i><i style="background:#f7efdc"></i></div>
+      <div class="lab"><b>--ink</b><span>#1c1304 / #f7efdc</span><em>article body text</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#5c5340"></i><i style="background:#cbc1a7"></i></div>
+      <div class="lab"><b>--ink2</b><span>#5c5340 / #cbc1a7</span><em>dek, captions</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#8b8168"></i><i style="background:#948a70"></i></div>
+      <div class="lab"><b>--muted</b><span>#8b8168 / #948a70</span><em>meta</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#eae1c8"></i><i style="background:#2e2a1e"></i></div>
+      <div class="lab"><b>--grid</b><span>#eae1c8 / #2e2a1e</span><em>hairlines, chart grid</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#cfc5a6"></i><i style="background:#423b28"></i></div>
+      <div class="lab"><b>--baseline</b><span>#cfc5a6 / #423b28</span><em>chart baseline</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#eda100"></i></div>
+      <div class="lab"><b>--honey</b><span>#eda100</span><em>brand accent (both modes)</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#8a5d00"></i><i style="background:#eda100"></i></div>
+      <div class="lab"><b>--honey-text</b><span>#8a5d00 / #eda100</span><em>honey as type</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#0c7a53"></i></div>
+      <div class="lab"><b>--green</b><span>#0c7a53</span><em>draft-sharpe accent</em></div></div>
+
+    <div class="sw"><div class="chips"><i style="background:#b3263c"></i></div>
+      <div class="lab"><b>--crimson</b><span>#b3263c</span><em>sharpe-counter accent</em></div></div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Layer 3 · Cover themes</h2>
+  <p class="lede">Each post tile is its own magazine cover. Themes ship with the post, as a scoped
+    record of <span class="mono">--cover-*</span> custom properties. See Components &rarr; Post tile.</p>
+  <div class="covergrid">
+
+    <div class="cover" style="background:#f6efdd;color:#1c1304;border-color:#1c1304">
+      <div class="name">honey newsprint &mdash; the buzz</div>
+      <div class="row"><i style="background:#f6efdd"></i>--cover-bg #f6efdd</div>
+      <div class="row"><i style="background:#1c1304"></i>--cover-ink #1c1304</div>
+      <div class="row"><i style="background:#eda100"></i>--cover-accent #eda100</div>
+      <div class="row"><i style="background:#1c1304"></i>--cover-peek-bg #1c1304</div>
+    </div>
+
+    <div class="cover" style="background:#07110c;color:#d6ffe9;border-color:#0c7a53">
+      <div class="name">green terminal &mdash; draft board</div>
+      <div class="row"><i style="background:#07110c"></i>--cover-bg #07110c</div>
+      <div class="row"><i style="background:#d6ffe9"></i>--cover-ink #d6ffe9</div>
+      <div class="row"><i style="background:#0c7a53"></i>--cover-rule #0c7a53</div>
+      <div class="row"><i style="background:#2fd08a"></i>--cover-accent #2fd08a</div>
+    </div>
+
+    <div class="cover" style="background:#eef3f8;color:#0f1b26;border-color:#0f1b26">
+      <div class="name">graph paper &mdash; unclaimed</div>
+      <div class="row"><i style="background:#eef3f8"></i>--cover-bg #eef3f8</div>
+      <div class="row"><i style="background:#0f1b26"></i>--cover-ink #0f1b26</div>
+      <div class="row"><i style="background:#1a5fb4"></i>--cover-accent #1a5fb4</div>
+      <div class="row"><i style="background:#0f1b26"></i>--cover-peek-bg #0f1b26</div>
+    </div>
+
+  </div>
+  <p class="note">Cover themes are artwork, not chrome: they hold their look in both color schemes
+    (the cream cover dims slightly in dark mode so it doesn&rsquo;t glare). #0c7a53 carries rules and
+    fills on the terminal cover; #2fd08a carries small type on that near-black ground for contrast.</p>
+</section>
+
 </body></html>

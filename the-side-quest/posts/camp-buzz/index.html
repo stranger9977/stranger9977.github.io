@@ -67,6 +67,20 @@
     text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--baseline);
     border-bottom: 1px solid var(--baseline); padding: 8px 0; margin-bottom: 34px; }
 
+  /* site + companion navigation */
+  .masthead .brand a { color: inherit; text-decoration: none; }
+  .companion, .postnav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    font-family: system-ui, sans-serif; }
+  .companion { margin: -18px 0 34px; }
+  .postnav { margin-top: 40px; border-top: 1px solid var(--grid); padding-top: 20px; }
+  .companion .lab { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); }
+  .companion a, .postnav a { display: inline-flex; align-items: center; min-height: 44px;
+    padding: 0 15px; border: 1px solid var(--baseline); border-radius: 999px;
+    font-size: 0.82rem; font-weight: 650; color: var(--honey-text); text-decoration: none; }
+  .companion a:hover, .postnav a:hover,
+  .companion a:focus-visible, .postnav a:focus-visible { border-color: var(--honey); }
+
   h2.sec { font-family: system-ui, sans-serif; font-weight: 800; font-size: 1rem;
     letter-spacing: 0.14em; text-transform: uppercase; margin: 52px 0 16px;
     display: flex; align-items: center; gap: 12px; }
@@ -376,7 +390,7 @@
 <div class="masthead" id="top">
   <svg class="hexes" aria-hidden="true" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><pattern id="hex" width="28" height="24.2" patternUnits="userSpaceOnUse" patternTransform="scale(1.6)"><polygon points="7,0 21,0 28,12.1 21,24.2 7,24.2 0,12.1" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.35"/></pattern></defs><rect width="100%" height="100%" fill="url(#hex)"/></svg>
   <span class="bee" aria-hidden="true">🐝</span>
-  <div class="brand">THE SIDE QUEST<span class="qm">.</span></div>
+  <div class="brand"><a href="../../index.html">THE SIDE QUEST<span class="qm">.</span></a></div>
   <div class="tag">A blog about whatever's interesting right now.</div>
   <div class="issue">No. 001 · Fantasy Football · August 2026</div>
   <div class="stripe"></div>
@@ -386,6 +400,11 @@
 <h1>The Buzz<br>Is <span style="box-shadow: inset 0 -0.30em 0 var(--honey-soft);">Real</span></h1>
 <p class="deck">Is Travis Hunter wearing teal? Is the Santa Clara electrical substation haunted? Are the Vikings seriously considering going with J.J. McCarthy over Kyler Murray? It's camp season, baby. Every year we get storylines. In this report we backtested the camp buzz over eight years, and we're tracking everything going on through the month of August.</p>
 <div class="byline">By Nick Gurol · Data through August 2, 2026</div>
+
+<div class="companion">
+  <span class="lab">Companion board</span>
+  <a href="../camp-dashboard/index.html">Training Camp Dashboard &mdash; all 32 clubs &rarr;</a>
+</div>
 
 <div class="front">
   <div class="fh">The Front Page · three live trackers</div>
@@ -3749,6 +3768,12 @@
 </details>
 
 <p class="sans arch-note"><a href="#wire">Back to the 2026 Camp Wire &uarr;</a> &middot; <a href="#tldr">Back to the five to watch &uarr;</a> &middot; <a href="#top">Back to the top &uarr;</a></p>
+
+<nav class="postnav" aria-label="Site navigation">
+  <a href="../camp-dashboard/index.html">Training Camp Dashboard &rarr;</a>
+  <a href="../../blog/index.html">All posts</a>
+  <a href="../../index.html">The Side Quest &uarr;</a>
+</nav>
 
 </div>
 <script>

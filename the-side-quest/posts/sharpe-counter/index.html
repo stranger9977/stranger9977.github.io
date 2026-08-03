@@ -91,9 +91,20 @@ where it falls short">
   #lb img { max-width:100%; max-height:100%; border-radius:8px; }
   /* footer nav */
   .postnav { margin-top:60px; border-top:1px solid var(--grid); padding-top:22px;
-    font-family:system-ui,sans-serif; font-size:.9rem; display:flex; flex-wrap:wrap; gap:14px;
-    justify-content:space-between; }
-  .postnav a { color:var(--accent); text-decoration:none; font-weight:650; }
+    font-family:system-ui,sans-serif; font-size:.9rem; display:flex; flex-wrap:wrap; gap:10px; }
+  .postnav a { display:inline-flex; align-items:center; min-height:44px; padding:0 15px;
+    border:1px solid var(--baseline); border-radius:999px; font-size:.82rem;
+    color:var(--accent); text-decoration:none; font-weight:650; }
+  .postnav a:hover, .postnav a:focus-visible { border-color:var(--accent); }
+  /* forward link to the interactive companion */
+  .companion { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:0 0 26px;
+    font-family:system-ui,sans-serif; }
+  .companion .lab { font-size:.66rem; font-weight:800; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); }
+  .companion a { display:inline-flex; align-items:center; min-height:44px; padding:0 15px;
+    border:1px solid var(--baseline); border-radius:999px; font-size:.82rem; font-weight:650;
+    color:var(--accent); text-decoration:none; }
+  .companion a:hover, .companion a:focus-visible { border-color:var(--accent); }
   .foot { margin-top:34px; font-family:system-ui,sans-serif; font-size:.78rem; color:var(--muted); }
 </style></head>
 <body><div id="progress"></div>
@@ -109,6 +120,11 @@ where it falls short">
 <p class="dek">Stress-testing our NFL Draft model and finding
 where it falls short</p>
 <div class="byline">By Nick Gurol — <a href="https://x.com/run_the_sims">X/Twitter</a> | <a href="https://www.linkedin.com/in/nick-gurol-87738a1b7/">LinkedIn</a></div>
+
+<div class="companion">
+  <span class="lab">Companion</span>
+  <a href="../draft-board/index.html">The Quasi-Sharpe Draft Board &mdash; interactive &rarr;</a>
+</div>
 
 <details class="toc"><summary>Contents</summary><ol><li><a href="#tldr">TL;DR</a></li><li><a href="#the-sharpe-ratio-was-incomplete.">The Sharpe Ratio Was Incomplete.</a></li><li><a href="#quick-recap-what-part-1-found">Quick Recap: What Part 1 Found</a></li><li><a href="#assumption-2-all-draft-classes-are-interchangeable">Assumption 2: All Draft Classes Are Interchangeable</a></li><li><a href="#the-love-question-revisited">The Love Question Revisited</a></li><li><a href="#what-the-stress-test-found">What the Stress Test Found</a></li><li><a href="#methodology-notes">Methodology Notes</a></li></ol></details>
 <div class="content">
@@ -3020,7 +3036,7 @@ Pro Football Reference.</em></p>
 
 
 </div>
-<div class="postnav"><a href="../draft-sharpe/index.html">&larr; NFL Draft Quasi-Sharpe Ratio Analysis</a><a href="../../index.html">The Side Quest &uarr;</a></div>
+<nav class="postnav" aria-label="Site navigation"><a href="../draft-sharpe/index.html">&larr; NFL Draft Quasi-Sharpe Ratio Analysis</a><a href="../../index.html">The Side Quest &uarr;</a><a href="../../blog/index.html">All posts</a><a href="../draft-board/index.html">The Quasi-Sharpe Draft Board &rarr;</a></nav>
 <div class="foot">&copy; 2026 The Side Quest &middot; <a href="https://x.com/run_the_sims" style="color:var(--accent)">@run_the_sims</a></div>
 </div>
 <div id="lb"><img alt=""></div>

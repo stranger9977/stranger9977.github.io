@@ -1,0 +1,823 @@
+{
+  "version": "v1",
+  "generated": "2026-08-02",
+  "source_posts": [
+    {
+      "id": "draft-sharpe",
+      "issue": "No. 002",
+      "title": "NFL Draft Quasi-Sharpe Ratio Analysis",
+      "path": "/the-side-quest/posts/draft-sharpe/index.html",
+      "role": "primary source for the Sharpe model, positional baselines, FA replacement costs and the full position x tier table"
+    },
+    {
+      "id": "sharpe-counter",
+      "issue": "No. 003",
+      "title": "Stress-testing our NFL Draft model and finding where it falls short",
+      "path": "/the-side-quest/posts/sharpe-counter/index.html",
+      "role": "primary source for career-AV outcomes, NGS Prospect Scores, the counterfactual table and the 2026 class/roster context"
+    }
+  ],
+  "notes": {
+    "provenance": "Every numeric value in this file was transcribed from a table or an explicit numeric statement already published in the two source posts. Nothing was re-derived, re-computed, interpolated or estimated. Fields the posts do not publish are null.",
+    "provenance_doc": "provenance.md (same directory) maps every block to the exact post + table it came from.",
+    "rounding": "Values are stored exactly as printed in the posts, including their published precision. Where the same quantity is printed twice at different precision (e.g. Sharpe -0.615 in the appendix table vs -0.62 in prose), the table value is stored and the prose value is recorded under discrepancies.",
+    "not_re_derived": "sd_player_return, bust_rate and a per-overall-pick EV curve are NOT published for most rows. They are left null rather than back-solved. See model.identities for the relationship the board may use if it chooses to derive them itself, explicitly and visibly.",
+    "frozen": "Both posts are published analyses of 2009/2010-2022 draft classes. Treat this file as a frozen snapshot of what those posts state. Do not edit numbers here to 'improve' them."
+  },
+  "units": {
+    "hit_rate_pct": "percent of picks in the bucket that met the snap-based hit threshold",
+    "p_elite_pct": "percent of picks in the bucket whose player return cleared the global elite threshold",
+    "mean_player_return_cap_frac": "mean player return as a FRACTION of the salary cap (0.2176 = 21.76% of cap)",
+    "fa_replacement_cap_pct": "free-agency replacement cost as a PERCENT of the salary cap",
+    "sharpe": "unitless quasi-Sharpe ratio",
+    "career_av": "Pro Football Reference weighted career Approximate Value",
+    "surplus_usd_m": "surplus value in millions of USD, as published",
+    "prospect_score": "NFL Next Gen Stats composite prospect score, 0-100, published pre-draft"
+  },
+
+  "model": {
+    "name": "Quasi-Sharpe ratio for NFL draft picks",
+    "formulas": {
+      "rookie_surplus": "Rookie Surplus = Snap Ratio x (FA Replacement Cost - Rookie Salary) x 4 years",
+      "player_return": "Player Return = Second Contract Cap% + Rookie Surplus",
+      "sharpe": "Sharpe = ( P(elite) x Elite Threshold - FA Replacement Cost ) / SD(Player Return)"
+    },
+    "identities": {
+      "sd_from_sharpe": "SD(Player Return) = ( P(elite) x Elite Threshold - FA Replacement Cost ) / Sharpe. NOT applied in this file; the two SD values below are the only ones the posts print.",
+      "note": "The posts publish SD only for QB Top 10 and RB Top 10 (worked example table)."
+    },
+    "components": [
+      { "component": "Snap Ratio", "measures": "Playing time vs positional baseline", "computed": "avg snap % / hit threshold (1.0 = starter)" },
+      { "component": "Rookie Surplus", "measures": "Cap savings during rookie deal", "computed": "snap_ratio x (FA cost - rookie salary) x 4 years" },
+      { "component": "Second Contract", "measures": "Market value after rookie deal", "computed": "APY as % of salary cap on next deal" },
+      { "component": "Player Return", "measures": "Total value of the pick", "computed": "second contract + rookie surplus" },
+      { "component": "Elite Threshold", "measures": "Top-tier outcome bar", "computed": "90th percentile of all player returns" },
+      { "component": "FA Replacement", "measures": "Cost of buying a starter instead", "computed": "Median of top-N FA contracts/yr; N = avg starter-caliber FAs available per position" },
+      { "component": "Volatility", "measures": "Outcome variance in that bucket", "computed": "Std dev of player returns (including busts at $0)" }
+    ],
+    "elite_threshold_cap_pct": 33.1,
+    "elite_threshold_definition": "90th percentile of all player returns, global across all positions",
+    "hit_definition": "Average snap percentage over the player's first 4 NFL seasons reaches at least 75% of the positional No. 1 starter baseline. Snap % is averaged over ALL expected games (seasons not played count as zero).",
+    "hit_threshold_multiplier": 0.75,
+    "evaluation_window_seasons": 4,
+    "sample_window": {
+      "as_stated_in_draft_sharpe_footer": "drafted players 2009-2022 with snap count data available (2013+)",
+      "as_stated_in_sharpe_counter": "2010-2022 draft classes (minimum 4 NFL seasons for fair evaluation)",
+      "note": "The two posts state slightly different start years. Both statements preserved verbatim; neither reconciled."
+    },
+    "rookie_surplus_share_of_total_return_iqr_pct": [77, 95],
+    "rookie_surplus_share_note": "For most players with positive returns, the rookie contract accounts for 77-95% of the total return (interquartile range).",
+    "data_sources_cited": [
+      "nflreadr / nflverse",
+      "Pro Football Reference (draft picks, snap counts, weighted career AV)",
+      "OverTheCap (contracts, normalized to % of salary cap)",
+      "Timo Riske / PFF hit-rate methodology",
+      "Brill & Wyner 2024 (arXiv:2407.00730) nonlinear upside framework",
+      "NFL Next Gen Stats prospect scores"
+    ]
+  },
+
+  "tiers": [
+    { "id": "top_10",   "label": "Top 10",     "pick_range": [1, 10],   "pick_range_published": false },
+    { "id": "late_1st", "label": "Late 1st",   "pick_range": [11, 32],  "pick_range_published": false },
+    { "id": "round_2",  "label": "Round 2",    "pick_range": [33, 64],  "pick_range_published": false },
+    { "id": "round_3",  "label": "Round 3",    "pick_range": [65, 96],  "pick_range_published": false },
+    { "id": "round_4_7","label": "Rounds 4-7", "pick_range": [97, null],"pick_range_published": false }
+  ],
+  "tiers_note": "The five buckets and their labels are published. The numeric pick ranges are NOT published in either post; they are the conventional reading of the labels and are flagged pick_range_published:false. Compensatory picks make rounds 3-7 variable in length year to year. Any board that maps an overall pick to a tier is applying an assumption of its own, not a published one.",
+
+  "positions": [
+    {
+      "position": "QB",
+      "starter_snap_baseline_pct": 82.9,
+      "hit_threshold_pct": 62.2,
+      "hit_threshold_note": "Starters play every snap when healthy - injuries drive this down",
+      "fa_replacement_cap_pct": 14.60,
+      "fa_supply_starters_per_year": 3,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 26, "hit_rate_pct": 73.1, "p_elite_pct": 73.1, "mean_player_return_cap_frac": 0.5751, "fa_replacement_cap_pct": 14.60, "sharpe": 0.374,  "sd_player_return_cap_pct": 25.7, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 14, "hit_rate_pct": 21.4, "p_elite_pct": 42.9, "mean_player_return_cap_frac": 0.3640, "fa_replacement_cap_pct": 14.60, "sharpe": -0.015, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 12, "hit_rate_pct": 33.3, "p_elite_pct": 41.7, "mean_player_return_cap_frac": 0.4365, "fa_replacement_cap_pct": 14.60, "sharpe": -0.020, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 19, "hit_rate_pct": 5.3,  "p_elite_pct": 26.3, "mean_player_return_cap_frac": 0.2143, "fa_replacement_cap_pct": 14.60, "sharpe": -0.204, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 78, "hit_rate_pct": 2.6,  "p_elite_pct": 5.1,  "mean_player_return_cap_frac": 0.0743, "fa_replacement_cap_pct": 14.60, "sharpe": -0.731, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "RB",
+      "starter_snap_baseline_pct": 56.4,
+      "hit_threshold_pct": 42.3,
+      "hit_threshold_note": "Even a bellcow comes off for passing downs and in committee",
+      "fa_replacement_cap_pct": 6.00,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": 8,
+      "best_second_contract_note": "Published as approximate: 'The best RB deal is ~8% of cap.'",
+      "tiers": [
+        { "tier": "top_10",    "n": 7,   "hit_rate_pct": 71.4, "p_elite_pct": 0.0,  "mean_player_return_cap_frac": 0.1757, "fa_replacement_cap_pct": 6.00, "sharpe": -0.615, "sd_player_return_cap_pct": 9.7, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 12,  "hit_rate_pct": 33.3, "p_elite_pct": 0.0,  "mean_player_return_cap_frac": 0.1608, "fa_replacement_cap_pct": 6.00, "sharpe": -0.659, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 36,  "hit_rate_pct": 44.4, "p_elite_pct": 2.8,  "mean_player_return_cap_frac": 0.1732, "fa_replacement_cap_pct": 6.00, "sharpe": -0.474, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 33,  "hit_rate_pct": 30.3, "p_elite_pct": 18.2, "mean_player_return_cap_frac": 0.1759, "fa_replacement_cap_pct": 6.00, "sharpe": 0.002,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 206, "hit_rate_pct": 3.4,  "p_elite_pct": 0.5,  "mean_player_return_cap_frac": 0.0662, "fa_replacement_cap_pct": 6.00, "sharpe": -0.765, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "WR",
+      "starter_snap_baseline_pct": 85.3,
+      "hit_threshold_pct": 64.0,
+      "hit_threshold_note": "Come off in heavy sets and some run formations",
+      "fa_replacement_cap_pct": 7.90,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": 14,
+      "best_second_contract_note": "Published as approximate: 'The best WR deal is ~14%.'",
+      "tiers": [
+        { "tier": "top_10",    "n": 16,  "hit_rate_pct": 62.5, "p_elite_pct": 25.0, "mean_player_return_cap_frac": 0.2449, "fa_replacement_cap_pct": 7.90, "sharpe": 0.035,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 35,  "hit_rate_pct": 34.3, "p_elite_pct": 28.6, "mean_player_return_cap_frac": 0.2465, "fa_replacement_cap_pct": 7.90, "sharpe": 0.121,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 63,  "hit_rate_pct": 28.6, "p_elite_pct": 33.3, "mean_player_return_cap_frac": 0.2459, "fa_replacement_cap_pct": 7.90, "sharpe": 0.227,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 59,  "hit_rate_pct": 18.6, "p_elite_pct": 22.0, "mean_player_return_cap_frac": 0.1888, "fa_replacement_cap_pct": 7.90, "sharpe": -0.040, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 239, "hit_rate_pct": 4.2,  "p_elite_pct": 4.6,  "mean_player_return_cap_frac": 0.0777, "fa_replacement_cap_pct": 7.90, "sharpe": -0.623, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "TE",
+      "starter_snap_baseline_pct": 71.2,
+      "hit_threshold_pct": 53.4,
+      "hit_threshold_note": "Many offenses rotate TEs situationally",
+      "fa_replacement_cap_pct": 4.80,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 3,   "hit_rate_pct": 100.0, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1260, "fa_replacement_cap_pct": 4.80, "sharpe": -0.822, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 7,   "hit_rate_pct": 42.9,  "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1602, "fa_replacement_cap_pct": 4.80, "sharpe": -1.220, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 23,  "hit_rate_pct": 39.1,  "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1658, "fa_replacement_cap_pct": 4.80, "sharpe": -0.656, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 28,  "hit_rate_pct": 14.3,  "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1263, "fa_replacement_cap_pct": 4.80, "sharpe": -0.538, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 126, "hit_rate_pct": 9.5,   "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.0836, "fa_replacement_cap_pct": 4.80, "sharpe": -0.587, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "EDGE",
+      "starter_snap_baseline_pct": 81.2,
+      "hit_threshold_pct": 60.9,
+      "hit_threshold_note": "Rotate with other pass rushers on some downs",
+      "fa_replacement_cap_pct": 9.10,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 22,  "hit_rate_pct": 50.0, "p_elite_pct": 36.4, "mean_player_return_cap_frac": 0.2759, "fa_replacement_cap_pct": 9.10, "sharpe": 0.265,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 45,  "hit_rate_pct": 35.6, "p_elite_pct": 48.9, "mean_player_return_cap_frac": 0.3207, "fa_replacement_cap_pct": 9.10, "sharpe": 0.594,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 48,  "hit_rate_pct": 16.7, "p_elite_pct": 27.1, "mean_player_return_cap_frac": 0.2399, "fa_replacement_cap_pct": 9.10, "sharpe": -0.009, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 55,  "hit_rate_pct": 9.1,  "p_elite_pct": 14.5, "mean_player_return_cap_frac": 0.1766, "fa_replacement_cap_pct": 9.10, "sharpe": -0.297, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 207, "hit_rate_pct": 2.9,  "p_elite_pct": 5.3,  "mean_player_return_cap_frac": 0.0947, "fa_replacement_cap_pct": 9.10, "sharpe": -0.604, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "OT",
+      "starter_snap_baseline_pct": 97.3,
+      "hit_threshold_pct": 73.0,
+      "hit_threshold_note": "Same - linemen don't rotate",
+      "fa_replacement_cap_pct": 8.15,
+      "fa_supply_starters_per_year": 3,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 17,  "hit_rate_pct": 76.5, "p_elite_pct": 29.4, "mean_player_return_cap_frac": 0.2600, "fa_replacement_cap_pct": 8.15, "sharpe": 0.184,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 30,  "hit_rate_pct": 50.0, "p_elite_pct": 46.7, "mean_player_return_cap_frac": 0.2815, "fa_replacement_cap_pct": 8.15, "sharpe": 0.562,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 28,  "hit_rate_pct": 39.3, "p_elite_pct": 46.4, "mean_player_return_cap_frac": 0.2630, "fa_replacement_cap_pct": 8.15, "sharpe": 0.468,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 31,  "hit_rate_pct": 16.1, "p_elite_pct": 19.4, "mean_player_return_cap_frac": 0.1913, "fa_replacement_cap_pct": 8.15, "sharpe": -0.130, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 112, "hit_rate_pct": 4.5,  "p_elite_pct": 8.0,  "mean_player_return_cap_frac": 0.1065, "fa_replacement_cap_pct": 8.15, "sharpe": -0.445, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "IOL",
+      "starter_snap_baseline_pct": 99.6,
+      "hit_threshold_pct": 74.7,
+      "hit_threshold_note": "On the field nearly every play for 3+ years",
+      "fa_replacement_cap_pct": 5.10,
+      "fa_supply_starters_per_year": 8,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 6,   "hit_rate_pct": 50.0, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1608, "fa_replacement_cap_pct": 5.10, "sharpe": -0.689, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 28,  "hit_rate_pct": 57.1, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1654, "fa_replacement_cap_pct": 5.10, "sharpe": -0.711, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 38,  "hit_rate_pct": 47.4, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.2096, "fa_replacement_cap_pct": 5.10, "sharpe": -0.757, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 55,  "hit_rate_pct": 27.3, "p_elite_pct": 1.8, "mean_player_return_cap_frac": 0.1425, "fa_replacement_cap_pct": 5.10, "sharpe": -0.477, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 203, "hit_rate_pct": 5.4,  "p_elite_pct": 0.5, "mean_player_return_cap_frac": 0.0574, "fa_replacement_cap_pct": 5.10, "sharpe": -0.661, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "CB",
+      "starter_snap_baseline_pct": 92.3,
+      "hit_threshold_pct": 69.2,
+      "hit_threshold_note": "Occasionally rotate in sub packages",
+      "fa_replacement_cap_pct": 8.20,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 15,  "hit_rate_pct": 53.3, "p_elite_pct": 6.7,  "mean_player_return_cap_frac": 0.2176, "fa_replacement_cap_pct": 8.20, "sharpe": -0.608, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 43,  "hit_rate_pct": 30.2, "p_elite_pct": 27.9, "mean_player_return_cap_frac": 0.2448, "fa_replacement_cap_pct": 8.20, "sharpe": 0.080,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 56,  "hit_rate_pct": 19.6, "p_elite_pct": 23.2, "mean_player_return_cap_frac": 0.2159, "fa_replacement_cap_pct": 8.20, "sharpe": -0.038, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 64,  "hit_rate_pct": 7.8,  "p_elite_pct": 12.5, "mean_player_return_cap_frac": 0.1405, "fa_replacement_cap_pct": 8.20, "sharpe": -0.300, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 321, "hit_rate_pct": 3.7,  "p_elite_pct": 4.7,  "mean_player_return_cap_frac": 0.0840, "fa_replacement_cap_pct": 8.20, "sharpe": -0.602, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "DL",
+      "starter_snap_baseline_pct": 71.7,
+      "hit_threshold_pct": 53.8,
+      "hit_threshold_note": "Heavy rotation - even stars share snaps with the line",
+      "fa_replacement_cap_pct": 7.50,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 7,   "hit_rate_pct": 85.7, "p_elite_pct": 14.3, "mean_player_return_cap_frac": 0.2403, "fa_replacement_cap_pct": 7.50, "sharpe": -0.284, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 34,  "hit_rate_pct": 44.1, "p_elite_pct": 29.4, "mean_player_return_cap_frac": 0.2677, "fa_replacement_cap_pct": 7.50, "sharpe": 0.231,  "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 35,  "hit_rate_pct": 14.3, "p_elite_pct": 14.3, "mean_player_return_cap_frac": 0.1924, "fa_replacement_cap_pct": 7.50, "sharpe": -0.229, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 52,  "hit_rate_pct": 9.6,  "p_elite_pct": 13.5, "mean_player_return_cap_frac": 0.1924, "fa_replacement_cap_pct": 7.50, "sharpe": -0.267, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 159, "hit_rate_pct": 1.9,  "p_elite_pct": 2.5,  "mean_player_return_cap_frac": 0.0970, "fa_replacement_cap_pct": 7.50, "sharpe": -0.696, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "LB",
+      "starter_snap_baseline_pct": 92.3,
+      "hit_threshold_pct": 69.2,
+      "hit_threshold_note": "Occasionally rotate in sub packages",
+      "fa_replacement_cap_pct": 6.10,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 8,   "hit_rate_pct": 50.0, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1640, "fa_replacement_cap_pct": 6.10, "sharpe": -0.781, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 21,  "hit_rate_pct": 33.3, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1834, "fa_replacement_cap_pct": 6.10, "sharpe": -0.804, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 41,  "hit_rate_pct": 26.8, "p_elite_pct": 7.3, "mean_player_return_cap_frac": 0.1823, "fa_replacement_cap_pct": 6.10, "sharpe": -0.352, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 45,  "hit_rate_pct": 24.4, "p_elite_pct": 8.9, "mean_player_return_cap_frac": 0.1471, "fa_replacement_cap_pct": 6.10, "sharpe": -0.260, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 218, "hit_rate_pct": 2.8,  "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.0580, "fa_replacement_cap_pct": 6.10, "sharpe": -0.805, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    },
+    {
+      "position": "S",
+      "starter_snap_baseline_pct": 95.2,
+      "hit_threshold_pct": 71.4,
+      "hit_threshold_note": "Safeties play almost every defensive snap",
+      "fa_replacement_cap_pct": 5.30,
+      "fa_supply_starters_per_year": null,
+      "best_second_contract_cap_pct": null,
+      "tiers": [
+        { "tier": "top_10",    "n": 3,  "hit_rate_pct": 66.7, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1159, "fa_replacement_cap_pct": 5.30, "sharpe": -0.805, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "late_1st",  "n": 17, "hit_rate_pct": 52.9, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1844, "fa_replacement_cap_pct": 5.30, "sharpe": -1.110, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_2",   "n": 35, "hit_rate_pct": 51.4, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.2034, "fa_replacement_cap_pct": 5.30, "sharpe": -0.653, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_3",   "n": 26, "hit_rate_pct": 19.2, "p_elite_pct": 0.0, "mean_player_return_cap_frac": 0.1610, "fa_replacement_cap_pct": 5.30, "sharpe": -0.670, "sd_player_return_cap_pct": null, "bust_rate_pct": null },
+        { "tier": "round_4_7", "n": 97, "hit_rate_pct": 8.2,  "p_elite_pct": 1.0, "mean_player_return_cap_frac": 0.0985, "fa_replacement_cap_pct": 5.30, "sharpe": -0.551, "sd_player_return_cap_pct": null, "bust_rate_pct": null }
+      ]
+    }
+  ],
+
+  "picks": {
+    "per_overall_pick_curve_published": false,
+    "note": "Neither post publishes an expected-value-by-overall-pick table. The published expected-value curve is the five-bucket tier curve in positions[].tiers (mean_player_return_cap_frac and sharpe). A continuous surplus-by-pick curve appears in post 003 only as a rendered chart image; its underlying values are not in the HTML. The pick-level anchors below are the only individual-pick numbers either post states in text.",
+    "published_pick_anchors": [
+      {
+        "pick": 10,
+        "source_post": "sharpe-counter",
+        "subject": "Jeremiyah Love",
+        "median_surplus_usd_m": 60.8,
+        "premium_position_average_surplus_usd_m": 96.4,
+        "gap_usd_m": 35.5,
+        "note": "Published as 'At pick 10, Love's median surplus is $60.8M vs $96.4M for the premium position average - a gap of $35.5M.' The printed gap (35.5) and the difference of the printed figures (35.6) differ by rounding; both preserved as published, neither recomputed."
+      },
+      {
+        "pick": 14,
+        "source_post": "sharpe-counter",
+        "subject": "Jeremiyah Love",
+        "event": "90th-percentile surplus outcome crosses the premium-position average",
+        "note": "The single published break-even point in either post."
+      }
+    ],
+    "special_slices": [
+      {
+        "label": "RB, picks 2-5",
+        "position": "RB",
+        "pick_range": [2, 5],
+        "n": 4,
+        "sharpe": -0.97,
+        "source_post": "draft-sharpe",
+        "source_section": "What About Love at 3?"
+      }
+    ]
+  },
+
+  "players": [
+    {
+      "name": "Todd Gurley", "position": "RB", "pick": 10, "draft_year": 2015, "is_hit": true,
+      "player_return_cap_pct": 31.3, "career_av": 54,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table (section 'What About Love at 3?'); career_av from sharpe-counter prose 'Gurley (54) vs Trae Waynes (CB, 18)'"
+    },
+    {
+      "name": "Christian McCaffrey", "position": "RB", "pick": 8, "draft_year": 2017, "is_hit": true,
+      "player_return_cap_pct": 28.9, "career_av": 86,
+      "avg_snap_pct": 64.6, "snap_ratio": 1.53, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": 20.8, "second_contract_apy_cap_pct": 8.1,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table + prose in section 'Player Example: Saquon Barkley'; career_av from sharpe-counter prose 'CMC (86 career AV) vs John Ross (WR, 7)'"
+    },
+    {
+      "name": "Ezekiel Elliott", "position": "RB", "pick": 4, "draft_year": 2016, "is_hit": true,
+      "player_return_cap_pct": 21.6, "career_av": null,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table"
+    },
+    {
+      "name": "Leonard Fournette", "position": "RB", "pick": 4, "draft_year": 2017, "is_hit": true,
+      "player_return_cap_pct": 13.0, "career_av": null,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table"
+    },
+    {
+      "name": "Saquon Barkley", "position": "RB", "pick": 2, "draft_year": 2018, "is_hit": true,
+      "player_return_cap_pct": 12.2, "career_av": null,
+      "avg_snap_pct": 48.0, "snap_ratio": 1.14, "rookie_apy_cap_pct": 4.4, "rookie_surplus_cap_pct": 7.3, "second_contract_apy_cap_pct": 4.9,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table + the dedicated 'Saquon Barkley - Pick #2, 2018' worked-example table"
+    },
+    {
+      "name": "C.J. Spiller", "position": "RB", "pick": 9, "draft_year": 2010, "is_hit": false,
+      "player_return_cap_pct": 9.4, "career_av": null,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table"
+    },
+    {
+      "name": "Trent Richardson", "position": "RB", "pick": 3, "draft_year": 2012, "is_hit": false,
+      "player_return_cap_pct": 6.6, "career_av": 17,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "prospect_score": null, "predicted_career_av": null,
+      "from_table": true,
+      "source": "draft-sharpe: top-10 RB table; career_av from sharpe-counter prose 'Trent Richardson at pick 3 (17 career AV)'"
+    },
+
+    {
+      "name": "Jalen Hurts", "position": "QB", "pick": 53, "draft_year": 2020, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 79, "predicted_career_av": 33, "career_av_delta": 46,
+      "prospect_score": 85.7,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Justin Herbert", "position": "QB", "pick": 6, "draft_year": 2020, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 74, "predicted_career_av": 53, "career_av_delta": 21,
+      "prospect_score": 88.7,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "CeeDee Lamb", "position": "WR", "pick": 17, "draft_year": 2020, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 65, "predicted_career_av": 40, "career_av_delta": 25,
+      "prospect_score": 88.3,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Justin Jefferson", "position": "WR", "pick": 22, "draft_year": 2020, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 65, "predicted_career_av": 40, "career_av_delta": 25,
+      "prospect_score": 91.0,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Ja'Marr Chase", "position": "WR", "pick": 5, "draft_year": 2021, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 58, "predicted_career_av": 56, "career_av_delta": 2,
+      "prospect_score": 96.9,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Tua Tagovailoa", "position": "QB", "pick": 5, "draft_year": 2020, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 52, "predicted_career_av": 55, "career_av_delta": -3,
+      "prospect_score": 88.7,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "DeVonta Smith", "position": "WR", "pick": 10, "draft_year": 2021, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 47, "predicted_career_av": 46, "career_av_delta": 1,
+      "prospect_score": 89.5,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Zach Wilson", "position": "QB", "pick": 2, "draft_year": 2021, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 13, "predicted_career_av": 61, "career_av_delta": -48,
+      "prospect_score": 85.8,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Jeff Okudah", "position": "CB", "pick": 3, "draft_year": 2020, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 11, "predicted_career_av": 55, "career_av_delta": -44,
+      "prospect_score": 92.2,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+    {
+      "name": "Trey Lance", "position": "QB", "pick": 3, "draft_year": 2021, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 6, "predicted_career_av": 58, "career_av_delta": -52,
+      "prospect_score": 85.9,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": true,
+      "source": "sharpe-counter: 'Model Check: Predicted vs Actual (2020-2022 Test Set)'"
+    },
+
+    {
+      "name": "Jeremiyah Love", "position": "RB", "pick": null, "draft_year": 2026, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": 50,
+      "predicted_career_av_at_pick": 10,
+      "prospect_score": 94.3, "production_score": 95.9, "athlete_score": null, "size_score": null,
+      "rb_prospect_rank_since_2010": 5, "rb_prospect_pool_n": 308, "rb_prospect_percentile": 98.4,
+      "gap_to_rb2_prospect_score": 17.2,
+      "median_surplus_usd_m_at_pick_10": 60.8,
+      "p90_crosses_premium_average_at_pick": 14,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": false,
+      "source": "sharpe-counter prose, sections 'The 2026 RB Class', 'Where Love Ranks in the Historical Record', 'Predicting Career Value', 'The Surplus Value View'. Note: post 002 spells the first name 'Jeremiah', post 003 spells it 'Jeremiyah'. Spelling here follows post 003."
+    },
+    {
+      "name": "Jonah Coleman", "position": "RB", "pick": null, "draft_year": 2026, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": null,
+      "prospect_score": 77.1,
+      "avg_snap_pct": null, "snap_ratio": null, "rookie_apy_cap_pct": null, "rookie_surplus_cap_pct": null, "second_contract_apy_cap_pct": null,
+      "from_table": false,
+      "source": "sharpe-counter prose: 'The gap to RB2 (Jonah Coleman at 77.1) is 17.2 points'"
+    },
+    {
+      "name": "Derrick Henry", "position": "RB", "pick": null, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 86, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "sharpe-counter prose: 'Derrick Henry's 86 career AV reflects a decade of elite rushing production.'"
+    },
+    {
+      "name": "John Ross", "position": "WR", "pick": null, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 7, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "sharpe-counter prose, next-pick comparison: 'CMC (86 career AV) vs John Ross (WR, 7)'"
+    },
+    {
+      "name": "Trae Waynes", "position": "CB", "pick": null, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 18, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "sharpe-counter prose, next-pick comparison: 'Gurley (54) vs Trae Waynes (CB, 18)'"
+    },
+    {
+      "name": "Matt Kalil", "position": "OT", "pick": null, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": 34, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "sharpe-counter prose: 'Trent Richardson at pick 3 (17 career AV). The next pick was Matt Kalil (OT, 34 career AV).' Pick number left null - the post says 'the next pick' but never prints it."
+    },
+    {
+      "name": "DK Metcalf", "position": "WR", "pick": 64, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "draft-sharpe prose: cited by pick number as a Round 2 WR who 'returned more than any top-10 RB'; no return value printed"
+    },
+    {
+      "name": "Davante Adams", "position": "WR", "pick": 53, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "draft-sharpe prose: cited by pick number only; no return value printed"
+    },
+    {
+      "name": "A.J. Brown", "position": "WR", "pick": 51, "draft_year": null, "is_hit": null,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": null, "prospect_score": null,
+      "from_table": false,
+      "source": "draft-sharpe prose: cited by pick number only; no return value printed"
+    },
+    {
+      "name": "Jahvid Best", "position": "RB", "pick": null, "draft_year": null, "is_hit": false,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": null, "prospect_score": null,
+      "pre_draft_elite": true,
+      "from_table": false,
+      "source": "sharpe-counter prose: 'Jahvid Best and LaMichael James scored elite on NGS but busted.' No numeric values published."
+    },
+    {
+      "name": "LaMichael James", "position": "RB", "pick": null, "draft_year": null, "is_hit": false,
+      "player_return_cap_pct": null, "career_av": null, "predicted_career_av": null, "prospect_score": null,
+      "pre_draft_elite": true,
+      "from_table": false,
+      "source": "sharpe-counter prose: 'Jahvid Best and LaMichael James scored elite on NGS but busted.' No numeric values published."
+    }
+  ],
+
+  "context": {
+    "prospect_score_vs_career_av": {
+      "source": "sharpe-counter table 'Prospect Score vs Career AV: R² by Position'",
+      "window": "2010-2022 draft classes",
+      "definitions": {
+        "pre_draft_elite": "Top 10% of Prospect Score at the position (knowable before the draft)",
+        "career_elite": "Top 10% of weighted career AV at the position (only knowable in hindsight)",
+        "hit": "Article 1's snap-based starter threshold (75% of positional baseline snaps)"
+      },
+      "rows": [
+        { "position": "QB",   "n": 112, "r_squared": 0.350, "elite_avg_av": 66.3, "other_avg_av": 20.3, "elite_hit_pct": 77.8, "other_hit_pct": 16.0 },
+        { "position": "EDGE", "n": 222, "r_squared": 0.310, "elite_avg_av": 50.8, "other_avg_av": 15.8, "elite_hit_pct": 50.0, "other_hit_pct": 10.2 },
+        { "position": "OT",   "n": 134, "r_squared": 0.308, "elite_avg_av": 53.8, "other_avg_av": 20.3, "elite_hit_pct": 66.7, "other_hit_pct": 19.8 },
+        { "position": "IOL",  "n": 202, "r_squared": 0.258, "elite_avg_av": 41.8, "other_avg_av": 19.2, "elite_hit_pct": 62.5, "other_hit_pct": 19.1 },
+        { "position": "S",    "n": 88,  "r_squared": 0.255, "elite_avg_av": 34.8, "other_avg_av": 18.1, "elite_hit_pct": 66.7, "other_hit_pct": 20.3 },
+        { "position": "LB",   "n": 201, "r_squared": 0.244, "elite_avg_av": 38.2, "other_avg_av": 14.1, "elite_hit_pct": 33.3, "other_hit_pct": 8.9 },
+        { "position": "WR",   "n": 330, "r_squared": 0.234, "elite_avg_av": 37.3, "other_avg_av": 14.3, "elite_hit_pct": 48.7, "other_hit_pct": 13.7 },
+        { "position": "DL",   "n": 186, "r_squared": 0.214, "elite_avg_av": 46.5, "other_avg_av": 18.3, "elite_hit_pct": 45.0, "other_hit_pct": 10.8 },
+        { "position": "RB",   "n": 217, "r_squared": 0.207, "elite_avg_av": 41.9, "other_avg_av": 15.1, "elite_hit_pct": 68.4, "other_hit_pct": 14.1 },
+        { "position": "TE",   "n": 151, "r_squared": 0.207, "elite_avg_av": 23.0, "other_avg_av": 10.6, "elite_hit_pct": 50.0, "other_hit_pct": 17.0 },
+        { "position": "CB",   "n": 308, "r_squared": 0.187, "elite_avg_av": 31.1, "other_avg_av": 11.4, "elite_hit_pct": 42.4, "other_hit_pct": 8.7 }
+      ],
+      "all_positions_pre_draft_elite_hit_pct": 53.5,
+      "all_positions_other_hit_pct": 13.5
+    },
+
+    "negative_sharpe_counterfactual": {
+      "source": "sharpe-counter table 'Negative-Sharpe First-Round Picks (2010-2022)'",
+      "subtitle": "128 picks at negative-Sharpe combos vs the actual next QB/EDGE/OT/WR drafted",
+      "totals_as_published": {
+        "first_round_picks_at_negative_sharpe_combos": 135,
+        "picks_with_a_matched_next_premium_player": 128,
+        "avg_career_av_negative_sharpe_picks": 40,
+        "avg_surplus_usd_m_negative_sharpe_picks": 49.2,
+        "avg_career_av_next_premium": 38,
+        "avg_surplus_usd_m_next_premium": 85.8,
+        "avg_surplus_gap_usd_m": -36.6
+      },
+      "rows": [
+        { "position": "IOL", "picks": 34, "avg_pick": 18.1, "got_career_av": 38.4, "got_surplus_usd_m": 43.0, "got_hit_pct": 53.8, "got_elite_pct": 20.6, "next_career_av": 34.3, "next_surplus_usd_m": 91.3, "next_hit_pct": 50.0, "next_elite_pct": 14.7, "surplus_delta_usd_m": -48.3 },
+        { "position": "LB",  "picks": 33, "avg_pick": 16.2, "got_career_av": 42.5, "got_surplus_usd_m": 48.8, "got_hit_pct": 40.0, "got_elite_pct": 30.3, "next_career_av": 30.7, "next_surplus_usd_m": 80.4, "next_hit_pct": 46.9, "next_elite_pct": 12.1, "surplus_delta_usd_m": -31.6 },
+        { "position": "CB",  "picks": 17, "avg_pick": 6.6,  "got_career_av": 41.8, "got_surplus_usd_m": 59.8, "got_hit_pct": 53.3, "got_elite_pct": 47.1, "next_career_av": 50.2, "next_surplus_usd_m": 96.9, "next_hit_pct": 76.5, "next_elite_pct": 23.5, "surplus_delta_usd_m": -37.1 },
+        { "position": "RB",  "picks": 16, "avg_pick": 16.0, "got_career_av": 43.1, "got_surplus_usd_m": 48.1, "got_hit_pct": 56.2, "got_elite_pct": 43.8, "next_career_av": 46.4, "next_surplus_usd_m": 95.3, "next_hit_pct": 60.0, "next_elite_pct": 31.2, "surplus_delta_usd_m": -47.2 },
+        { "position": "S",   "picks": 11, "avg_pick": 17.7, "got_career_av": 31.6, "got_surplus_usd_m": 48.1, "got_hit_pct": 45.5, "got_elite_pct": 27.3, "next_career_av": 31.6, "next_surplus_usd_m": 77.4, "next_hit_pct": 9.1,  "next_elite_pct": 18.2, "surplus_delta_usd_m": -29.3 },
+        { "position": "TE",  "picks": 10, "avg_pick": 18.0, "got_career_av": 25.7, "got_surplus_usd_m": 41.2, "got_hit_pct": 60.0, "got_elite_pct": 60.0, "next_career_av": 41.0, "next_surplus_usd_m": 83.0, "next_hit_pct": 50.0, "next_elite_pct": 30.0, "surplus_delta_usd_m": -41.8 }
+      ],
+      "row_pick_sum": 121,
+      "row_pick_sum_note": "The published rows sum to 121 picks while the table subtitle and prose say 128. Preserved as published; not reconciled."
+    },
+
+    "sharpe_vs_draft_frequency": {
+      "source": "draft-sharpe table 'Rank Correlation: Sharpe vs Draft Frequency'",
+      "average_spearman_across_rounds": 0.14,
+      "rows": [
+        { "round": 1, "spearman_r": 0.79,  "pct_picks_to_positive_sharpe_positions": 59 },
+        { "round": 2, "spearman_r": 0.20,  "pct_picks_to_positive_sharpe_positions": 22 },
+        { "round": 3, "spearman_r": 0.06,  "pct_picks_to_positive_sharpe_positions": 7 },
+        { "round": 4, "spearman_r": -0.46, "pct_picks_to_positive_sharpe_positions": 0 },
+        { "round": 5, "spearman_r": 0.10,  "pct_picks_to_positive_sharpe_positions": 0 }
+      ]
+    },
+
+    "round_1_optimality": {
+      "source": "draft-sharpe prose, section 'Are Teams Drafting Optimally?'",
+      "positions_with_positive_sharpe_somewhere_in_round_1": ["CB", "DL", "EDGE", "OT", "QB", "WR"],
+      "positions_negative_in_every_round_1_slot": ["IOL", "LB", "RB", "S", "TE"],
+      "first_round_picks_to_negative_sharpe_positions": 112,
+      "first_round_picks_total": 416,
+      "first_round_picks_to_negative_sharpe_pct": 27,
+      "top_10_picks_where_a_later_tier_had_higher_sharpe": 98,
+      "top_10_picks_total": 130,
+      "top_10_picks_where_a_later_tier_had_higher_sharpe_pct": 75
+    },
+
+    "trade_back": {
+      "source": "draft-sharpe prose, 'Appendix: The Case for Trading Back'",
+      "positions_higher_sharpe_in_round_2_than_round_1": ["CB", "LB", "OT", "RB", "S", "TE", "WR"],
+      "positions_meaningfully_higher_in_round_1": ["DL", "EDGE", "IOL", "QB"],
+      "count_higher_in_round_2": 7,
+      "positions_total": 11
+    },
+
+    "team_draft_efficiency": {
+      "source": "draft-sharpe prose 'Team-Level Draft Efficiency' and sharpe-counter prose 'How Need-Adjustment Changes the Rankings'",
+      "window": "2018-2022 first-round picks",
+      "best_team": { "team": "PHI", "avg_sharpe_per_r1_pick": 0.24 },
+      "worst_team": { "team": "PIT", "avg_sharpe_per_r1_pick": -0.64 },
+      "excluded": { "team": "LAR", "reason": "zero first-round picks 2018-2022 (traded for Jalen Ramsey and Matthew Stafford)" },
+      "need_adjusted_biggest_climber": { "team": "DAL", "spots": 4 },
+      "need_adjusted_biggest_faller": { "team": "IND", "spots": -7 },
+      "need_adjusted_sharpe_picks_filling_a_need": { "avg_sharpe": 0.057, "n": 256 },
+      "need_adjusted_sharpe_picks_at_filled_positions": { "avg_sharpe": -0.139, "n": 32 }
+    },
+
+    "career_av_variant": {
+      "source": "sharpe-counter prose, 'Weighted Career AV: Our Measuring Stick'",
+      "description": "Part 1's Sharpe formula re-run with weighted career AV as the return metric instead of snap-based contract returns.",
+      "rb_sharpe": 0.249,
+      "rb_rank_of_11": 6,
+      "all_other_positions": null,
+      "note": "Only the RB result is published for this variant. The other ten positions' career-AV Sharpe values are not printed anywhere in the post."
+    },
+
+    "class_depth_2026": {
+      "source": "sharpe-counter prose, 'The 2026 Class at a Glance'",
+      "metric": "count of prospects grading Good or better (Prospect Score >= 70)",
+      "ngs_tiers": { "below_average": [50, 60], "average": [60, 70], "good": [70, 90], "elite": [90, null] },
+      "deepest": [ { "position": "CB", "good_plus": 34 }, { "position": "WR", "good_plus": 32 }, { "position": "IOL", "good_plus": 31 } ],
+      "thinnest": [ { "position": "RB", "good_plus": 8 }, { "position": "QB", "good_plus": 10 } ],
+      "other_positions_good_plus": null,
+      "rb_elite_tier_count": 1,
+      "rb_top_prospect_gap_points": 17.2,
+      "wr_top_prospect_gap_points": 1.5
+    },
+
+    "rb_class_depth_statements": {
+      "source": "sharpe-counter prose, 'Prospective Class Quality' and 'Did the Pre-Draft Signal Match Reality?'",
+      "internal_inconsistency": true,
+      "statements": [
+        "The 2019 RB class had 14 prospects grading Good or better, the deepest pool of pre-draft talent in our sample. The 2010 class had just 9.",
+        "The 2020 RB class had 14 prospects grading Good or better, the deepest pool of pre-draft talent in our sample. The 2013 class had just 9."
+      ],
+      "note": "The post prints two mutually inconsistent versions of the same sentence. Both preserved verbatim; neither chosen as authoritative.",
+      "correlation_good_plus_count_vs_hit_rate": 0.42,
+      "correlation_by_position": { "DL": 0.45, "LB": -0.57, "others": null },
+      "best_actual_rb_class": { "year": 2017, "hit_rate_pct": 23.3 },
+      "highest_mean_ngs_rb_class_with_zero_hits": 2010
+    },
+
+    "historical_ngs_elite": {
+      "source": "sharpe-counter prose, 'The Historical NGS Elite'",
+      "rb_top_8_ngs_reached_top_10pct_career_av_pct": 50.0,
+      "dl_top_6_ngs_reached_top_10pct_career_av_pct": 66.7,
+      "s_weakest_translation_pct": 16.7,
+      "named_rb_examples": ["Jonathan Taylor", "Saquon Barkley", "Derrick Henry", "Ezekiel Elliott"]
+    },
+
+    "first_round_rb_counterfactual": {
+      "source": "sharpe-counter prose, 'Did First-Round RBs Actually Outproduce the Alternative?'",
+      "pct_first_round_rbs_outproducing_next_non_rb_pick": 56
+    },
+
+    "predictive_models": {
+      "source": "sharpe-counter, 'Predicting Career Value', 'The Surplus Value View' and 'Methodology Notes'",
+      "training_window": "2010-2019",
+      "test_window": "2020-2022 (out-of-time)",
+      "features": ["Prospect Score", "log(draft pick)", "position group"],
+      "career_av_linear_model": { "test_r_squared": 0.162, "rmse": 13.9 },
+      "snap_ratio_quantile_model": { "ols_r_squared": 0.332, "test_r_squared": 0.349, "quantiles": [10, 50, 90] },
+      "second_contract_quantile_model": { "test_r_squared": 0.316, "quantiles": [10, 50, 90] },
+      "assembled_player_return": { "combined_median_out_of_sample_r_squared": 0.866, "formula": "Player Return = Snap Ratio x (FA Cost - Rookie APY) x 4 + Second Contract" },
+      "median_elite_rb_career_av_historical": 44
+    },
+
+    "market_notes": {
+      "source": "draft-sharpe prose, 'Is a WR3 Worth More Than an Elite RB1?' and sharpe-counter prose",
+      "rashid_shaheed_wr3_apy_usd_m": 17,
+      "rbs_league_wide_earning_more_than_shaheed": 2,
+      "bijan_robinson_snap_share_pct_approx": 74,
+      "tyler_allgeier_snap_share_pct_approx": 30,
+      "elite_lt_snap_share_pct_approx": 97,
+      "median_round_2_wr_return_cap_frac": 0.236,
+      "best_top_10_rb_return_cap_frac": 0.313,
+      "rookie_deal_cap_savings_per_year_approx": { "QB_pct": 10, "RB_pct": 1.6 },
+      "worked_2018_comparison": {
+        "saquon_barkley": { "pick": 2, "rookie_apy_cap_pct_approx": 4.4, "fa_replacement_cap_pct_approx": 6.0, "savings_usd_m_per_year_approx": 4, "four_year_rookie_surplus_usd_m_approx": 19 },
+        "sam_darnold": { "pick": 3, "rookie_apy_cap_pct_approx": 4.3, "fa_replacement_cap_pct_approx": 14.6, "savings_usd_m_per_year_approx": 26, "four_year_rookie_surplus_usd_m_approx": 120 }
+      },
+      "rb_aging_curve_fantasy_points_year_1": { "RB": 70, "QB": 148, "WR": 52 },
+      "rb_peak_year": 7,
+      "wr_peak_year": 9,
+      "rb_peak_note": "Published statements about RB aging conflict within post 003: 'they peak in year 7 and decline fast' vs 'peaking in their first two years'. Both preserved; neither reconciled."
+    },
+
+    "fa_supply_published": {
+      "source": "draft-sharpe prose, 'Supply-Controlled Free Agency Replacement Cost'",
+      "note": "Only three positions' supply counts are printed in text; the rest exist only in a chart image.",
+      "values": { "OT": 3, "QB": 3, "IOL": 8 },
+      "definition": "Starter-caliber FA contracts signed per position per year, where starter-caliber = at least the 25th percentile of what snap-based hits earned on their second contracts."
+    },
+
+    "rb_rooms_2026": {
+      "source": "sharpe-counter table '2026 RB Room Snapshot'",
+      "subtitle": "Current depth charts via OurLads | Sorted by need then pick",
+      "teams_with_need": 9,
+      "rows": [
+        { "team": "ARI", "r1_pick": 3,  "rb1": "Tyler Allgeier",      "rb2": "James Conner",        "rb3": "Trey Benson",            "status": "Need" },
+        { "team": "TEN", "r1_pick": 4,  "rb1": "Tony Pollard",        "rb2": "Tyjae Spears",        "rb3": "Michael Carter",         "status": "Need" },
+        { "team": "NYG", "r1_pick": 5,  "rb1": "Cam Skattebo",        "rb2": "Tyrone Tracy Jr.",    "rb3": "Devin Singletary",       "status": "Need" },
+        { "team": "WAS", "r1_pick": 7,  "rb1": "Rachaad White",       "rb2": "Jerome Ford",         "rb3": "Jacory Croskey-Merritt", "status": "Need" },
+        { "team": "MIN", "r1_pick": 18, "rb1": "Aaron Jones Sr.",     "rb2": "Jordan Mason",        "rb3": "Zavier Scott",           "status": "Need" },
+        { "team": "CAR", "r1_pick": 19, "rb1": "Chuba Hubbard",       "rb2": "Jonathon Brooks",     "rb3": "Trevor Etienne",         "status": "Need" },
+        { "team": "JAX", "r1_pick": 24, "rb1": "Bhayshul Tuten",      "rb2": "LeQuint Allen Jr.",   "rb3": "Chris Rodriguez Jr.",    "status": "Need" },
+        { "team": "NE",  "r1_pick": 31, "rb1": "Rhamondre Stevenson", "rb2": "TreVeyon Henderson",  "rb3": "Lan Larison",            "status": "Need" },
+        { "team": "SEA", "r1_pick": 32, "rb1": "Zach Charbonnet",     "rb2": "Emanuel Wilson",      "rb3": "George Holani",          "status": "Need" },
+        { "team": "LV",  "r1_pick": 1,  "rb1": "Ashton Jeanty",       "rb2": "Dylan Laube",         "rb3": "Chris Collier",          "status": "Filled" },
+        { "team": "NYJ", "r1_pick": 2,  "rb1": "Breece Hall",         "rb2": "Braelon Allen",       "rb3": "Isaiah Davis",           "status": "Filled" },
+        { "team": "CLE", "r1_pick": 6,  "rb1": "Quinshon Judkins",    "rb2": "Dylan Sampson",       "rb3": "Raheim Sanders",         "status": "Filled" },
+        { "team": "NO",  "r1_pick": 8,  "rb1": "Travis Etienne Jr.",  "rb2": "Alvin Kamara",        "rb3": "Kendre Miller",          "status": "Filled" },
+        { "team": "KC",  "r1_pick": 9,  "rb1": "Kenneth Walker",      "rb2": "Brashard Smith",      "rb3": "Emari Demercado",        "status": "Filled" },
+        { "team": "CIN", "r1_pick": 10, "rb1": "Chase Brown",         "rb2": "Samaje Perine",       "rb3": "Tahj Brooks",            "status": "Filled" },
+        { "team": "MIA", "r1_pick": 11, "rb1": "De'Von Achane",       "rb2": "Jaylen Wright",       "rb3": "Ollie Gordon II",        "status": "Filled" },
+        { "team": "DAL", "r1_pick": 12, "rb1": "Javonte Williams",    "rb2": "Malik Davis",         "rb3": "Jaydon Blue",            "status": "Filled" },
+        { "team": "ATL", "r1_pick": 13, "rb1": "Bijan Robinson",      "rb2": "Brian Robinson",      "rb3": "Tyler Goodson",          "status": "Filled" },
+        { "team": "BAL", "r1_pick": 14, "rb1": "Derrick Henry",       "rb2": "Justice Hill",        "rb3": "Rasheen Ali",            "status": "Filled" },
+        { "team": "TB",  "r1_pick": 15, "rb1": "Bucky Irving",        "rb2": "Kenneth Gainwell",    "rb3": "Sean Tucker",            "status": "Filled" },
+        { "team": "IND", "r1_pick": 16, "rb1": "Jonathan Taylor",     "rb2": "DJ Giddens",          "rb3": "Ulysses Bentley IV",     "status": "Filled" },
+        { "team": "DET", "r1_pick": 17, "rb1": "Jahmyr Gibbs",        "rb2": "Isiah Pacheco",       "rb3": "Jacob Saylors",          "status": "Filled" },
+        { "team": "GB",  "r1_pick": 20, "rb1": "Josh Jacobs",         "rb2": "Chris Brooks",        "rb3": "MarShawn Lloyd",         "status": "Filled" },
+        { "team": "PIT", "r1_pick": 21, "rb1": "Jaylen Warren",       "rb2": "Rico Dowdle",         "rb3": "Kaleb Johnson",          "status": "Filled" },
+        { "team": "LAC", "r1_pick": 22, "rb1": "Omarion Hampton",     "rb2": "Keaton Mitchell",     "rb3": "Kimani Vidal",           "status": "Filled" },
+        { "team": "PHI", "r1_pick": 23, "rb1": "Saquon Barkley",      "rb2": "Tank Bigsby",         "rb3": "Will Shipley",           "status": "Filled" },
+        { "team": "CHI", "r1_pick": 25, "rb1": "D'Andre Swift",       "rb2": "Kyle Monangai",       "rb3": "Roschon Johnson",        "status": "Filled" },
+        { "team": "BUF", "r1_pick": 26, "rb1": "James Cook III",      "rb2": "Ty Johnson",          "rb3": "Ray Davis",              "status": "Filled" },
+        { "team": "SF",  "r1_pick": 27, "rb1": "Christian McCaffrey", "rb2": "Jordan James",        "rb3": "Isaac Guerendo",         "status": "Filled" },
+        { "team": "HOU", "r1_pick": 28, "rb1": "David Montgomery",    "rb2": "Woody Marks",         "rb3": "Jawhar Jordan",          "status": "Filled" },
+        { "team": "LA",  "r1_pick": 29, "rb1": "Kyren Williams",      "rb2": "Blake Corum",         "rb3": "Ronnie Rivers",          "status": "Filled" },
+        { "team": "DEN", "r1_pick": 30, "rb1": "J.K. Dobbins",        "rb2": "RJ Harvey",           "rb3": "Jaleel McLaughlin",      "status": "Filled" }
+      ]
+    }
+  },
+
+  "discrepancies": [
+    {
+      "field": "WR round_2 sharpe",
+      "table_value": 0.227,
+      "conflicting_prose_value": 0.47,
+      "where": "draft-sharpe, 'Key Takeaways': 'The best WR Sharpe (0.47 in Round 2)'",
+      "resolution": "Table value stored. 0.468 is the published OT Round 2 Sharpe, so the prose figure appears to be a transcription slip in the post. Not corrected here - flagged only."
+    },
+    {
+      "field": "RB top_10 sharpe",
+      "table_value": -0.615,
+      "conflicting_prose_value": -0.62,
+      "where": "draft-sharpe TL;DR and sharpe-counter recap",
+      "resolution": "Rounding only. Table value stored."
+    },
+    {
+      "field": "QB top_10 sharpe",
+      "table_value": 0.374,
+      "conflicting_prose_value": 0.37,
+      "where": "draft-sharpe prose",
+      "resolution": "Rounding only. Table value stored."
+    },
+    {
+      "field": "EDGE late_1st sharpe",
+      "table_value": 0.594,
+      "conflicting_prose_value": 0.59,
+      "where": "draft-sharpe prose",
+      "resolution": "Rounding only. Table value stored."
+    },
+    {
+      "field": "negative-Sharpe pick counts",
+      "table_row_sum": 121,
+      "conflicting_prose_value": 128,
+      "where": "sharpe-counter, table subtitle and prose vs the six published rows",
+      "resolution": "Both preserved. row_pick_sum recorded alongside the published totals."
+    },
+    {
+      "field": "RB class depth sentence",
+      "where": "sharpe-counter, 'Prospective Class Quality' vs 'Did the Pre-Draft Signal Match Reality?'",
+      "resolution": "Two mutually inconsistent versions (2019 vs 2020 deepest; 2010 vs 2013 thinnest) both stored verbatim under context.rb_class_depth_statements."
+    },
+    {
+      "field": "RB peak year",
+      "where": "sharpe-counter, 'Putting It All Together' vs 'What the Stress Test Found'",
+      "resolution": "'peak in year 7' vs 'peaking in their first two years' both stored under context.market_notes."
+    },
+    {
+      "field": "analysis start year",
+      "where": "draft-sharpe footer (2009-2022) vs sharpe-counter methodology (2010-2022) vs draft-sharpe prose ('top 10 since 2010', 'any top-10 RB since 2009')",
+      "resolution": "All statements preserved under model.sample_window. No single window asserted."
+    },
+    {
+      "field": "Love pick-10 surplus gap",
+      "where": "sharpe-counter, 'The Surplus Value View'",
+      "resolution": "Published gap is $35.5M while the published components (96.4 - 60.8) differ by 35.6. Both stored; not recomputed."
+    },
+    {
+      "field": "prospect first name",
+      "where": "draft-sharpe uses 'Jeremiah Love', sharpe-counter uses 'Jeremiyah Love'",
+      "resolution": "players[] uses the post 003 spelling; both spellings noted on the record."
+    }
+  ],
+
+  "gaps": [
+    "bust_rate is not published for any position or tier in either post. Hit rate is published; the posts never define or print a bust rate. All bust_rate_pct fields are null.",
+    "SD(player return) is published only for QB Top 10 (25.7%) and RB Top 10 (9.7%). All other sd_player_return_cap_pct fields are null.",
+    "No expected-value-by-overall-pick table exists. The surplus-by-pick curves in post 003 are chart images only. picks.per_overall_pick_curve_published is false.",
+    "Tier-to-pick-range mapping is not published; the ranges in tiers[] are conventional readings of the labels and are flagged pick_range_published:false.",
+    "FA starter supply per year is printed for OT (3), QB (3) and IOL (8) only. The other eight positions are chart-only and are null.",
+    "Best second-contract cap% is printed only for RB (~8%) and WR (~14%), both as approximations. Null elsewhere.",
+    "The career-AV Sharpe variant publishes only RB (0.249, 6th of 11). The other ten positions' values are null.",
+    "2026 class Good+ counts are printed for CB (34), WR (32), IOL (31), RB (8) and QB (10) only. The remaining six positions are null.",
+    "Per-year class-depth counts by position exist only in charts; only a handful of RB years are stated in text.",
+    "The Top 10 / Round 1 surplus leaderboards and all Top-5-by-position appendices are images. Their player rows and values are not in the HTML and are absent here.",
+    "Team-level draft-efficiency scores are published for PHI (+0.24) and PIT (-0.64) only; the full 32-team ranking is chart-only.",
+    "Athlete Score and Size Score are not published for any individual prospect (only Love's Production Score, 95.9).",
+    "Rookie wage-scale APY by pick (a CBA input the models use) is never tabulated in either post.",
+    "Elite-threshold equivalents in dollars, and the cap value used to convert cap% to $M, are never published - so cap% and $M figures here cannot be converted into each other."
+  ]
+}

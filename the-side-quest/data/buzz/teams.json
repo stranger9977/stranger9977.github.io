@@ -1,0 +1,340 @@
+{
+ "version": 1,
+ "generated": "2026-08-02",
+ "description": "All 32 NFL clubs. Colors match the team chips already used in the camp wire.",
+ "source": "Club identity (name/conference/division) is public record; hex values are the team colors already in use in the-side-quest/posts/camp-buzz/index.html.",
+ "alias_note": "aliases lists historical or alternate abbreviations that appear in older data (wire records for the 2018-2019 Raiders carry team 'OAK'). Resolve an unknown abbr by scanning aliases before treating it as unmapped.",
+ "count": 32,
+ "teams": [
+  {
+   "abbr": "ARI",
+   "name": "Arizona Cardinals",
+   "nickname": "Cardinals",
+   "conference": "NFC",
+   "division": "West",
+   "primary": "#97233F",
+   "secondary": "#000000",
+   "aliases": []
+  },
+  {
+   "abbr": "ATL",
+   "name": "Atlanta Falcons",
+   "nickname": "Falcons",
+   "conference": "NFC",
+   "division": "South",
+   "primary": "#A71930",
+   "secondary": "#000000",
+   "aliases": []
+  },
+  {
+   "abbr": "BAL",
+   "name": "Baltimore Ravens",
+   "nickname": "Ravens",
+   "conference": "AFC",
+   "division": "North",
+   "primary": "#241773",
+   "secondary": "#9E7C0C",
+   "aliases": []
+  },
+  {
+   "abbr": "BUF",
+   "name": "Buffalo Bills",
+   "nickname": "Bills",
+   "conference": "AFC",
+   "division": "East",
+   "primary": "#00338D",
+   "secondary": "#C60C30",
+   "aliases": []
+  },
+  {
+   "abbr": "CAR",
+   "name": "Carolina Panthers",
+   "nickname": "Panthers",
+   "conference": "NFC",
+   "division": "South",
+   "primary": "#0085CA",
+   "secondary": "#101820",
+   "aliases": []
+  },
+  {
+   "abbr": "CHI",
+   "name": "Chicago Bears",
+   "nickname": "Bears",
+   "conference": "NFC",
+   "division": "North",
+   "primary": "#0B162A",
+   "secondary": "#C83803",
+   "aliases": []
+  },
+  {
+   "abbr": "CIN",
+   "name": "Cincinnati Bengals",
+   "nickname": "Bengals",
+   "conference": "AFC",
+   "division": "North",
+   "primary": "#FB4F14",
+   "secondary": "#000000",
+   "aliases": []
+  },
+  {
+   "abbr": "CLE",
+   "name": "Cleveland Browns",
+   "nickname": "Browns",
+   "conference": "AFC",
+   "division": "North",
+   "primary": "#311D00",
+   "secondary": "#FF3C00",
+   "aliases": []
+  },
+  {
+   "abbr": "DAL",
+   "name": "Dallas Cowboys",
+   "nickname": "Cowboys",
+   "conference": "NFC",
+   "division": "East",
+   "primary": "#003594",
+   "secondary": "#869397",
+   "aliases": []
+  },
+  {
+   "abbr": "DEN",
+   "name": "Denver Broncos",
+   "nickname": "Broncos",
+   "conference": "AFC",
+   "division": "West",
+   "primary": "#FB4F14",
+   "secondary": "#002244",
+   "aliases": []
+  },
+  {
+   "abbr": "DET",
+   "name": "Detroit Lions",
+   "nickname": "Lions",
+   "conference": "NFC",
+   "division": "North",
+   "primary": "#0076B6",
+   "secondary": "#B0B7BC",
+   "aliases": []
+  },
+  {
+   "abbr": "GB",
+   "name": "Green Bay Packers",
+   "nickname": "Packers",
+   "conference": "NFC",
+   "division": "North",
+   "primary": "#203731",
+   "secondary": "#FFB612",
+   "aliases": []
+  },
+  {
+   "abbr": "HOU",
+   "name": "Houston Texans",
+   "nickname": "Texans",
+   "conference": "AFC",
+   "division": "South",
+   "primary": "#03202F",
+   "secondary": "#A71930",
+   "aliases": []
+  },
+  {
+   "abbr": "IND",
+   "name": "Indianapolis Colts",
+   "nickname": "Colts",
+   "conference": "AFC",
+   "division": "South",
+   "primary": "#002C5F",
+   "secondary": "#A2AAAD",
+   "aliases": []
+  },
+  {
+   "abbr": "JAX",
+   "name": "Jacksonville Jaguars",
+   "nickname": "Jaguars",
+   "conference": "AFC",
+   "division": "South",
+   "primary": "#006778",
+   "secondary": "#D7A22A",
+   "aliases": [
+    "JAC"
+   ]
+  },
+  {
+   "abbr": "KC",
+   "name": "Kansas City Chiefs",
+   "nickname": "Chiefs",
+   "conference": "AFC",
+   "division": "West",
+   "primary": "#E31837",
+   "secondary": "#FFB81C",
+   "aliases": []
+  },
+  {
+   "abbr": "LAC",
+   "name": "Los Angeles Chargers",
+   "nickname": "Chargers",
+   "conference": "AFC",
+   "division": "West",
+   "primary": "#0080C6",
+   "secondary": "#FFC20E",
+   "aliases": [
+    "SD"
+   ]
+  },
+  {
+   "abbr": "LAR",
+   "name": "Los Angeles Rams",
+   "nickname": "Rams",
+   "conference": "NFC",
+   "division": "West",
+   "primary": "#003594",
+   "secondary": "#FFA300",
+   "aliases": [
+    "STL"
+   ]
+  },
+  {
+   "abbr": "LV",
+   "name": "Las Vegas Raiders",
+   "nickname": "Raiders",
+   "conference": "AFC",
+   "division": "West",
+   "primary": "#000000",
+   "secondary": "#A5ACAF",
+   "aliases": [
+    "OAK"
+   ]
+  },
+  {
+   "abbr": "MIA",
+   "name": "Miami Dolphins",
+   "nickname": "Dolphins",
+   "conference": "AFC",
+   "division": "East",
+   "primary": "#008E97",
+   "secondary": "#FC4C02",
+   "aliases": []
+  },
+  {
+   "abbr": "MIN",
+   "name": "Minnesota Vikings",
+   "nickname": "Vikings",
+   "conference": "NFC",
+   "division": "North",
+   "primary": "#4F2683",
+   "secondary": "#FFC62F",
+   "aliases": []
+  },
+  {
+   "abbr": "NE",
+   "name": "New England Patriots",
+   "nickname": "Patriots",
+   "conference": "AFC",
+   "division": "East",
+   "primary": "#002244",
+   "secondary": "#C60C30",
+   "aliases": []
+  },
+  {
+   "abbr": "NO",
+   "name": "New Orleans Saints",
+   "nickname": "Saints",
+   "conference": "NFC",
+   "division": "South",
+   "primary": "#101820",
+   "secondary": "#D3BC8D",
+   "aliases": []
+  },
+  {
+   "abbr": "NYG",
+   "name": "New York Giants",
+   "nickname": "Giants",
+   "conference": "NFC",
+   "division": "East",
+   "primary": "#0B2265",
+   "secondary": "#A71930",
+   "aliases": []
+  },
+  {
+   "abbr": "NYJ",
+   "name": "New York Jets",
+   "nickname": "Jets",
+   "conference": "AFC",
+   "division": "East",
+   "primary": "#125740",
+   "secondary": "#000000",
+   "aliases": []
+  },
+  {
+   "abbr": "PHI",
+   "name": "Philadelphia Eagles",
+   "nickname": "Eagles",
+   "conference": "NFC",
+   "division": "East",
+   "primary": "#004C54",
+   "secondary": "#A5A5AF",
+   "aliases": []
+  },
+  {
+   "abbr": "PIT",
+   "name": "Pittsburgh Steelers",
+   "nickname": "Steelers",
+   "conference": "AFC",
+   "division": "North",
+   "primary": "#101820",
+   "secondary": "#FFB612",
+   "aliases": []
+  },
+  {
+   "abbr": "SEA",
+   "name": "Seattle Seahawks",
+   "nickname": "Seahawks",
+   "conference": "NFC",
+   "division": "West",
+   "primary": "#002244",
+   "secondary": "#69BE28",
+   "aliases": []
+  },
+  {
+   "abbr": "SF",
+   "name": "San Francisco 49ers",
+   "nickname": "49ers",
+   "conference": "NFC",
+   "division": "West",
+   "primary": "#AA0000",
+   "secondary": "#B3995D",
+   "aliases": []
+  },
+  {
+   "abbr": "TB",
+   "name": "Tampa Bay Buccaneers",
+   "nickname": "Buccaneers",
+   "conference": "NFC",
+   "division": "South",
+   "primary": "#D50A0A",
+   "secondary": "#34302B",
+   "aliases": []
+  },
+  {
+   "abbr": "TEN",
+   "name": "Tennessee Titans",
+   "nickname": "Titans",
+   "conference": "AFC",
+   "division": "South",
+   "primary": "#0C2340",
+   "secondary": "#4B92DB",
+   "aliases": []
+  },
+  {
+   "abbr": "WAS",
+   "name": "Washington Commanders",
+   "nickname": "Commanders",
+   "conference": "NFC",
+   "division": "East",
+   "primary": "#5A1414",
+   "secondary": "#FFB612",
+   "aliases": [
+    "WFT"
+   ]
+  }
+ ]
+}

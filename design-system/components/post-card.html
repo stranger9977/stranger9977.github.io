@@ -1,36 +1,277 @@
-<!-- @dsCard group="Components" name="Post card" subtitle="Blog list card, with and without LIVE badge" -->
+<!-- @dsCard group="Components" name="Post tile" subtitle="Square magazine-cover tile, hover-reveal preview, per-post theme" -->
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Post card — The Side Quest DS</title><style>
+<title>Post tile — The Side Quest DS</title><style>
   :root { color-scheme: light dark;
-    --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
-    --grid:#eae1c8; --baseline:#cfc5a6; --honey:#eda100; --honey-text:#8a5d00;
-    --green:#0c7a53; --crimson:#b3263c; }
+    /* site chrome tokens — see tokens/colors.html, Layer 1 */
+    --c-canvas:#fcfcf9;  --c-panel:#ffffff;  --c-panel-2:#f2f1ea;
+    --c-ink:#16150f;     --c-ink-2:#4b4940;  --c-muted:#706d61;
+    --c-rule:#16150f;    --c-border:#c6c3b6; --c-dotted:#9d9a8d;
+    --c-link:#0000cc;    --c-visited:#551a8b; --c-focus:#0000cc; --c-stub:#8a6d00; }
   @media (prefers-color-scheme: dark) {
-    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
-      --grid:#2e2a1e; --baseline:#423b28; --honey-text:#eda100; } }
+    :root { --c-canvas:#131311; --c-panel:#1c1c19; --c-panel-2:#232320;
+      --c-ink:#ecebe3; --c-ink-2:#b3b0a4; --c-muted:#8a877b;
+      --c-rule:#ecebe3; --c-border:#3b3a34; --c-dotted:#55534a;
+      --c-link:#8fb0ff; --c-visited:#c9a6f5; --c-focus:#8fb0ff; --c-stub:#d8b45a; } }
+
   * { box-sizing:border-box; }
-  body { margin:0; padding:24px; background:var(--page); color:var(--ink);
-    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6; }
-  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  body { margin:0; padding:24px 20px 40px; background:var(--c-canvas); color:var(--c-ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6;
+    overflow-wrap:break-word; }
+  .wrap { max-width:860px; margin:0 auto; }
+  .spec { margin:0 0 10px; font-family:"Courier New",Courier,monospace; font-size:.68rem;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--c-muted); }
+  .note { font-family:"Courier New",Courier,monospace; font-size:.72rem; color:var(--c-muted);
+    line-height:1.65; }
+  pre { font-family:"Courier New",Courier,monospace; font-size:.72rem; line-height:1.55;
+    background:var(--c-panel-2); border:1px solid var(--c-border); color:var(--c-ink);
+    padding:12px 14px; overflow-x:auto; margin:0; }
+
+  /* ── Shelf header (directory listing) ──────────────────────────────── */
+  .shelf-head { font-family:"Courier New",Courier,monospace; font-size:.76rem; color:var(--c-ink-2);
+    border-top:1px solid var(--c-rule); border-bottom:1px dotted var(--c-dotted);
+    padding:8px 0; margin-bottom:14px; display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; }
+  .shelf-head b { color:var(--c-ink); }
+  .shelf-head .dim { color:var(--c-muted); }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     POST TILE
+     Every visual decision below reads from a --cover-* custom property.
+     A post supplies its own cover by scoping those properties to its tile
+     (inline style attribute, written straight from the post metadata),
+     so a new post ships its theme with it and this CSS never changes.
+     ══════════════════════════════════════════════════════════════════════ */
+  .shelf { display:grid; gap:14px;
+    grid-template-columns:repeat(auto-fill,minmax(min(258px,100%),1fr)); }
+
+  .tile {
+    /* fallbacks = an unthemed post still renders, in plain chrome */
+    --cover-bg:var(--c-panel);
+    --cover-ink:var(--c-ink);
+    --cover-ink-2:var(--c-ink-2);
+    --cover-rule:var(--c-border);
+    --cover-accent:var(--c-ink);
+    --cover-peek-bg:var(--c-ink);
+    --cover-peek-ink:var(--c-canvas);
+    --cover-font:Georgia,"Times New Roman",serif;
+    --cover-meta-font:"Courier New",Courier,monospace;
+    --cover-prefix:"";
+    --cover-bullet:"\00b7\00a0";
+    --cover-texture:none;
+
+    position:relative; display:flex; flex-direction:column; overflow:hidden;
+    aspect-ratio:1/1; min-height:240px; padding:16px 16px 15px;
+    text-decoration:none; background:var(--cover-bg); color:var(--cover-ink);
+    border:1px solid var(--cover-rule); font-family:var(--cover-font);
+  }
+  /* texture plate: newsprint tooth, scanlines, graph paper — theme's call */
+  .tile::before { content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background-image:var(--cover-texture); }
+  .tile > * { position:relative; z-index:1; }
+
+  /* hover / focus = double-rule outline. Never a shadow, never a lift. */
+  .tile:hover { outline:1px solid var(--cover-rule); outline-offset:3px; }
+  .tile:focus-visible { outline:2px solid var(--cover-accent); outline-offset:3px; }
+
+  .tile .kicker { font-family:var(--cover-meta-font); font-size:.66rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--cover-accent); margin:0 0 10px; }
+  .tile .headline { font-family:var(--cover-font); font-size:1.5rem; line-height:1.14;
+    font-weight:700; letter-spacing:-.01em; margin:0; color:var(--cover-ink); }
+  .tile .headline::before { content:var(--cover-prefix); color:var(--cover-accent); }
+  .tile .dek { font-size:.9rem; font-style:italic; color:var(--cover-ink-2); margin:8px 0 0; }
+  .tile .foot { margin-top:auto; padding-top:12px; font-family:var(--cover-meta-font);
+    font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--cover-ink-2);
+    border-top:1px solid var(--cover-rule); }
+  .tile .flag { border:1px solid currentColor; padding:0 5px; margin-left:6px; }
+
+  /* preview panel — slides up over the lower half on hover / focus */
+  .peek { position:absolute; left:0; right:0; bottom:0; z-index:2;
+    background:var(--cover-peek-bg); color:var(--cover-peek-ink);
+    border-top:1px solid var(--cover-rule); padding:12px 16px 14px;
+    transform:translateY(101%); transition:transform .22s ease; }
+  .tile:hover .peek, .tile:focus .peek, .tile:focus-visible .peek,
+  .tile:focus-within .peek { transform:translateY(0); }
+
+  .peek .statval { display:block; font-family:var(--cover-font); font-size:2rem; line-height:1;
+    font-weight:700; letter-spacing:-.02em; color:var(--cover-accent); }
+  .peek .statval::before { content:var(--cover-prefix); }
+  .peek .statlab { display:block; font-family:var(--cover-meta-font); font-size:.63rem;
+    letter-spacing:.1em; text-transform:uppercase; margin-top:4px; opacity:.85; }
+  .peek .tools { list-style:none; margin:10px 0 0; padding:9px 0 0; font-family:var(--cover-meta-font);
+    font-size:.7rem; line-height:1.6; border-top:1px dotted currentColor; }
+  .peek .tools li::before { content:var(--cover-bullet); color:var(--cover-accent); }
+
+  @media (prefers-reduced-motion: reduce) { .peek { transition:none; } }
+  /* touch: no hover to give, so the preview just lives there */
+  @media (hover:none) { .peek { transform:translateY(0); } }
+
+  /* ── Cover: honey newsprint (The Buzz) ─────────────────────────────── */
+  /* Kept here only so the specimens read cleanly; in production this whole
+     block is the post's metadata record, applied inline. */
+  .cover-honey {
+    --cover-bg:#f6efdd; --cover-ink:#1c1304; --cover-ink-2:#5c5340; --cover-rule:#1c1304;
+    --cover-accent:#8a5d00; --cover-peek-bg:#1c1304; --cover-peek-ink:#f6efdd;
+    --cover-font:Georgia,"Times New Roman",serif; --cover-meta-font:"Courier New",Courier,monospace;
+    --cover-texture:repeating-linear-gradient(0deg,rgba(28,19,4,.05) 0 1px,transparent 1px 4px);
+  }
+  .cover-honey .peek { --cover-accent:#eda100; }
+  @media (prefers-color-scheme: dark) { .cover-honey { --cover-bg:#e9e0c9; } }
+
+  /* ── Cover: green terminal (Draft Board) ───────────────────────────── */
+  .cover-terminal {
+    --cover-bg:#07110c; --cover-ink:#d6ffe9; --cover-ink-2:#7fbfa2; --cover-rule:#0c7a53;
+    --cover-accent:#2fd08a; --cover-peek-bg:#0c7a53; --cover-peek-ink:#eafff4;
+    --cover-font:"Courier New",Courier,monospace; --cover-meta-font:"Courier New",Courier,monospace;
+    --cover-prefix:"> "; --cover-bullet:"$\00a0";
+    --cover-texture:repeating-linear-gradient(0deg,rgba(214,255,233,.045) 0 1px,transparent 1px 3px);
+  }
+  .cover-terminal .headline { font-size:1.32rem; font-weight:700; letter-spacing:0; }
+  .cover-terminal .peek { --cover-accent:#d6ffe9; }
+
+  /* ── Cover: unthemed / under construction ──────────────────────────── */
+  .cover-stub { --cover-rule:var(--c-stub); --cover-accent:var(--c-stub); }
+  .cover-stub .headline { font-style:italic; color:var(--c-ink-2); }
 </style></head>
 <body>
-<style>
-.card { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--grid);
-  border-radius:14px; padding:20px 22px; margin-bottom:16px; max-width:640px; transition:transform .15s, box-shadow .15s; }
-.card:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(28,19,4,.08); }
-.kick { font-family:system-ui,sans-serif; font-size:.7rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; margin-bottom:6px; }
-.card h2 { font-family:system-ui,sans-serif; font-weight:850; font-size:1.35rem; margin:0 0 6px; line-height:1.2; }
-.dek { color:var(--ink2); font-style:italic; font-size:.98rem; margin:0 0 10px; }
-.meta { font-family:system-ui,sans-serif; font-size:.78rem; color:var(--muted); }
-.live { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:800; letter-spacing:.08em;
-  color:#fff; background:var(--crimson); border-radius:5px; padding:2px 7px; margin-left:6px; animation:pulse 2.4s infinite; vertical-align:2px; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
-</style>
-<a class="card" href="#"><div class="kick" style="color:#b97a00">No. 001 · Fantasy Football<span class="live">LIVE</span></div>
-<h2>The Buzz Is Real</h2><p class="dek">What eight years of training camp hype actually predicts.</p>
-<div class="meta"><b>August 2026</b> · live trackers, updated daily</div></a>
-<a class="card" href="#"><div class="kick" style="color:var(--green)">No. 002 · NFL Draft</div>
-<h2>NFL Draft Quasi-Sharpe Ratio Analysis</h2><p class="dek">Treating the draft like a portfolio problem.</p>
-<div class="meta"><b>April 2026</b> · As featured in Michael MacKelvie's video</div></a>
+<div class="wrap">
+
+  <p class="spec">specimen 01 &mdash; the shelf, two cover themes</p>
+
+  <div class="shelf-head">
+    <b>index of /quests/</b><span class="dim">&middot;</span><span>3 entries</span>
+    <span class="dim">&middot;</span><span class="dim">last updated 2026-08-02 07:41</span>
+  </div>
+
+  <div class="shelf" id="shelf">
+
+    <!-- The Buzz Is Real — theme record lives on the tile, not in this stylesheet.
+         Class used here for legibility; production writes these same properties inline. -->
+    <a class="tile cover-honey" href="/the-side-quest/posts/camp-buzz/">
+      <p class="kicker">No. 001 &middot; Fantasy football</p>
+      <h2 class="headline">The Buzz Is Real</h2>
+      <p class="dek">What eight years of training camp hype actually predicts.</p>
+      <p class="foot">August 2026 <span class="flag">live</span></p>
+      <div class="peek">
+        <!-- stat + tool names come from the post's metadata record -->
+        <span class="statval">8</span>
+        <span class="statlab">seasons backtested &middot; 2018&ndash;2025</span>
+        <ul class="tools">
+          <li>live camp wire</li>
+          <li>buzz tracker</li>
+          <li>watchlist table</li>
+        </ul>
+      </div>
+    </a>
+
+    <!-- Draft board — same markup, different theme record -->
+    <a class="tile cover-terminal" href="/the-side-quest/posts/draft-sharpe/">
+      <p class="kicker">No. 002 &middot; NFL draft</p>
+      <h2 class="headline">Draft Board</h2>
+      <p class="dek">Treating the draft like a portfolio problem.</p>
+      <p class="foot">April 2026</p>
+      <div class="peek">
+        <span class="statval">002</span>
+        <span class="statlab">quasi-sharpe ratio analysis</span>
+        <ul class="tools">
+          <li>sortable draft board</li>
+          <li>team filter</li>
+          <li>risk/return scatter</li>
+        </ul>
+      </div>
+    </a>
+
+    <!-- Third tile is injected by the script below, from a metadata record only. -->
+  </div>
+
+  <noscript>
+    <p class="note" style="margin-top:12px">
+      [ script off &mdash; the metadata-driven third tile is not shown. Tiles rendered in HTML,
+      like the two above, need no JS. ]
+    </p>
+  </noscript>
+
+  <p class="note" style="margin-top:16px">
+    Square, 1px border, no radius, no shadow. Hover and keyboard focus slide the preview panel up
+    and draw a double-rule outline. Coarse pointers get the panel pinned open;
+    <span style="color:var(--c-ink)">prefers-reduced-motion</span> drops the slide.
+  </p>
+
+  <p class="spec" style="margin-top:34px">specimen 02 &mdash; the theme record</p>
+  <pre>{
+  "slug": "draft-sharpe",
+  "no": "002",
+  "kicker": "No. 002 · NFL draft",
+  "title": "Draft Board",
+  "stat":  { "value": "002", "label": "quasi-sharpe ratio analysis" },
+  "tools": ["sortable draft board", "team filter", "risk/return scatter"],
+  "theme": {
+    "--cover-bg":        "#07110c",
+    "--cover-ink":       "#d6ffe9",
+    "--cover-ink-2":     "#7fbfa2",
+    "--cover-rule":      "#0c7a53",
+    "--cover-accent":    "#2fd08a",
+    "--cover-peek-bg":   "#0c7a53",
+    "--cover-peek-ink":  "#eafff4",
+    "--cover-font":      "'Courier New', monospace",
+    "--cover-prefix":    "'&gt; '",
+    "--cover-bullet":    "'$\\00a0'",
+    "--cover-texture":   "repeating-linear-gradient(0deg,rgba(214,255,233,.045) 0 1px,transparent 1px 3px)"
+  }
+}</pre>
+  <p class="note" style="margin-top:12px">
+    The renderer walks <span style="color:var(--c-ink)">theme</span> and calls
+    <span style="color:var(--c-ink)">setProperty</span> on the tile &mdash; every key is optional and
+    falls back to plain chrome. Adding post No. 004 with its own cover touches the data file only.
+  </p>
+
+  <script>
+  // Reference renderer: a tile built from nothing but a metadata record.
+  // Post No. 004 has no cover of its own yet, so it inherits chrome + the stub treatment.
+  (function () {
+    var post = {
+      href: "#",
+      kicker: "No. 004 · Unfiled",
+      title: "Untitled quest",
+      dek: "",
+      foot: "coming soon",
+      flag: "wip",
+      stat: { value: "—", label: "no numbers yet" },
+      tools: ["under construction"],
+      theme: {} // ← a new post drops its cover here; no homepage code changes
+    };
+
+    var shelf = document.getElementById("shelf");
+    if (!shelf) return;
+
+    var tile = document.createElement("a");
+    tile.className = "tile cover-stub";
+    tile.href = post.href;
+    Object.keys(post.theme).forEach(function (prop) {
+      tile.style.setProperty(prop, post.theme[prop]);
+    });
+
+    var esc = function (s) {
+      return String(s).replace(/[&<>"]/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+      });
+    };
+    var tools = post.tools.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
+
+    tile.innerHTML =
+      '<p class="kicker">' + esc(post.kicker) + '</p>' +
+      '<h2 class="headline">' + esc(post.title) + '</h2>' +
+      (post.dek ? '<p class="dek">' + esc(post.dek) + '</p>' : '') +
+      '<p class="foot">' + esc(post.foot) +
+        (post.flag ? ' <span class="flag">' + esc(post.flag) + '</span>' : '') + '</p>' +
+      '<div class="peek">' +
+        '<span class="statval">' + esc(post.stat.value) + '</span>' +
+        '<span class="statlab">' + esc(post.stat.label) + '</span>' +
+        '<ul class="tools">' + tools + '</ul>' +
+      '</div>';
+
+    shelf.appendChild(tile);
+  })();
+  </script>
+
+</div>
 </body></html>

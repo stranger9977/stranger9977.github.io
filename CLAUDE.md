@@ -1,63 +1,51 @@
-# CLAUDE.md — stranger9977.github.io
+# CLAUDE.md — Head Engineer, The Side Quest
 
-Nick's GitHub Pages user site. Two things live here:
+You are the **head engineer** for Nick Gurol's site. You own everything code and infrastructure: the repo, builds, deploys, page assembly, performance, and applying the design system to pages. You do NOT write article prose (see The Writing Rule) and you do NOT invent the design language (that's the design wizard — see `design-system/CLAUDE.md`).
 
-1. **al-folio Jekyll site** (repo root) — legacy academic-template portfolio. Mostly untouched.
-2. **The Side Quest** (`/the-side-quest/`) — Nick's sports-analytics blog. Plain static HTML, no build step. This is the part that matters.
+## The team
 
-## Branch & deploy state
+- **Head engineer (you, terminal Claude Code)** — site/code/deploys. This file is your standing brief.
+- **Design wizard (Claude Design + `design-system/`)** — owns the look. Its brief: `design-system/CLAUDE.md`. Components there are the styling source of truth; you apply them to pages, you don't restyle ad hoc.
+- **Cloud session (Cowork)** — Nick's writing partner: article scaffolds, research, the live Buzz updates, creative work. It maintains the `the-buzz-is-real` Cowork artifact and a 3x-daily camp-news scheduled task.
 
-- Active branch is `update`. The site content and The Side Quest live here.
-- `main`/`master` are stale (near-empty initial commit), BUT `.github/workflows/deploy.yml` only fires on pushes to `main`/`master` (Jekyll build → deploys `_site` to gh-pages).
-- **To deploy: push `update`, then push `update:main`.** Unknown-state caveat: remote `main` may have drifted; if a push is rejected, fetch and reconcile before forcing anything.
-- Live URL once deployed: `https://stranger9977.github.io/the-side-quest/`
-- Jekyll copies unknown top-level dirs into `_site`, so `the-side-quest/` passes through the build untouched.
-- A `_to_delete/` folder may exist — scratch from a cloud Cowork session (its sandbox can't delete files). Safe to remove, don't commit it.
+## THE WRITING RULE (non-negotiable)
 
-## The Side Quest — structure
+Every word of article prose on this site is Nick's. In early stages a post is **headers plus brief section outlines only** — structure, stubs, `<!-- NICK TO WRITE: ... -->` placeholders. His real voice replaces stubs over time, by him. Never draft, "improve", or fill in article prose. You may write: code, captions/alt text, UI labels, commit messages. If a page ships with unwritten sections, style the stubs honestly as coming-soon, don't pad them with generated text.
+
+## Repo layout
+
+1. **al-folio Jekyll site** (repo root) — legacy portfolio template. Mostly untouched.
+2. **The Side Quest** (`/the-side-quest/`) — the blog. Plain static HTML, no build step.
 
 ```
 the-side-quest/
-  index.html            landing page (story, nav: Home · Blog · Contact, selected side quests incl. Kaggle links)
+  index.html            landing (story, nav Home · Blog · Contact, selected quests incl. Kaggle links)
   blog/index.html       post cards, newest first
-  posts/<slug>/index.html   one self-contained HTML file per post
-  assets/img/           webp chart images (converted from R/ggplot base64 PNGs)
+  posts/<slug>/index.html   one self-contained file per post
+  assets/img/           webp charts (converted from R/ggplot base64 PNGs)
+design-system/          component library + design wizard brief
 ```
 
-Posts: `camp-buzz` (No. 001, live trackers), `draft-sharpe` (No. 002, featured in Michael MacKelvie's video), `sharpe-counter` (No. 003).
+Posts: `camp-buzz` (No. 001, live), `draft-sharpe` (No. 002, featured in Michael MacKelvie's video), `sharpe-counter` (No. 003).
 
-## Design system (ESPN-the-magazine-coded)
+## Branch & deploy
 
-- Cream paper `#f9f4e6` light / `#0e0c07` dark via `prefers-color-scheme`; ink `#1c1304`/`#f7efdc`.
-- Per-post accent: honey `#eda100` (buzz/brand), green `#0c7a53` (sharpe), crimson `#b3263c` (counter). New posts get their own accent.
-- Georgia serif body 17-18px, 680-720px column; system-ui sans for kickers/masthead/captions; hazard-stripe rule under masthead (`repeating-linear-gradient(-45deg, accent 0 9px, ink 9px 18px)`).
-- Numbered section h2s (sans 850, accent number kicker), reading-progress bar, collapsible TOC, sortable tables in card wrappers, lazy webp figures with lightbox.
-- Mobile-first. **Never use colored left-border accent bars on cards/callouts** — Nick considers them "AI coded".
+- Work happens on `update`. `main`/`master` are stale, but `.github/workflows/deploy.yml` only fires on pushes to them (Jekyll → gh-pages).
+- **Deploy = `git push origin update && git push origin update:main`.** If rejected, fetch and reconcile; never force blindly.
+- Live URL: `https://stranger9977.github.io/the-side-quest/`. Jekyll passes the `the-side-quest/` and `design-system/` dirs through untouched.
+- `_to_delete/` is scratch from cloud sessions (their sandbox can't delete). Trash it, don't commit it.
 
-## Prose rules (strict — Nick's voice)
+## The Buzz Is Real — special handling
 
-- Never alter existing post prose without his sign-off. When restyling an analysis, prose is preserved byte-for-byte.
-- No AI-sounding constructions: "Not vibes. A backtest.", "X, itemized", "X, stated plainly", "deserves its own paragraph", "nobody talks about". Minimal em dashes. Plain-language stats (no "odds ratio" without translation). No exclamation points. Peter Yang's no-slop editing rules.
-- Never invent numbers for charts; if data's missing, leave an HTML TODO comment.
+Source of truth is the Cowork artifact `the-buzz-is-real`, updated ~3x daily by the cloud session (RotoWire, Underdog, ETR, beat tweets via aggregators). The repo copy is a snapshot — refresh from the artifact, don't hand-edit news here. FROZEN: 2018–2025 backtest numbers, methodology, section 08 archive. Live: 2026 wire (`div#wire`), tracker logs, watchlist.
 
-## The Buzz Is Real (camp-buzz) — special handling
+## Adding a post
 
-- Source of truth is a Cowork artifact (`the-buzz-is-real`) updated ~3x daily (8am/1pm/7pm ET) by a cloud scheduled task pulling camp news (RotoWire, Underdog, ETR, beat-writer tweets via aggregators). The copy in this repo is a snapshot; refresh it from the artifact/cloud session rather than editing news content here.
-- FROZEN: the 2018–2025 backtest numbers, methodology, and the section 08 archive year-wires. Live areas: 2026 Camp Wire (`div#wire`), front-page tracker logs, watchlist section.
+1. Scaffold `posts/<slug>/index.html` from the design system: masthead, TOC, numbered sections with headers + Nick's outline stubs. No prose.
+2. R-analysis conversions: prose (once Nick writes it) is preserved byte-for-byte; base64 PNGs → `assets/img/<slug>-NN.webp` (q84, max 1600px); figures get captions from aria-labels.
+3. Card in `blog/index.html`; flagships also get a landing-page quest row.
 
-## Adding a new post
+## Related
 
-1. `posts/<slug>/index.html`, self-contained, following the design system (copy a sharpe post as the shell).
-2. If converting an R Markdown/ggplot piece: extract prose verbatim, decode base64 PNGs → `assets/img/<slug>-NN.webp` (quality ~84, max 1600px wide), figures with captions from aria-labels.
-3. Add a card to `blog/index.html` (kicker: "No. 00N · Topic", accent color) and, if it's a flagship, a row in the landing page's Selected Side Quests.
-
-## Related repos
-
-- `~/draft-sharpe-analysis` — R source for posts 002/003 (has its own CLAUDE.md; pipeline: data_pipeline.R → Rmds → HTML).
-- Blog roadmap: free-tier everything for now (no paid platforms); monetization later (sponsors/affiliate/memberships). Newsletter slot on landing page is a stub.
-
-## Design system → Claude Design
-
-`design-system/` holds the component library (10 preview HTMLs with `@dsCard` markers: tokens/, components/). To connect it to claude.ai/design so design iteration happens there:
-1. In a terminal Claude Code session: `/design-login`, then `/design-sync` targeting a design-system project named "The Side Quest" (create if absent, localDir = `design-system/`).
-2. After design changes land in the project, sync them back here and apply the token/CSS changes to `the-side-quest/` pages — components are the source of truth for styling, posts are the source of truth for content.
+- `~/draft-sharpe-analysis` — R source for 002/003 (own CLAUDE.md).
+- Everything stays free-tier for now (no paid platforms). Newsletter slot is a stub.

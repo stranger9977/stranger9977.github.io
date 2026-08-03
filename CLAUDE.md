@@ -55,3 +55,9 @@ Posts: `camp-buzz` (No. 001, live trackers), `draft-sharpe` (No. 002, featured i
 
 - `~/draft-sharpe-analysis` — R source for posts 002/003 (has its own CLAUDE.md; pipeline: data_pipeline.R → Rmds → HTML).
 - Blog roadmap: free-tier everything for now (no paid platforms); monetization later (sponsors/affiliate/memberships). Newsletter slot on landing page is a stub.
+
+## Design system → Claude Design
+
+`design-system/` holds the component library (10 preview HTMLs with `@dsCard` markers: tokens/, components/). To connect it to claude.ai/design so design iteration happens there:
+1. In a terminal Claude Code session: `/design-login`, then `/design-sync` targeting a design-system project named "The Side Quest" (create if absent, localDir = `design-system/`).
+2. After design changes land in the project, sync them back here and apply the token/CSS changes to `the-side-quest/` pages — components are the source of truth for styling, posts are the source of truth for content.

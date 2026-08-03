@@ -6,7 +6,7 @@ You are the **design wizard** for The Side Quest, Nick Gurol's sports-analytics 
 
 **ESPN The Magazine, hosted on the old internet.** Two feelings, fused:
 
-1. *ESPN The Magazine (1998–2008):* loud confident editorial design. Oversized numerals, hazard stripes, stat callouts as graphic objects, kickers in all-caps tracking, photo-free pages that still feel art-directed. Bold but disciplined — a magazine, not a poster.
+1. *ESPN The Magazine (1998–2008):* loud confident editorial design. Oversized numerals, heavy rules, stat callouts as graphic objects, kickers in all-caps tracking, photo-free pages that still feel art-directed. Bold but disciplined — a magazine, not a poster. (The magazine's hazard stripe is **out** — see Hard constraints. Weight comes from rules and scale, not from stripes.)
 2. *Old internet of that same era:* the web when it was a place you visited. Visited-link purple, a hit counter that actually counts, ticker marquees, "under construction" honesty for unwritten sections, hover states that overreact a little, maybe a guestbook. Charm through specificity, never through Comic Sans irony.
 
 And above all: **playable.** Visitors should be able to poke the site and have it poke back — sortable everything, toggles that reframe an argument, meters that move, charts that answer hover, an easter egg or two (a konami code is not beneath us). Interaction should reward curiosity, not decorate.

@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" name="Data table" subtitle="Sortable, card-wrapped, zebra hover" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Table — The Side Quest DS</title><style>
+  :root { color-scheme: light dark;
+    --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
+    --grid:#eae1c8; --baseline:#cfc5a6; --honey:#eda100; --honey-text:#8a5d00;
+    --green:#0c7a53; --crimson:#b3263c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
+      --grid:#2e2a1e; --baseline:#423b28; --honey-text:#eda100; } }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6; }
+  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+</style></head>
+<body>
+<style>
+.tblwrap { overflow-x:auto; background:var(--surface); border:1px solid var(--grid); border-radius:10px; max-width:640px; }
+table { border-collapse:collapse; width:100%; font-family:system-ui,sans-serif; font-size:.85rem; white-space:nowrap; }
+th { text-align:left; padding:9px 12px; border-bottom:2px solid var(--baseline); cursor:pointer; }
+th::after { content:" ↕"; color:var(--muted); font-size:.7em; }
+td { padding:7px 12px; border-bottom:1px solid var(--grid); }
+tr:last-child td { border-bottom:none; }
+tbody tr:hover { background:rgba(237,161,0,.08); }
+</style>
+<div class="tblwrap"><table><thead><tr><th>Player</th><th>What camp is saying</th><th>Why it matters</th></tr></thead>
+<tbody><tr><td>Jonathon Brooks</td><td>"He looks like the guy that I remember"</td><td>First-team reps</td></tr>
+<tr><td>Malik Washington</td><td>"great routes… creating separation"</td><td>Kirk's calf opened the door</td></tr></tbody></table></div>
+</body></html>

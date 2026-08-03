@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog — The Side Quest</title>
+<meta name="description" content="Interactive sports analytics writeups by Nick Gurol.">
+<style>
+  :root { color-scheme: light dark;
+    --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
+    --grid:#eae1c8; --honey:#eda100; --honey-text:#8a5d00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
+      --grid:#2e2a1e; --honey-text:#eda100; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6; }
+  .wrap { max-width:680px; margin:0 auto; padding:0 22px 90px; }
+  nav { display:flex; align-items:baseline; gap:22px; padding:30px 0 0;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  nav .brand { font-weight:850; letter-spacing:.13em; font-size:1.05rem; margin-right:auto; }
+  nav .brand a { color:inherit; text-decoration:none; }
+  nav .brand .dot { color:var(--honey); }
+  nav a { color:var(--ink2); text-decoration:none; font-size:.9rem; font-weight:650; }
+  nav a:hover { color:var(--honey-text); }
+  nav a.here { color:var(--ink); border-bottom:2px solid var(--honey); padding-bottom:2px; }
+  .stripe { height:7px; border-radius:3px; margin-top:18px;
+    background:repeating-linear-gradient(-45deg, var(--honey) 0 9px, var(--ink) 9px 18px); }
+  h1 { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:850;
+    font-size:1.7rem; letter-spacing:-.02em; margin:44px 0 6px; }
+  .sub { color:var(--ink2); font-style:italic; margin:0 0 30px; }
+  .card { display:block; text-decoration:none; color:inherit; background:var(--surface);
+    border:1px solid var(--grid); border-radius:14px; padding:20px 22px; margin-bottom:16px;
+    transition:transform .15s ease, box-shadow .15s ease; }
+  .card:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(28,19,4,.08); }
+  .card .kick { font-family:system-ui,sans-serif; font-size:.7rem; font-weight:800;
+    letter-spacing:.13em; text-transform:uppercase; margin-bottom:6px; }
+  .card h2 { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:850;
+    font-size:1.35rem; letter-spacing:-.01em; margin:0 0 6px; line-height:1.2; }
+  .card .dek { color:var(--ink2); font-style:italic; font-size:.98rem; margin:0 0 10px; }
+  .card .meta { font-family:system-ui,sans-serif; font-size:.78rem; color:var(--muted); }
+  .card .meta b { color:var(--ink2); }
+  .live { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:800;
+    letter-spacing:.08em; color:#fff; background:#b3263c; border-radius:5px; padding:2px 7px;
+    margin-left:6px; animation:pulse 2.4s infinite; vertical-align:2px; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+  .foot { margin-top:50px; font-family:system-ui,sans-serif; font-size:.8rem; color:var(--muted);
+    border-top:1px solid var(--grid); padding-top:18px; }
+  .foot a { color:var(--honey-text); text-decoration:none; font-weight:650; }
+</style></head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="brand"><a href="../index.html">THE SIDE QUEST<span class="dot">.</span></a></div>
+  <a href="../index.html">Home</a>
+  <a href="index.html" class="here">Blog</a>
+  <a href="mailto:nickgurol@gmail.com">Contact</a>
+</nav>
+<div class="stripe"></div>
+
+<h1>The blog</h1>
+<p class="sub">Every post starts the same way: a question that should have a simple answer and doesn&rsquo;t.</p>
+
+<a class="card" href="../posts/camp-buzz/index.html">
+  <div class="kick" style="color:#b97a00">No. 001 &middot; Fantasy Football<span class="live">LIVE</span></div>
+  <h2>The Buzz Is Real</h2>
+  <p class="dek">What eight years of training camp hype actually predicts &mdash; with a live 2026 camp wire updating through August.</p>
+  <div class="meta"><b>August 2026</b> &middot; 8-year backtest &middot; live trackers, updated daily</div>
+</a>
+
+<a class="card" href="../posts/draft-sharpe/index.html">
+  <div class="kick" style="color:#0c7a53">No. 002 &middot; NFL Draft</div>
+  <h2>NFL Draft Quasi-Sharpe Ratio Analysis</h2>
+  <p class="dek">How much is a draft pick really worth, by position? Treating the draft like a portfolio problem.</p>
+  <div class="meta"><b>April 2026</b> &middot; As featured in Michael MacKelvie&rsquo;s <b>&ldquo;The Safest Pick is the Most Dangerous in the NFL&rdquo;</b></div>
+</a>
+
+<a class="card" href="../posts/sharpe-counter/index.html">
+  <div class="kick" style="color:#b3263c">No. 003 &middot; The Counter-Analysis</div>
+  <h2>What the Sharpe Ratio Can&rsquo;t See</h2>
+  <p class="dek">Stress-testing our own draft model and finding where it falls apart.</p>
+  <div class="meta"><b>April 2026</b> &middot; The rebuttal to No. 002, argued with the same data</div>
+</a>
+
+<div class="foot">Say hi: <a href="mailto:nickgurol@gmail.com">nickgurol@gmail.com</a> &middot; <a href="https://x.com/run_the_sims">@run_the_sims</a> &middot; &copy; 2026 The Side Quest</div>
+</div>
+</body></html>

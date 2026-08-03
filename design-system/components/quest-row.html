@@ -1,0 +1,28 @@
+<!-- @dsCard group="Components" name="Quest row" subtitle="Landing-page list rows with result badges" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quest row — The Side Quest DS</title><style>
+  :root { color-scheme: light dark;
+    --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
+    --grid:#eae1c8; --baseline:#cfc5a6; --honey:#eda100; --honey-text:#8a5d00;
+    --green:#0c7a53; --crimson:#b3263c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
+      --grid:#2e2a1e; --baseline:#423b28; --honey-text:#eda100; } }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6; }
+  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+</style></head>
+<body>
+<style>
+.quest { display:flex; gap:16px; align-items:baseline; padding:16px 0; border-bottom:1px solid var(--grid);
+  text-decoration:none; color:inherit; max-width:640px; }
+.badge { font-family:system-ui,sans-serif; font-size:.66rem; font-weight:800; letter-spacing:.08em;
+  color:var(--honey-text); background:rgba(237,161,0,.15); border-radius:6px; padding:3px 8px; white-space:nowrap; }
+.t { font-family:system-ui,sans-serif; font-weight:750; font-size:1.05rem; }
+.d { color:var(--muted); font-size:.9rem; font-family:system-ui,sans-serif; }
+</style>
+<a class="quest" href="#"><span class="badge">TOP 5</span><span><span class="t">PASTA</span><br><span class="d">NFL Big Data Bowl entry, on Kaggle.</span></span></a>
+<a class="quest" href="#"><span class="badge">LIVE</span><span><span class="t">The Buzz Is Real</span><br><span class="d">Eight years of camp hype, backtested.</span></span></a>
+</body></html>

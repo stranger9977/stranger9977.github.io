@@ -1,0 +1,38 @@
+<!-- @dsCard group="Components" name="Tracker card" subtitle="Front-page live tracker with meter + dated log" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracker — The Side Quest DS</title><style>
+  :root { color-scheme: light dark;
+    --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
+    --grid:#eae1c8; --baseline:#cfc5a6; --honey:#eda100; --honey-text:#8a5d00;
+    --green:#0c7a53; --crimson:#b3263c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
+      --grid:#2e2a1e; --baseline:#423b28; --honey-text:#eda100; } }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.6; }
+  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+</style></head>
+<body>
+<style>
+.fp { background:var(--surface); border:1px solid var(--grid); border-radius:12px; padding:16px 18px; max-width:640px; font-family:system-ui,sans-serif; }
+.hexb { display:inline-flex; align-items:center; justify-content:center; width:34px; height:30px; color:#fff; font-weight:800; font-size:.7rem;
+  background:#006778; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
+.meter { position:relative; height:34px; border-radius:8px; overflow:hidden; display:flex; margin:10px 0; }
+.meter .l { flex:1; display:flex; align-items:center; padding-left:10px; background:#006778; color:#fff; font-weight:800; font-size:.72rem; }
+.meter .r { flex:1; display:flex; align-items:center; justify-content:flex-end; padding-right:10px; background:#101820; color:#fff; font-weight:800; font-size:.72rem; }
+.needle { position:absolute; left:61%; top:0; bottom:0; width:4px; background:var(--honey); transform:translateX(-50%); }
+.needle::after { content:"CB LEAN"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:var(--honey); color:#1c1304; font-size:.6rem; font-weight:800; padding:2px 6px; border-radius:4px; }
+.log { list-style:none; margin:8px 0 0; padding:0; font-size:.8rem; color:var(--ink2); }
+.log li { padding:4px 0; border-bottom:1px dashed var(--grid); }
+.log .d { color:var(--muted); font-weight:800; font-size:.68rem; margin-right:7px; }
+</style>
+<div class="fp"><div style="display:flex;gap:10px;align-items:center;margin-bottom:6px"><span class="hexb">JAX</span>
+<span style="font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">The Teal Tracker</span></div>
+<h3 style="margin:0 0 8px;font-size:1.1rem;font-weight:800">Is Travis Hunter a receiver or a corner this year?</h3>
+<div class="meter"><div class="l">WR</div><div class="r">CB</div><div class="needle"></div></div>
+<ul class="log"><li><span class="d">AUG 2</span>Two catches and an INT. "Maybe most impressive practice of his career."</li>
+<li><span class="d">JUL 31</span>Day 3: both sides again.</li></ul></div>
+</body></html>

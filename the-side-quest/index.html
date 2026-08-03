@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Side Quest — Nick Gurol</title>
+<meta name="description" content="Sports analytics has always been my side quest. Interactive research writeups by Nick Gurol.">
+<style>
+  :root { color-scheme: light dark;
+    --page:#f9f4e6; --surface:#fefbf1; --ink:#1c1304; --ink2:#5c5340; --muted:#8b8168;
+    --grid:#eae1c8; --honey:#eda100; --honey-text:#8a5d00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#0e0c07; --surface:#1a1712; --ink:#f7efdc; --ink2:#cbc1a7; --muted:#948a70;
+      --grid:#2e2a1e; --honey-text:#eda100; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:18px; line-height:1.65; }
+  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width:680px; margin:0 auto; padding:0 22px 90px; }
+  nav { display:flex; align-items:baseline; gap:22px; padding:30px 0 0;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  nav .brand { font-weight:850; letter-spacing:.13em; font-size:1.05rem; margin-right:auto; }
+  nav .brand a { color:inherit; text-decoration:none; }
+  nav .brand .dot { color:var(--honey); }
+  nav a { color:var(--ink2); text-decoration:none; font-size:.9rem; font-weight:650; }
+  nav a:hover { color:var(--honey-text); }
+  nav a.here { color:var(--ink); border-bottom:2px solid var(--honey); padding-bottom:2px; }
+  .stripe { height:7px; border-radius:3px; margin-top:18px;
+    background:repeating-linear-gradient(-45deg, var(--honey) 0 9px, var(--ink) 9px 18px); }
+  .hero { padding:64px 0 8px; }
+  .hero .kick { font-family:system-ui,sans-serif; font-size:.72rem; font-weight:800;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--honey-text); margin-bottom:14px; }
+  .hero h1 { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:850;
+    font-size:clamp(2.1rem, 7vw, 3.2rem); line-height:1.05; letter-spacing:-.025em; margin:0 0 22px; }
+  .hero h1 em { font-style:normal; box-shadow:inset 0 -0.35em 0 rgba(237,161,0,.35); }
+  .hero p { color:var(--ink2); font-size:1.05rem; margin:0 0 1.1em; }
+  .hero a { color:var(--honey-text); }
+  .sec-h { font-family:system-ui,sans-serif; font-size:.72rem; font-weight:800; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--muted); margin:56px 0 16px; display:flex; align-items:center; gap:12px; }
+  .sec-h::after { content:""; flex:1; height:1px; background:var(--grid); }
+  .quest { display:flex; gap:16px; align-items:baseline; padding:16px 0;
+    border-bottom:1px solid var(--grid); text-decoration:none; color:inherit; }
+  .quest:last-of-type { border-bottom:none; }
+  .quest:hover .t { color:var(--honey-text); }
+  .quest .badge { font-family:system-ui,sans-serif; font-size:.66rem; font-weight:800;
+    letter-spacing:.08em; color:var(--honey-text); background:rgba(237,161,0,.15);
+    border-radius:6px; padding:3px 8px; white-space:nowrap; }
+  .quest .t { font-family:system-ui,sans-serif; font-weight:750; font-size:1.05rem;
+    transition:color .12s; }
+  .quest .d { color:var(--muted); font-size:.9rem; font-family:system-ui,sans-serif; }
+  .cta { display:inline-block; font-family:system-ui,sans-serif; font-weight:750; font-size:.95rem;
+    color:var(--ink); background:var(--honey); border-radius:9px; padding:12px 20px;
+    text-decoration:none; margin-top:10px; }
+  .cta:active { transform:translateY(1px); }
+  .foot { margin-top:70px; font-family:system-ui,sans-serif; font-size:.8rem; color:var(--muted);
+    border-top:1px solid var(--grid); padding-top:18px; }
+  .foot a { color:var(--honey-text); text-decoration:none; font-weight:650; }
+</style></head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="brand"><a href="index.html">THE SIDE QUEST<span class="dot">.</span></a></div>
+  <a href="index.html" class="here">Home</a>
+  <a href="blog/index.html">Blog</a>
+  <a href="mailto:nickgurol@gmail.com">Contact</a>
+</nav>
+<div class="stripe"></div>
+
+<div class="hero">
+  <div class="kick">Nick Gurol &middot; Sports analytics</div>
+  <h1>Sports analytics has always been <em>my side quest</em>.</h1>
+  <p>Back in my middle-school-science-teaching days, this was the thing I did on the side. Now I&rsquo;m a data scientist at a major sportsbook, and it&rsquo;s still the thing I do on the side: the research projects that start in group chats, in sports debates with boomers, in The Conversation as a whole.</p>
+  <p>This site is where those quests get written up properly, with the data attached and the charts you can poke at.</p>
+  <a class="cta" href="blog/index.html">Read the blog &rarr;</a>
+</div>
+
+<div class="sec-h">Selected side quests</div>
+<a class="quest" href="posts/camp-buzz/index.html">
+  <span class="badge">LIVE</span>
+  <span><span class="t">The Buzz Is Real</span><br>
+  <span class="d">Eight years of training camp hype, backtested, with a live 2026 camp wire.</span></span>
+</a>
+<a class="quest" href="posts/draft-sharpe/index.html">
+  <span class="badge">FEATURED</span>
+  <span><span class="t">The NFL Draft, as a portfolio problem</span><br>
+  <span class="d">A quasi-Sharpe ratio for draft picks &mdash; featured in Michael MacKelvie&rsquo;s &ldquo;The Safest Pick is the Most Dangerous in the NFL.&rdquo;</span></span>
+</a>
+<a class="quest" href="https://www.kaggle.com/code/brochillington/pasta" target="_blank" rel="noopener">
+  <span class="badge">TOP 5</span>
+  <span><span class="t">PASTA</span><br>
+  <span class="d">NFL Big Data Bowl entry &mdash; top-5 finish, on Kaggle.</span></span>
+</a>
+<a class="quest" href="https://www.kaggle.com/code/brochillington/camo-the-art-of-pre-snap-disguise" target="_blank" rel="noopener">
+  <span class="badge">TOP 10</span>
+  <span><span class="t">CAMO: The Art of Pre-Snap Disguise</span><br>
+  <span class="d">NFL Big Data Bowl entry &mdash; top-10 finish, on Kaggle.</span></span>
+</a>
+
+<div class="foot">Say hi: <a href="mailto:nickgurol@gmail.com">nickgurol@gmail.com</a> &middot; <a href="https://x.com/run_the_sims">@run_the_sims</a> &middot; &copy; 2026 The Side Quest</div>
+</div>
+</body></html>

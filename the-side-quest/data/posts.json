@@ -13,6 +13,7 @@
     {
       "slug": "camp-buzz",
       "number": "001",
+      "kind": "blog",
       "title": "The Buzz Is Real",
       "title_long": "The Buzz Is Real — What Eight Years of Training Camp Hype Actually Predicts",
       "kicker": "No. 001 · Fantasy Football",
@@ -58,7 +59,7 @@
           "--tile-mono-font": "ui-monospace, SFMono-Regular, Menlo, Consolas, \"Courier New\", monospace",
           "--tile-kicker-tracking": ".16em",
           "--tile-radius": "14px",
-          "--tile-texture": "repeating-linear-gradient(-45deg, #eda100 0 9px, #1c1304 9px 18px)",
+          "--tile-texture": "repeating-linear-gradient(to bottom, rgba(28,19,4,.09) 0 1px, transparent 1px 5px)",
           "--tile-texture-opacity": "1"
         },
         "vars_dark": {
@@ -69,13 +70,14 @@
           "--tile-muted": "#948a70",
           "--tile-accent-text": "#eda100",
           "--tile-rule": "#2e2a1e",
-          "--tile-texture": "repeating-linear-gradient(-45deg, #eda100 0 9px, #f7efdc 9px 18px)"
+          "--tile-texture": "repeating-linear-gradient(to bottom, rgba(247,239,220,.10) 0 1px, transparent 1px 5px)"
         }
       }
     },
     {
       "slug": "draft-sharpe",
       "number": "002",
+      "kind": "blog",
       "title": "The NFL Draft, as a portfolio problem",
       "title_long": "NFL Draft Quasi-Sharpe Ratio Analysis",
       "kicker": "No. 002 · NFL Draft",
@@ -136,6 +138,7 @@
     {
       "slug": "sharpe-counter",
       "number": "003",
+      "kind": "blog",
       "title": "What the Sharpe Ratio Can’t See",
       "title_long": "What the Sharpe Ratio Can’t See",
       "kicker": "No. 003 · The Counter-Analysis",
@@ -179,7 +182,7 @@
           "--tile-mono-font": "ui-monospace, SFMono-Regular, Menlo, Consolas, \"Courier New\", monospace",
           "--tile-kicker-tracking": ".16em",
           "--tile-radius": "14px",
-          "--tile-texture": "repeating-linear-gradient(-45deg, #b3263c 0 9px, #2a0f13 9px 18px)",
+          "--tile-texture": "repeating-linear-gradient(to bottom, rgba(42,15,19,.10) 0 1px, transparent 1px 5px)",
           "--tile-texture-opacity": "1"
         },
         "vars_dark": {
@@ -190,13 +193,14 @@
           "--tile-muted": "#9b7d77",
           "--tile-accent-text": "#ff6a7e",
           "--tile-rule": "#3a1a18",
-          "--tile-texture": "repeating-linear-gradient(-45deg, #b3263c 0 9px, #f7e6e2 9px 18px)"
+          "--tile-texture": "repeating-linear-gradient(to bottom, rgba(247,230,226,.10) 0 1px, transparent 1px 5px)"
         }
       }
     },
     {
       "slug": "camp-dashboard",
       "number": "004",
+      "kind": "tool",
       "title": "The Buzz: Training Camp Dashboard",
       "title_long": "The Buzz: Training Camp Dashboard — all 32 clubs, updated daily",
       "kicker": "No. 004 · Fantasy Football",
@@ -256,6 +260,7 @@
     {
       "slug": "draft-board",
       "number": "005",
+      "kind": "tool",
       "title": "The Quasi-Sharpe Draft Board",
       "title_long": "The Quasi-Sharpe Draft Board — the model, the board, the break-even calculator",
       "kicker": "No. 005 · NFL Draft",
@@ -312,5 +317,9 @@
         }
       }
     }
+  ],
+  "kind_values": [
+    "blog",
+    "tool"
   ]
 }

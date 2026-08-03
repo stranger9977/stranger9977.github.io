@@ -15,6 +15,11 @@ And above all: **playable.** Visitors should be able to poke the site and have i
 
 - Tokens: cream paper `#f9f4e6` / dark `#0e0c07`, ink `#1c1304`/`#f7efdc`, honey `#eda100` brand accent; each post gets its own accent (green `#0c7a53` sharpe, crimson `#b3263c` counter). Georgia serif body, system sans display, 680–720px column, mobile-first, light+dark via `prefers-color-scheme`.
 - **Never colored left-border accent bars** on cards/callouts (Nick: "AI coded").
+- **Never diagonal candy/hazard stripes** — no `repeating-linear-gradient(-45deg, …)` bands under
+  mastheads, trailing section headers, or as tile texture (Nick: doesn't like the candy stripe).
+  Where a band is wanted, use the newspaper idiom instead: `3px double` accent rule for mastheads,
+  `1px solid` accent hairline for section-header fills, `1px dotted` for stubs and separators.
+  Tile texture, if any, is a horizontal 1px scanline — never diagonal.
 - Old-internet flavor must stay fast and accessible: no layout jank, respects `prefers-reduced-motion`, works with keyboard, degrades gracefully without JS.
 - Unwritten sections are styled as honest stubs ("under construction" energy), never filled with generated prose.
 

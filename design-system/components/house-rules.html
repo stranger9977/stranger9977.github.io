@@ -1,0 +1,87 @@
+<!-- @dsCard group="Brand" name="House rules" subtitle="Banned treatments and the newspaper idiom that replaces them" -->
+<style>
+  :root { color-scheme: light dark;
+    --page:#fcfcf9; --surface:#ffffff; --ink:#16150f; --ink2:#4b4940; --muted:#6f6752;
+    --rule:#16150f; --border:#c6c3b6; --dotted:#9d9a8d;
+    --honey:#eda100; --honey-text:#8a5d00; --no:#b3263c; --yes:#0c7a53; }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#131311; --surface:#1c1c19; --ink:#ecebe3; --ink2:#b3b0a4; --muted:#8a877b;
+      --rule:#ecebe3; --border:#3b3a34; --dotted:#55534a;
+      --honey-text:#eda100; --no:#ef7f92; --yes:#5fd3a0; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:16px; line-height:1.6; padding:24px; }
+  .hd { font-family:"Courier New",Courier,monospace; font-size:.7rem; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--muted); margin:0 0 4px; }
+  h1 { font-size:1.5rem; margin:0 0 20px; letter-spacing:-.01em; }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr)); }
+  .card { background:var(--surface); border:1px solid var(--border); padding:16px; }
+  .tag { font-family:"Courier New",Courier,monospace; font-size:.66rem; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; padding:3px 7px; display:inline-block;
+    border:1px solid currentColor; margin-bottom:12px; }
+  .tag.no  { color:var(--no); }
+  .tag.yes { color:var(--yes); }
+  .lab { font-family:"Courier New",Courier,monospace; font-size:.68rem; color:var(--muted);
+    letter-spacing:.06em; margin:14px 0 5px; }
+  .why { font-size:.86rem; color:var(--ink2); margin:12px 0 0; }
+  .why b { color:var(--ink); }
+
+  /* ── banned: diagonal candy / hazard stripe ───────────────────────────── */
+  .x-candy { height:7px; border-radius:3px;
+    background:repeating-linear-gradient(-45deg, var(--honey) 0 9px, var(--ink) 9px 18px); }
+  /* ── banned: coloured left-border accent bar ──────────────────────────── */
+  .x-bar { border-left:4px solid var(--honey); background:var(--page);
+    padding:9px 12px; font-size:.86rem; color:var(--ink2); }
+  /* strike the banned specimens so they can never be mistaken for a pattern */
+  .banned { position:relative; }
+  .banned::after { content:""; position:absolute; inset:-3px -5px; pointer-events:none;
+    background:linear-gradient(to bottom right, transparent calc(50% - 1px),
+      var(--no) calc(50% - 1px), var(--no) calc(50% + 1px), transparent calc(50% + 1px)); }
+
+  /* ── the idiom that replaces them ─────────────────────────────────────── */
+  .ok-double { height:0; border-top:3px double var(--honey); }
+  .ok-hair   { height:0; border-top:1px solid var(--honey); }
+  .ok-dotted { height:0; border-top:1px dotted var(--dotted); }
+  .ok-scan   { height:34px; border:1px solid var(--border);
+    background:repeating-linear-gradient(to bottom, rgba(237,161,0,.16) 0 1px, transparent 1px 5px); }
+  .sec { display:flex; align-items:center; gap:12px; font-family:"Courier New",Courier,monospace;
+    font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--honey-text); }
+  .sec::after { content:""; flex:1; height:0; border-top:1px solid var(--honey); opacity:.85; }
+</style>
+
+<p class="hd">The Side Quest · design system</p>
+<h1>House rules</h1>
+
+<div class="grid">
+  <div class="card">
+    <span class="tag no">Never ship</span>
+
+    <p class="lab">diagonal candy / hazard stripe</p>
+    <div class="banned"><div class="x-candy"></div></div>
+
+    <p class="lab">coloured left-border accent bar</p>
+    <div class="banned"><div class="x-bar">Callout text with an accent bar down its left edge.</div></div>
+
+    <p class="why"><b>Why:</b> the candy stripe reads as decoration for its own sake, and the
+      left-border bar reads as machine-generated. Neither belongs to the magazine.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag yes">Use instead</span>
+
+    <p class="lab">masthead band → 3px double rule</p>
+    <div class="ok-double"></div>
+
+    <p class="lab">section-header fill → 1px hairline</p>
+    <div class="sec">01 &nbsp;Section</div>
+
+    <p class="lab">stub / separator → 1px dotted</p>
+    <div class="ok-dotted"></div>
+
+    <p class="lab">tile texture → horizontal 1px scanline</p>
+    <div class="ok-scan"></div>
+
+    <p class="why"><b>Why:</b> rules are the newspaper idiom — they separate without ornamenting,
+      and they hold up at every width and in both schemes.</p>
+  </div>
+</div>

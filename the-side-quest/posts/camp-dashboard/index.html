@@ -63,7 +63,7 @@
   .masthead .tag { color: var(--ink-2); font-size: 0.82rem; margin-top: 2px; position: relative; }
   .masthead .issue { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
     margin-top: 8px; position: relative; }
-  .masthead .stripe { height: 7px; background: repeating-linear-gradient(-45deg, var(--honey) 0 9px, var(--ink-1) 9px 18px);
+  .masthead .stripe { height: 0; border-top: 3px double var(--honey);
     border-radius: 3px; margin-top: 14px; position: relative; }
   .bee { position: absolute; top: 30px; left: -40px; font-size: 20px; animation: beefly 9s ease-in-out 800ms 1 forwards;
     pointer-events: none; z-index: 2; }
@@ -102,8 +102,8 @@
   h2.sec { font-family: system-ui, sans-serif; font-weight: 800; font-size: 1rem;
     letter-spacing: 0.14em; text-transform: uppercase; margin: 54px 0 14px;
     display: flex; align-items: center; gap: 12px; scroll-margin-top: 12px; }
-  h2.sec::after { content: ""; flex: 1; height: 5px; border-radius: 2px;
-    background: repeating-linear-gradient(-45deg, var(--honey) 0 8px, var(--ink-1) 8px 16px); opacity: 0.85; }
+  h2.sec::after { content: ""; flex: 1; height: 0;
+    border-top: 1px solid var(--honey); opacity: 0.85; }
   h2.sec .num { color: var(--honey-text); }
   h3.sub { font-family: system-ui, sans-serif; font-weight: 800; font-size: 0.78rem; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--honey-text); margin: 22px 0 8px; }
@@ -111,8 +111,8 @@
   /* ---------- unwritten-prose stub ---------- */
   .stub { border: 1px dashed var(--baseline); border-radius: 10px; padding: 12px 14px; margin: 0 0 20px;
     font-family: system-ui, sans-serif; background: transparent; }
-  .stub .tape { height: 5px; border-radius: 2px; margin: -2px 0 9px;
-    background: repeating-linear-gradient(-45deg, var(--honey) 0 7px, transparent 7px 14px); opacity: 0.75; }
+  .stub .tape { height: 0; margin: -2px 0 11px;
+    border-top: 1px dotted var(--honey); opacity: 0.75; }
   .stub .lab { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--honey-text); }
   .stub .txt { font-size: 0.85rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }

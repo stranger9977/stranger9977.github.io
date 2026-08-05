@@ -420,9 +420,8 @@
   .meter { --lean: 50%; }
   .meter .side.l { flex: 0 0 calc(100% - var(--lean)); min-width: 0; }
   .meter .side.r { flex: 0 0 var(--lean); min-width: 0; }
-  @media (prefers-color-scheme: dark) {
-    .meter .side.r { background: #27323f; }
-    .meter { border: 1px solid var(--muted); } }
+  .meter { border: 1px solid var(--muted); }
+  .meter .side.r { background: #fbf8f0; color: #14120c; }
   .meter .needle { left: calc(100% - var(--lean)); }
   .meter .side .pct { font-variant-numeric: tabular-nums; opacity: .92; margin-left: 7px; }
   .meter .side.r .pct { margin: 0 7px 0 0; order: -1; }
@@ -519,6 +518,61 @@
     .dayw-row .km .bar .prest { width: 28px; height: 21px; }
     .dayw-row .km .bar .pname { font-size: 0.46rem; letter-spacing: 0.1em; }
   }
+
+  /* ── Days-since-incident board ─────────────────────────────────────────
+     Styled as the enamelled safety sign it is parodying, so it keeps its own
+     colours in both schemes -- a physical sign on a wall does not invert. */
+  .safety { position: relative; background: #e9e3d3; border: 3px solid #14120c;
+    border-radius: 3px; overflow: hidden; margin: 12px 0 4px;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  /* four corner screws, drawn rather than marked up */
+  .safety::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(circle 3px at 9px 9px, #14120c 60%, transparent 62%),
+      radial-gradient(circle 3px at calc(100% - 9px) 9px, #14120c 60%, transparent 62%),
+      radial-gradient(circle 3px at 9px calc(100% - 9px), #14120c 60%, transparent 62%),
+      radial-gradient(circle 3px at calc(100% - 9px) calc(100% - 9px), #14120c 60%, transparent 62%); }
+  .sf-hd { display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #1b6e3c; color: #fff; font-size: 0.66rem; font-weight: 800;
+    letter-spacing: 0.16em; text-transform: uppercase; padding: 7px 30px;
+    border-bottom: 3px solid #14120c; text-align: center; }
+  .sf-cross { flex: none; }
+  .sf-main { display: flex; align-items: center; gap: 16px; padding: 16px 18px; }
+  .sf-well { flex: none; background: #fbf8f0; border: 2px solid #14120c;
+    min-width: 92px; padding: 6px 14px; text-align: center;
+    /* the seam a real flip-digit board has across its middle */
+    background-image: linear-gradient(to bottom, transparent calc(50% - 1px),
+      rgba(20,18,12,.28) calc(50% - 1px), rgba(20,18,12,.28) calc(50% + 1px), transparent calc(50% + 1px)); }
+  .sf-num { display: block; font-size: 3.4rem; font-weight: 900; line-height: 1;
+    color: #14120c; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+  .sf-lead { margin: 0; font-size: 0.82rem; font-weight: 800; line-height: 1.28;
+    letter-spacing: 0.1em; text-transform: uppercase; color: #14120c; }
+  .sf-ft { background: #14120c; color: #e9e3d3; font-size: 0.58rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 30px; text-align: center; }
+  @media (max-width: 460px) {
+    .sf-main { gap: 12px; padding: 13px 14px; }
+    .sf-num { font-size: 2.7rem; }
+    .sf-well { min-width: 74px; padding: 5px 10px; }
+    .sf-lead { font-size: 0.72rem; letter-spacing: 0.08em; }
+    .sf-hd { font-size: 0.58rem; letter-spacing: 0.1em; padding: 7px 26px; }
+  }
+
+  /* Jersey marks: teal = offense, white = defense, filled to the reported share.
+     A day with no reported split is drawn as an empty outline, never guessed. */
+  .jsy-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .jsy { display: block; width: 100%; max-width: 46px; height: auto; margin: 0 auto; }
+  .jsy-o { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-linejoin: round; }
+  .jsy.unk .jsy-o { stroke: var(--muted); stroke-dasharray: 2.5 2.5; }
+  .jsy.big { max-width: 62px; }
+  .jers-tot { display: flex; align-items: center; gap: 14px; margin-top: 12px;
+    padding-top: 12px; border-top: 1px dotted var(--grid); }
+  .jers-tot-t { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px;
+    font-family: system-ui, sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--ink-2); }
+  .jers-tot-t .jt-l { display: inline-flex; align-items: center; gap: 6px; }
+  .jers-tot-t .sw { width: 11px; height: 11px; display: inline-block; border: 1px solid var(--muted); }
+  .jers-tot-t .sw.teal { background: #006778; }
+  .jers-tot-t .sw.white { background: #fbf8f0; }
+  .jers-tot-t .jt-n { flex-basis: 100%; font-weight: 400; font-size: 0.72rem; color: var(--muted); }
 </style>
 </head>
 <body class="viz-root">
@@ -564,19 +618,29 @@
       <div class="trk-h"><span>WR ↔ CB Lean Meter</span><span class="upd">Updated Aug 4</span></div>
       <div class="meter" style="--lean:59.4%" role="img" aria-label="Snap split through five practices: 28 offense, 41 percent; 41 defense, 59 percent. Lean: corner."><div class="side l">WR<span class="pct">41%</span></div><div class="side r">CB<span class="pct">59%</span></div><div class="needle cb"></div></div>
       <div class="jers">
-        <div class="jers-h"><span>Teal vs black, by day</span><span class="upd">Through Aug 3</span></div>
+        <div class="jers-h"><span>Teal vs white, by day</span><span class="upd">Through Aug 3</span></div>
+        <svg class="jsy-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+          <clipPath id="jsyClip"><path d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></clipPath>
+        </defs></svg>
         <ol class="jers-row">
-          <li><span class="chip" role="img" aria-label="July 29: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Jul 29</span></li>
-          <li><span class="chip" role="img" aria-label="July 30: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Jul 30</span></li>
-          <li><span class="chip" role="img" aria-label="July 31: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Jul 31</span></li>
-          <li><span class="chip" role="img" aria-label="August 2: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Aug 2</span></li>
-          <li><span class="chip" role="img" aria-label="August 3: both sides"><i class="teal"></i><i class="black"></i></span><span class="dt">Aug 3</span></li>
+          <li><svg class="jsy unk " viewBox="0 0 40 44" role="img" aria-label="Jul 29: both sides, split not reported"><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Jul 29</span></li>
+          <li><svg class="jsy unk " viewBox="0 0 40 44" role="img" aria-label="Jul 30: both sides, split not reported"><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Jul 30</span></li>
+          <li><svg class="jsy unk " viewBox="0 0 40 44" role="img" aria-label="Jul 31: both sides, split not reported"><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Jul 31</span></li>
+          <li><svg class="jsy unk " viewBox="0 0 40 44" role="img" aria-label="Aug 2: both sides, split not reported"><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Aug 2</span></li>
+          <li><svg class="jsy " viewBox="0 0 40 44" role="img" aria-label="Aug 3: 6 offense, 7 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="18.46" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Aug 3</span></li>
         </ol>
-        <div class="jsbar" role="img" aria-label="Five-practice snap total: 28 offense, 41 defense">
-          <span class="off" style="width:40.6%">28 off</span>
-          <span class="def" style="width:59.4%">41 def</span>
+        <div class="jers-tot">
+          <svg class="jsy big" viewBox="0 0 40 44" role="img" aria-label="Five-practice total: 28 offense, 41 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="16.23" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg>
+          <div class="jers-tot-t">
+            <span class="jt-l"><i class="sw teal"></i>28 offense</span>
+            <span class="jt-l"><i class="sw white"></i>41 defense</span>
+            <span class="jt-n">41% offense &middot; 59% defense, five practices</span>
+          </div>
         </div>
-        <p class="jers-note">Both jerseys every practice day so far. Only the four-day snap total is broken out by side &mdash; no per-day split is reported.</p>
+        <p class="jers-note">Teal is offense, white is defense. Only Aug 3 has a per-day split, and that
+        one is arithmetic: DiRocco had 22&ndash;34 through four practices and 28&ndash;41 through five, so
+        practice five was 6 offense to 7 defense. The first four days are reported only as a four-day
+        total, so they are drawn empty rather than guessed.</p>
       </div>
       <ul class="trk-log">
         <li><span class="d">AUG 4</span>Jeremy Fowler (ESPN): Coen says Hunter won&rsquo;t be asked to master the full offense &mdash; he&rsquo;s learning the X and F receiver roles only. The WR job is a package, not a position.</li>
@@ -598,7 +662,17 @@
     <p>Kittle blames electromagnetic fields coming off the substation beside the Santa Clara facility, where the 49ers have been the league's most-injured team since 2014. The NFL's medical office waved it off. The reaper did not.</p>
     <div class="trk">
       <div class="trk-h"><span>Reaper Board</span><span class="upd">Updated Aug 4</span></div>
-      <div class="reap"><div class="n">1</div><div class="l2">Days since the substation<br>claimed a 49er</div></div>
+      <div class="safety" role="img" aria-label="Safety board: 1 day since the substation claimed a 49er.">
+        <div class="sf-hd">
+          <svg class="sf-cross" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z" fill="currentColor"/></svg>
+          <span>Santa Clara Facility &middot; Safety Record</span>
+        </div>
+        <div class="sf-main">
+          <div class="sf-well"><span class="sf-num" data-since="2026-08-04">1</span></div>
+          <p class="sf-lead">Days since the<br>substation claimed<br>a 49er</p>
+        </div>
+        <div class="sf-ft">Report all injuries to the training staff</div>
+      </div>
       <ul class="trk-log">
         <li><span class="d">AUG 4</span>Fourteen Niners missed Monday&rsquo;s practice, about a sixth of the 90-man roster. Eric Branch (SF Chronicle): Pearsall&rsquo;s isolated PCL surgery has almost no comparable cases among pro athletes, so the rehab timeline is a guess. He is on IR. RB Kaelon Black (adductor) is out multiple weeks; Jordan James is still nursing a fractured rib.</li>
         <li><span class="d">AUG 3</span>Matt Maiocco (NBC Sports Bay Area): Mike Evans sat out with a quad strain, De&rsquo;Zhaun Stribling missed a second straight practice (hamstring), and Christian Kirk still hasn&rsquo;t practiced since day one (calf). Deebo Samuel, signed to a one-year deal, had an active day in his second practice.</li>
@@ -627,14 +701,14 @@
         <div class="bars"><div class="bar jj" style="width:83%">10/12 · 83%</div><div class="bar km" style="width:33%">4/12 · 33%</div></div>
       </div>
       <div class="dayw">
-        <div class="dayw-h"><span>Who won the day</span><span class="tally">McCarthy 2 &middot; Murray 1</span></div>
+        <div class="dayw-h"><span>Who won the day</span><span class="tally">McCarthy 2 &middot; Murray 2</span></div>
         <ol class="dayw-row">
           <li class="jj"><span class="bar" role="img" aria-label="July 30: McCarthy"><span class="num9">9</span></span><span class="dt">Jul 30</span></li>
           <li class="jj"><span class="bar" role="img" aria-label="July 31: McCarthy"><span class="num9">9</span></span><span class="dt">Jul 31</span></li>
           <li class="km"><span class="bar" role="img" aria-label="August 1: Murray"><svg class="prest" viewBox="0 0 56 40" width="34" height="26" aria-hidden="true" focusable="false"><path d="M19 9C10 12 4 19 4 29c5-2 9-7 10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M37 9c9 3 15 10 15 20-5-2-9-7-10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.6-7.8-4.1-7.8 4.1 1.5-8.6-6.3-6.1 8.7-1.3z" fill="currentColor"/><path d="M18 33l10 4.5 10-4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pname">Murray</span></span><span class="dt">Aug 1</span></li>
-          <li class="nd"><span class="bar" role="img" aria-label="August 4: no winner attributed"><span class="ndm">&mdash;</span></span><span class="dt">Aug 4</span></li>
+          <li class="km"><span class="bar" role="img" aria-label="August 4: Murray"><svg class="prest" viewBox="0 0 56 40" width="34" height="26" aria-hidden="true" focusable="false"><path d="M19 9C10 12 4 19 4 29c5-2 9-7 10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M37 9c9 3 15 10 15 20-5-2-9-7-10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.6-7.8-4.1-7.8 4.1 1.5-8.6-6.3-6.1 8.7-1.3z" fill="currentColor"/><path d="M18 33l10 4.5 10-4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pname">Murray</span></span><span class="dt">Aug 4</span></li>
         </ol>
-        <p class="dayw-note">One column per practice day in the log below. Aug 4 is a dash because the report has McCarthy struggling early and finishing strong &mdash; no winner attributed.</p>
+        <p class="dayw-note">One column per practice day the log below attributes a winner to.</p>
       </div>
       <ul class="trk-log">
         <li><span class="d">AUG 4</span>Star Tribune&rsquo;s Tuesday practice report: McCarthy struggled early, then finished strong. O&rsquo;Connell keeps saying the evaluation is ongoing, but Murray remains the favorite.</li>
@@ -3743,6 +3817,31 @@ if (tt) document.querySelectorAll('.hv').forEach(g => {
     /* no error handler needed: on failure the badge is simply left alone */
     img.src = BASE + abbr + ".webp";
   });
+})();
+</script>
+
+<script>
+/* Keep the safety board honest: the digit counts from the last dated incident
+   rather than sitting at whatever was hardcoded. Falls back to the shipped
+   number if the date is missing or unparseable. */
+(function () {
+  "use strict";
+  var el = document.querySelector(".sf-num[data-since]");
+  if (!el) return;
+  var p = String(el.getAttribute("data-since")).split("-");
+  if (p.length !== 3) return;
+  var last = new Date(+p[0], +p[1] - 1, +p[2]);
+  if (isNaN(last.getTime())) return;
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var days = Math.round((today - last) / 86400000);
+  if (days < 0) return;
+  el.textContent = String(days);
+  var board = el.closest(".safety");
+  if (board) {
+    board.setAttribute("aria-label",
+      "Safety board: " + days + (days === 1 ? " day" : " days") +
+      " since the substation claimed a 49er.");
+  }
 })();
 </script>
 </body>

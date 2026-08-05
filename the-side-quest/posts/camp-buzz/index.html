@@ -502,6 +502,23 @@
   .hexb.logo-on { background: none !important; clip-path: none; width: auto; }
   .hexb.logo-on img { height: 30px; width: auto; display: block; }
   .hexb.sm.logo-on img { height: 25px; }
+
+  /* Day-winner marks: McCarthy's jersey 9, and a prestige-style insignia for
+     Murray (original artwork in the spirit of one, not the game's own mark). */
+  .dayw-row .bar { flex-direction: column; gap: 2px; height: 62px; }
+  .dayw-row .jj .bar .num9 { font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-weight: 900; font-size: 2.1rem; line-height: 1; letter-spacing: -0.04em; }
+  .dayw-row .km .bar .prest { display: block; }
+  .dayw-row .km .bar .pname { font-family: system-ui, sans-serif; font-weight: 800;
+    font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
+  .dayw-row .nd .bar { background: transparent; border: 1px dashed var(--muted); color: var(--muted); }
+  .dayw-row .nd .bar .ndm { font-size: 1.2rem; font-weight: 800; line-height: 1; }
+  @media (max-width: 460px) {
+    .dayw-row .bar { height: 52px; }
+    .dayw-row .jj .bar .num9 { font-size: 1.7rem; }
+    .dayw-row .km .bar .prest { width: 28px; height: 21px; }
+    .dayw-row .km .bar .pname { font-size: 0.46rem; letter-spacing: 0.1em; }
+  }
 </style>
 </head>
 <body class="viz-root">
@@ -612,11 +629,12 @@
       <div class="dayw">
         <div class="dayw-h"><span>Who won the day</span><span class="tally">McCarthy 2 &middot; Murray 1</span></div>
         <ol class="dayw-row">
-          <li class="jj"><span class="bar" role="img" aria-label="July 30: McCarthy">JJ</span><span class="dt">Jul 30</span></li>
-          <li class="jj"><span class="bar" role="img" aria-label="July 31: McCarthy">JJ</span><span class="dt">Jul 31</span></li>
-          <li class="km"><span class="bar" role="img" aria-label="August 1: Murray">KM</span><span class="dt">Aug 1</span></li>
+          <li class="jj"><span class="bar" role="img" aria-label="July 30: McCarthy"><span class="num9">9</span></span><span class="dt">Jul 30</span></li>
+          <li class="jj"><span class="bar" role="img" aria-label="July 31: McCarthy"><span class="num9">9</span></span><span class="dt">Jul 31</span></li>
+          <li class="km"><span class="bar" role="img" aria-label="August 1: Murray"><svg class="prest" viewBox="0 0 56 40" width="34" height="26" aria-hidden="true" focusable="false"><path d="M19 9C10 12 4 19 4 29c5-2 9-7 10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M37 9c9 3 15 10 15 20-5-2-9-7-10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.6-7.8-4.1-7.8 4.1 1.5-8.6-6.3-6.1 8.7-1.3z" fill="currentColor"/><path d="M18 33l10 4.5 10-4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pname">Murray</span></span><span class="dt">Aug 1</span></li>
+          <li class="nd"><span class="bar" role="img" aria-label="August 4: no winner attributed"><span class="ndm">&mdash;</span></span><span class="dt">Aug 4</span></li>
         </ol>
-        <p class="dayw-note">One column per practice day the log below attributes a winner to.</p>
+        <p class="dayw-note">One column per practice day in the log below. Aug 4 is a dash because the report has McCarthy struggling early and finishing strong &mdash; no winner attributed.</p>
       </div>
       <ul class="trk-log">
         <li><span class="d">AUG 4</span>Star Tribune&rsquo;s Tuesday practice report: McCarthy struggled early, then finished strong. O&rsquo;Connell keeps saying the evaluation is ongoing, but Murray remains the favorite.</li>

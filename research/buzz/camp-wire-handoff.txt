@@ -1,0 +1,430 @@
+CAMP WIRE HANDOFF LOG — the-buzz-is-real
+========================================
+Append-only. Newest entry at the bottom.
+
+Each entry is a run that gathered camp news but could not write it into the
+Cowork artifact itself (usually: desktop bridge offline, so device_stage_files
+and update_artifact were unavailable). The next run that CAN stage the artifact
+should work through the unapplied entries oldest-first, then mark them applied.
+
+Rules that still hold when applying these:
+  - 2018-2025 backtest numbers, methodology, and section 08 archive are FROZEN.
+  - Check dates on existing wire cards and tracker logs before adding anything;
+    skip whatever is already reflected in the artifact.
+  - Every item needs a named reporter/outlet. Thin single-source items get
+    flagged or dropped, never laundered into confident claims.
+  - The repo copy at the-side-quest/posts/camp-buzz/index.html is a SNAPSHOT,
+    not the source of truth. The artifact is.
+
+
+====================================================================
+CAMP WIRE HANDOFF — Tue Aug 4, 2026 (morning run)
+Append this entry to camp-wire-handoff.txt. Artifact: the-buzz-is-real
+Note: this run could not stage the artifact HTML (desktop bridge was
+offline), so edits below are described against the known structure,
+not as literal diffs. Skip any item already reflected in the file —
+check dates on existing wire cards and tracker logs before adding.
+====================================================================
+
+--- FRONT PAGE TRACKERS ---
+
+[1] TEAL TRACKER (Travis Hunter WR<->CB meter)
+News:
+  - DiRocco's running count through 5 practices: 69 team-period
+    snaps — 41 at CB, 28 at WR. (Michael DiRocco, ESPN, via Yahoo
+    Sports snap-count breakdown)
+  - Sun 8/2 (camp Day 4): standout day — INT off Nick Mullens in
+    team drills, then a contested deep catch from Trevor Lawrence
+    through tight coverage. OC comment: "It's great getting back
+    out there with the guys. He has such an infectious energy."
+    (jaguars.com Day 4 snapshot)
+  - Mon 8/3: quieter — one WR target, ended in a miscommunication.
+    (DiRocco)
+  - Team's stated plan: more CB than his rookie year, WR snaps
+    limited, week-to-week by matchup.
+Edits:
+  - trk-log: add dated entries for 8/2 (INT + deep catch day) and
+    8/3 (one target, miscommunication; running count 41 CB / 28 WR
+    per DiRocco).
+  - .needle: set to lean CB — ~59% CB (41 of 69). Nudge toward the
+    CB side if it currently sits at/near center.
+  - .trk-verdict: reflect "leaning CB" — snaps say corner first,
+    with the deep-ball highlights coming on his limited WR work.
+  - Update "Updated Aug 4" label.
+
+[2] SUBSTATION REAPER BOARD (49ers injuries)
+News (it was a rough weekend in Santa Clara):
+  - WR Ricky Pearsall: OUT FOR SEASON — PCL setback, surgery.
+    (Cam Inman, Bay Area News Group / 49ers Webzone)
+  - DE Mikail Kamara: torn ACL Saturday, waived/injured. (same)
+  - WR Mike Evans: quad strain — no practice Mon, stationary catch
+    drills only. (Matt Barrows, The Athletic, 8/3)
+  - WR De'Zhaun Stribling: hamstring, day-to-day, missed Mon.
+    (Nick Wagoner, ESPN, 8/3)
+  - RB Kaelon Black: adductor, missed Mon. (Wagoner, 8/3)
+  - WR Christian Kirk: calf strain, multiple practices missed.
+  - Countermoves: Deebo Samuel signed 1-yr after the Pearsall news
+    and was a FULL participant Saturday (Barrows, 8/1); RB Khalil
+    Herbert signed 8/2 (team announcement).
+  - Returns: DT C.J. West and DE Romello Height back at practice.
+  - Nick Bosa on his ACL recovery: moving better with less leg
+    mass. (Albert Breer, The MMQB, 8/3)
+Edits:
+  - trk-log: add 8/3-8/4 entries — Pearsall done for the year,
+    Kamara ACL, Evans/Stribling/Black all sat Monday; Deebo and
+    Herbert signed as the patch jobs; West and Height back.
+  - Update the board's names/statuses to match the list above and
+    the "Updated Aug 4" label.
+
+[3] MURRAY / McCARTHY CARD (Vikings QB battle)
+News:
+  - Mike Florio (PFT), after Saturday 8/1 practice: Murray is
+    pulling ahead — "He's objectively more talented than J.J.
+    McCarthy"; early limiter was offense unfamiliarity, now fading.
+  - QB coach Josh McCown (via Jori Epstein, Yahoo): "We want to
+    coach him... to operate in our offense and then add his touch
+    to it."
+  - Context: Kevin Seifert (ESPN) had Murray as "heavy favorite"
+    entering camp — the battle is going as expected. (ClutchPoints
+    roundup, 8/2)
+Edits:
+  - trk-log: add 8/2 entry (Florio: Murray pulling ahead after
+    Saturday practice; McCown quote optional).
+  - Verdict line: Murray trending toward QB1, McCarthy hasn't
+    made it close yet. Update "Updated Aug 4" label.
+
+--- 2026 LIVE WIRE (div#wire) — new dated .wi cards ---
+(match existing card markup: team colors, player, BUZZING/STUNG
+badge, quote, source link; bump the summary mention counts)
+
+BUZZING:
+  - Travis Hunter, JAX — 8/2 — INT + contested deep catch same
+    practice. Source: jaguars.com Day 4 snapshot / DiRocco.
+  - Parker Washington, JAX WR — 8/2 — sliding TD catch, keeps
+    drawing "tough cover" praise at camp. Source: jaguars.com Day
+    4 snapshot. (Repeat-buzz name — fits the thesis.)
+  - Dillon Gabriel, CLE QB — 8/1 — Daryl Ruiter: "most consistent"
+    of the QBs; Todd Monken (via Daniel Oyefusi, ESPN): "looked
+    really good... prepares like he's gonna get first-team reps."
+  - Cyrus Allen, KC WR — 7/31 — Andy Reid: "He's done a nice
+    job... he's willing to work." NOTE: shin bruise since 8/1,
+    back later this week (Nate Taylor, ESPN) — pair the buzz with
+    the ding or hold the card until he's back.
+  - Tory Horton, SEA WR — 8/2 — two TDs in team drills. THIN:
+    single source (@DailyFumbles via Athlon roundup) — flag as
+    thin or skip per house rules.
+
+STUNG:
+  - Ricky Pearsall, SF WR — 8/3 — out for season (PCL surgery).
+    Source: Cam Inman, Bay Area News Group.
+  - KC Concepcion, CLE WR — 8/3 — shoulder injury on a catch
+    attempt Monday. Source: Daniel Oyefusi, ESPN.
+  - Xavier Worthy, KC WR — 8/3 — sprained shoulder, "a day or
+    two." Source: Matt Derrick, ChiefsDigest / Ian Rapoport, NFL
+    Network.
+  - Jahmyr Gibbs, DET RB — 8/3 — back, at practice but not in
+    uniform Monday. Source: Nolan Bianchi, Detroit News.
+
+--- SECTION 06 WATCHLIST ---
+  - ADD (or bump if present): Parker Washington (JAX WR) and
+    Dillon Gabriel (CLE QB) — both have repeat credible buzz.
+  - If Cyrus Allen is on the list, annotate the shin bruise.
+  - If KC Concepcion is on the list, mark the 8/3 shoulder.
+  - Trim anything stale per the usual pass; dates in ET.
+
+--- DO NOT TOUCH ---
+2018-2025 backtest numbers, methodology, section 08 archive.
+
+--- NOT COVERED THIS RUN ---
+X/Twitter accounts (no Chrome bridge from this session) and
+underdognetwork.com / establishtherun.com (fetch blocked) — no
+Levitan/Norris/Winks notes this time. Worth a manual X glance at
+@ESPNdirocco for the exact per-practice Hunter splits.'
+
+STATUS: UNAPPLIED — no run has written these into the artifact yet.
+
+--------------------------------------------------------------------
+[repo-snapshot cross-check — added by head engineer, 2026-08-03]
+Mechanical only. Compared the entry against the REPO SNAPSHOT
+(the-side-quest/posts/camp-buzz/index.html, 135 cards in the 2026
+wire, newest date Aug 2). The artifact may already be ahead of the
+snapshot, so treat this as a hint that narrows the checking, NOT as
+authority. Verify against the staged artifact before writing.
+
+  Newest wire date in snapshot ........ Aug 2
+  => every 8/3 and 8/4 item below is certainly absent from it.
+
+  Definitely new (name appears nowhere in the snapshot):
+    Dillon Gabriel (CLE QB)     KC Concepcion (CLE WR)
+    Khalil Herbert (SF RB)      Mikail Kamara (SF DE)
+
+  New card needed (name present elsewhere, but no wire card at all):
+    Tory Horton (SEA WR)        Xavier Worthy (KC WR)
+
+  Dated cards already in the snapshot — check for duplication:
+    Travis Hunter ....... Aug 2 (x2), Jul 31
+        ^ the 8/2 INT + deep-catch item may ALREADY be one of these.
+          Read both Aug 2 Hunter cards before adding a third.
+    Parker Washington ... Jul 31 (x2)   -> 8/2 sliding TD is new
+    Cyrus Allen ......... Aug 1, Jul 28 (x2)
+        ^ entry dates this 7/31; snapshot has Aug 1. Possibly the
+          same Reid quote under a different date — reconcile, don't
+          duplicate.
+    Ricky Pearsall ...... Aug 1, Jul 31  -> 8/3 season-ending is new
+    Jahmyr Gibbs ........ Jul 29         -> 8/3 back injury is new
+
+  Tracker logs: snapshot's front-page logs stop at Aug 2, so all
+  three trackers need their 8/3-8/4 entries plus the "Updated Aug 4"
+  label bump.
+
+  Note on the Teal Tracker needle: the repo copy's lean meter is now
+  data-driven via --lean (right-hand share). 41 CB of 69 = 59.4%, so
+  --lean:59.4% with the CB label reading 59% and WR 41%. The artifact
+  may still use the old fixed-50/50 markup with only .needle moving —
+  check which it is before editing.
+--------------------------------------------------------------------
+
+====================================================================
+# The Buzz Is Real — update packet, Aug 5, 2026 (ET)
+
+Handoff for updating the live artifact/site. I couldn't reach the current HTML this run
+(desktop bridge offline), so snippets below follow the article's established markup
+conventions — **before pasting, copy the exact class names and card structure from a
+neighboring element in the file** and slot this content in. Frozen zones: do not touch
+the 2018–2025 backtest numbers, methodology, or section 08 archive.
+
+News window covered: Aug 2–4, 2026. All dates ET.
+
+---
+
+## 1. Front page — Teal Tracker (Travis Hunter WR↔CB lean meter)
+
+**Needle:** move toward **CB**. DiRocco's team-period tally through five practices:
+**41 snaps at CB, 28 at WR** (~60/40 defense). Set `.needle` accordingly (CB side, ~60%).
+
+**Verdict line (`.trk-verdict`):** replace with something in this voice:
+
+> Leaning corner. DiRocco's count says 41 defensive snaps to 28 on offense through five
+> practices, and Coen is trimming the offensive menu — Hunter learns the X and F receiver
+> spots, not the whole playbook.
+
+**Append to trk-log (newest first, match existing entry markup):**
+
+```html
+<div class="trk-entry"><span class="trk-date">Aug 4</span> Jeremy Fowler (ESPN): Coen says
+Hunter won't be asked to master the full offense — he's learning the X and F receiver
+roles only. The WR job is a package, not a position.</div>
+
+<div class="trk-entry"><span class="trk-date">Aug 3</span> DiRocco's running count through
+five practices: 41 team-period snaps at corner, 28 at receiver. Monday's lone target from
+Nick Mullens fell incomplete on a route miscommunication.</div>
+
+<div class="trk-entry"><span class="trk-date">Aug 2</span> Both-ways Sunday: an interception
+at corner and two chunk plays at receiver, including a 35-yard grab. Asked how many snaps
+he wants: "All of them. I can't stay on the sideline."</div>
+```
+
+Update the tracker's "Updated Aug 4" label.
+
+Sources: [Jaguars Wire via Yahoo (snap counts, DiRocco)](https://sports.yahoo.com/articles/travis-hunters-snap-count-breakdown-153306249.html) ·
+[Yahoo (week 1 tally)](https://sports.yahoo.com/articles/two-way-jaguars-star-ramping-015725858.html) ·
+[PFT (Sunday practice + quote)](https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/travis-hunter-says-he-wants-to-play-every-snap-after-putting-on-a-show-in-practice) ·
+RotoWire news desk, Aug 4 (Fowler/playbook item)
+
+---
+
+## 2. Front page — Substation Reaper Board (49ers injuries)
+
+The cluster got worse. **14 players missed Monday's practice — about a sixth of the
+90-man roster** (CBS Sports, Aug 4). Update the board's count/verdict line if it carries one.
+
+**Append to trk-log:**
+
+```html
+<div class="trk-entry"><span class="trk-date">Aug 4</span> Eric Branch (SF Chronicle):
+Pearsall's isolated PCL surgery has almost no comparable cases among pro athletes — the
+rehab timeline is a guess. He's on IR; the season is over before it started.</div>
+
+<div class="trk-entry"><span class="trk-date">Aug 3</span> Matt Maiocco (NBC Sports Bay
+Area): Mike Evans sat out Monday with a quad strain. De'Zhaun Stribling missed a second
+straight practice (hamstring), Christian Kirk still hasn't practiced since day one (calf).
+Deebo Samuel — signed to a one-year deal — had an active day in his second practice.</div>
+
+<div class="trk-entry"><span class="trk-date">Aug 4</span> The count: 14 Niners missed
+Monday's practice. RB Kaelon Black (adductor) is out multiple weeks; Jordan James is
+still nursing a fractured rib.</div>
+```
+
+Update the board's "Updated Aug 4" label.
+
+Sources: [CBS Sports (injury roundup)](https://www.cbssports.com/nfl/news/49ers-injuries-training-camp/) ·
+[NBC Sports Bay Area (Maiocco)](https://www.nbcsports.com/nfl/san-francisco-49ers/mike-evans-quad-injury-receivers-training-camp/1954261/)
+
+---
+
+## 3. Front page — Murray/McCarthy card (Vikings QB battle)
+
+Momentum swung to Murray over the weekend, with McCarthy wobbling then steadying Tuesday.
+If the card carries a lean/verdict line, it should now read Murray as the clear Week 1
+favorite, competition not closed.
+
+**Append to trk-log:**
+
+```html
+<div class="trk-entry"><span class="trk-date">Aug 4</span> Star Tribune's Tuesday practice
+report: McCarthy struggled early, then finished strong. O'Connell keeps saying the
+evaluation is ongoing, but Murray remains the favorite.</div>
+
+<div class="trk-entry"><span class="trk-date">Aug 1</span> Saturday belonged to Murray.
+Alec Lewis (The Athletic): "very sharp... the operation looked clean." Will Ragatz:
+"Clear, decisive win for Kyler Murray in the QB competition today... It wasn't very
+close."</div>
+```
+
+Update the card's "Updated Aug 4" label.
+
+Sources: [Vikings Territory (Aug 1 practice)](https://vikingsterritory.com/2026/news/top_news/kyler-murray-punches-back) ·
+[Star Tribune (Aug 4 headline)](https://www.startribune.com/minnesota-vikings-training-camp-practice-live-updates-august-4-jj-mccarthy-kyler-murray-eagan/601873246) ·
+[B/R live blog Aug 3 (O'Connell, via Krammer)](https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3)
+
+---
+
+## 4. Camp Wire — new cards for the 2026 LIVE feed (div#wire)
+
+Six new items. Match the existing `.wi` card markup (team-colored card, player name,
+▲ BUZZING / ▼ STUNG badge, quote, source link). Bump the 2026 summary's mention counts
+accordingly. Content per card:
+
+**▲ BUZZING — Denzel Boston, WR, Browns — Aug 3**
+Quote: Zac Jackson (The Athletic) says the rookie wideouts are "galaxies ahead" of the
+rest of Cleveland's receiver room, with Boston and KC Concepcion penciled in as the top
+two by Week 1. Second independent nod: SI's Nick Pedone called Boston among the best
+receivers on the field. Source link: [B/R live blog, Aug 3](https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3)
+
+**▼ STUNG — KC Concepcion, WR, Browns — Aug 4**
+The other half of that Cleveland buzz took a shoulder injury and is limited to individual
+work. Buzz interrupted, not dead — Boston now carries the room's hype alone. Source:
+RotoWire news desk, Aug 4.
+
+**▲ BUZZING — Travis Hunter, WR/CB, Jaguars — Aug 2**
+Interception at corner, 35-yard catch at receiver, same practice. "All of them. I can't
+stay on the sideline." Cross-link the Teal Tracker for the snap math. Source link:
+[PFT](https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/travis-hunter-says-he-wants-to-play-every-snap-after-putting-on-a-show-in-practice)
+
+**▲ BUZZING — Malik Washington, WR, Dolphins — Aug 3**
+Joe Schad (Palm Beach Post): trending as Malik Willis' top target, with a "great
+connection" showing up daily. Classic thesis case — third-year afterthought, repeated
+beat-writer praise. Source link: [B/R live blog, Aug 3](https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3)
+
+**▲ BUZZING — Carson Beck, QB, Cardinals — Aug 4**
+Johnny Venerable (PHNX): "looking more and more comfortable," the most impressive
+Cardinals QB by the end of Monday's practice — and he gets the start in Thursday's Hall
+of Fame game. Source link: [B/R live blog, Aug 3](https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3)
+
+**▼ STUNG — Mike Evans, WR, 49ers — Aug 3**
+Quad strain, out Monday. In Santa Clara the reaper is working through the depth chart in
+order. Cross-link the Reaper Board. Source link: [Maiocco, NBC Sports Bay Area](https://www.nbcsports.com/nfl/san-francisco-49ers/mike-evans-quad-injury-receivers-training-camp/1954261/)
+
+Thin / single-source — held out of the wire on purpose (watchlist chips only if desired):
+Cyrus Allen (Chiefs WR, first-team reps per an UnderdogNFL clip of Andy Reid), Colbie
+Young (Bengals WR, Dan Hoard), Pat Bryant (Broncos WR, Nick Kosmider), Jalen Nailor
+(Las Vegas Sun). One credible mention each, no second source yet.
+
+---
+
+## 5. Section 06 — watchlist changes
+
+- **Add chip + table row: Denzel Boston (CLE WR)** — two independent credible mentions
+  (Jackson/The Athletic, Pedone/SI). First mention date Aug 3.
+- **Add chip + table row: Malik Washington (MIA WR)** — Schad, Aug 3. One strong beat
+  source; mark as one-mention if the table tracks that.
+- **Update KC Concepcion's row** if present: note Aug 4 shoulder, limited.
+- **Update Travis Hunter's row**: mention count +2 (Aug 2 practice, Aug 4 Fowler item).
+- Stale check (I couldn't see the current table): any player whose last mention predates
+  July 28 with no roster/injury change should rotate out per the article's usual rule.
+
+---
+
+## 6. Notes for whoever pastes this in
+
+- Dates in ET; keep the wire newest-first.
+- Voice check: plain declarative sentences, bee/honey theme is in the furniture, not the
+  prose. No colored left-border accent bars on any new card or callout.
+- The 2018–2025 year wires in section 08 and all backtest numbers stay untouched.
+- Not covered this run: X/Twitter accounts (no browser access from this session) — worth
+  a manual skim of @ESPNdirocco and @adamlevitan before publishing, since the snap-count
+  numbers above came to me secondhand via Jaguars Wire rather than DiRocco's own feed.
+
+STATUS: UNAPPLIED — no run has written these into the artifact yet.
+
+--------------------------------------------------------------------
+[repo-snapshot cross-check — added by head engineer, 2026-08-04]
+Mechanical only, against the REPO SNAPSHOT (the-side-quest/posts/camp-buzz/
+index.html). The artifact may be ahead of it. Hint, not authority.
+
+(A) THE MARKUP IN THIS PACKET WILL NOT STYLE. The proposed snippets use
+    <div class="trk-entry"><span class="trk-date">. Neither class exists
+    anywhere in the article — 0 occurrences. Tracker logs are a <ul>, and
+    entries are <li> with a .d date span:
+
+        <ul class="trk-log">
+          <li><span class="d">AUG 2</span>Two catches, one over his shoulder
+          down the sideline and one on a deep over, plus an INT. ...</li>
+        </ul>
+
+    Pasting the packet's divs verbatim yields unstyled blocks: no dashed
+    separator, no muted date colour, wrong size. Convert to <li>/.d form.
+    Date format in existing entries is uppercase ("AUG 2"), not "Aug 2".
+    (.trk-verdict, .trk-log, .trk-h and .needle DO exist and are correct.)
+
+(B) THE AUG 2 HUNTER ITEM IS ALREADY IN THE ARTICLE — TWICE OVER.
+    The snapshot already carries two Aug 2 Travis Hunter wire cards, and an
+    existing trk-log entry reading "AUG 2 — Two catches ... plus an INT.
+    'Maybe most impressive practice of his career.'" That is the same Sunday
+    practice this packet proposes adding. Adding §4's Hunter card and §1's
+    Aug 2 trk entry would make it a third and fourth telling of one practice.
+    Read those two cards first; most likely this item is DROP, not ADD.
+
+(C) THIS PACKET OVERLAPS THE Aug 4 ENTRY ABOVE. Both are unapplied. Do not
+    apply both blind — reconcile first. Same events, differing details:
+      - Hunter Aug 2: Aug-4 entry says "INT off Nick Mullens + contested deep
+        catch from Trevor Lawrence"; this one says "INT + two chunk plays,
+        incl. a 35-yard grab". Aug-4 puts Mullens on the INT, this one puts
+        Mullens on an Aug 3 incompletion. One of the two is misattributed.
+      - KC Concepcion shoulder: dated 8/3 (Oyefusi/ESPN) in the Aug-4 entry,
+        8/4 (RotoWire) here. Pick one.
+      - Murray/McCarthy Saturday practice: Aug-4 entry logs it as 8/2 (Florio),
+        this one as 8/1 (Lewis/Ragatz). Same practice, two dates.
+      - Cyrus Allen: Aug-4 entry wants him in the wire as BUZZING 7/31; this
+        packet deliberately holds him out as thin/single-source. Straight
+        contradiction — decide, don't apply both.
+      - Mike Evans quad: attributed to Barrows/The Athletic in the Aug-4 entry,
+        Maiocco/NBC Bay Area here. Both plausible; not a conflict.
+    Still pending from the Aug-4 entry and NOT restated here: Dillon Gabriel,
+    Parker Washington 8/2, Mikail Kamara, Khalil Herbert, Xavier Worthy,
+    Jahmyr Gibbs, Tory Horton (thin).
+
+(D) §2's PROPOSED LOG IS OUT OF ORDER. The three Reaper entries run
+    Aug 4, Aug 3, Aug 4. The stated convention is newest-first; merge the two
+    Aug 4 items or reorder.
+
+(E) VERDICT LINE MATH. The snapshot's .trk-verdict currently reads "corner,
+    34 defensive snaps to 22 offensive through four days" (56 snaps). This
+    packet's 41/28 through five practices is the consistent next step (69
+    snaps). 41/69 = 59.4%, so "~60%" here and "~59%" in the Aug-4 entry are
+    the same number rounded differently — set one value, not two.
+    NOTE: the repo copy's meter is now data-driven via --lean (right-hand
+    share) with the fill proportional; the artifact may still be the old
+    fixed 50/50 where only .needle moves. Check which before editing.
+
+(F) NEW vs PRESENT (2026 wire cards in the snapshot):
+      new, no card ....... Denzel Boston, Colbie Young, Jalen Nailor,
+                           Jordan James
+      has earlier cards .. Malik Washington (Jul 31) -> Aug 3 is a new mention
+                           Carson Beck (Jul 28, Jul 19) -> Aug 4 is new
+      named elsewhere but no 2026 wire card .. Mike Evans, Pat Bryant
+
+(G) Packet header is dated Aug 5 but its news window is Aug 2–4 and the
+    preceding entry is dated Aug 4. Log is append-ordered, so this is
+    cosmetic — flagging only so the dates in the artifact don't inherit it.
+--------------------------------------------------------------------

@@ -495,6 +495,13 @@
     td:first-child { font-weight: 700; }
     td:first-child::before { display: none; }
   }
+
+  /* club marks. Applied by progressive enhancement so no existing badge markup
+     changes -- which matters because the 2018-2025 archive below is frozen.
+     If the script or an image fails, the coloured hex badge stays exactly as-is. */
+  .hexb.logo-on { background: none !important; clip-path: none; width: auto; }
+  .hexb.logo-on img { height: 30px; width: auto; display: block; }
+  .hexb.sm.logo-on img { height: 25px; }
 </style>
 </head>
 <body class="viz-root">
@@ -3683,6 +3690,42 @@ if (tt) document.querySelectorAll('.hv').forEach(g => {
   });
   g.addEventListener('mouseleave', () => { tt.style.opacity = 0; });
 });
+</script>
+
+<script>
+/* Swap the hex team badges for real club marks (nflverse / nflreadr
+   team_logo_espn, downloaded and converted to webp under assets/img/logos/).
+   Enhancement only: it reads the abbreviation already in each badge and never
+   edits markup on disk, so the frozen archive section is untouched. Any badge
+   whose logo is missing or fails to load keeps its original coloured hex. */
+(function () {
+  "use strict";
+  var BASE = "../../assets/img/logos/";
+  /* clubs that moved or rebranded inside the study window */
+  var ALIAS = { OAK: "LV", SD: "LAC", STL: "LAR", LA: "LAR", WSH: "WAS", JAC: "JAX", ARZ: "ARI" };
+  var badges = document.querySelectorAll(".hexb");
+  if (!badges.length) return;
+
+  Array.prototype.forEach.call(badges, function (el) {
+    var raw = (el.textContent || "").trim().toUpperCase();
+    if (!/^[A-Z]{2,3}$/.test(raw)) return;
+    var abbr = ALIAS[raw] || raw;
+    var img = new Image();
+    img.decoding = "async";
+    img.alt = raw;
+    img.addEventListener("load", function () {
+      /* keep the abbreviation for screen readers, drop it visually */
+      el.setAttribute("aria-label", raw);
+      if (!el.title) el.title = raw;
+      el.textContent = "";
+      el.style.background = "none";
+      el.classList.add("logo-on");
+      el.appendChild(img);
+    });
+    /* no error handler needed: on failure the badge is simply left alone */
+    img.src = BASE + abbr + ".webp";
+  });
+})();
 </script>
 </body>
 </html>

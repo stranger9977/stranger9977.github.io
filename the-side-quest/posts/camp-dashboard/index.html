@@ -352,6 +352,10 @@
   .sitenav a:focus-visible { outline:2px solid currentColor; outline-offset:2px; border-color:currentColor; }
   .sitenav .sep { color:var(--muted); }
   @media (max-width:520px) { .sitenav .sep { display:none; } }
+
+  /* club marks (nflverse / nflreadr team_logo_espn, converted to webp) */
+  .tlogo { display: inline-block; vertical-align: middle; object-fit: contain; flex: none; }
+  .tlogo.sm { width: 28px; height: 28px; }
 </style>
 </head>
 <body class="viz-root">
@@ -684,9 +688,29 @@
     var t = teamOf(abbr);
     if (!t) return '<span class="hexb sm" style="background:var(--muted)" title="The source names no team">' + esc(abbr || '—') + '</span>';
     var c = badgeOn(t.primary);
+    /* real club mark when the record carries one; the coloured hex stays as the
+       fallback and is restored by the delegated error handler below */
+    if (t.logo) {
+      return '<img class="tlogo sm" src="' + esc(t.logo) + '" alt="' + esc(t.name) +
+        '" title="' + esc(t.name) + '" loading="lazy" decoding="async"' +
+        ' data-abbr="' + esc(abbr) + '" data-bg="' + esc(c.bg) + '" data-fg="' + c.fg + '">';
+    }
     return '<span class="hexb sm" style="background:' + esc(c.bg) + ';color:' + c.fg +
       (c.fg === '#ffffff' ? '' : ';text-shadow:none') + '" title="' + esc(t.name) + '">' + esc(abbr) + '</span>';
   }
+  /* a logo that fails to load becomes the hex chip it replaced, rather than a
+     broken-image icon. Capture phase: img error events do not bubble. */
+  document.addEventListener('error', function (e) {
+    var el = e.target;
+    if (!el || el.tagName !== 'IMG' || el.className.indexOf('tlogo') === -1) return;
+    var s = document.createElement('span');
+    s.className = 'hexb sm';
+    s.style.background = el.getAttribute('data-bg') || 'var(--muted)';
+    s.style.color = el.getAttribute('data-fg') || '#fff';
+    s.title = el.title || '';
+    s.textContent = el.getAttribute('data-abbr') || '—';
+    if (el.parentNode) el.parentNode.replaceChild(s, el);
+  }, true);
   function posMatch(entryPos, want) {
     if (want === 'ALL') return true;
     var parts = String(entryPos || '').split('/');

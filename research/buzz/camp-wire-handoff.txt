@@ -141,7 +141,12 @@ underdognetwork.com / establishtherun.com (fetch blocked) — no
 Levitan/Norris/Winks notes this time. Worth a manual X glance at
 @ESPNdirocco for the exact per-practice Hunter splits.'
 
-STATUS: UNAPPLIED — no run has written these into the artifact yet.
+STATUS: APPLIED TO SITE 2026-08-05 (commit 494b079) — the wire cards, tracker
+logs, meter, verdicts and watchlist rows are live at
+https://stranger9977.github.io/the-side-quest/posts/camp-buzz/ and in
+the-side-quest/data/buzz/wire.json. NOT yet written to the Cowork artifact —
+when the desktop bridge is back, reconcile the artifact against the site
+rather than re-applying this entry from scratch.
 
 --------------------------------------------------------------------
 [repo-snapshot cross-check — added by head engineer, 2026-08-03]
@@ -355,7 +360,12 @@ Young (Bengals WR, Dan Hoard), Pat Bryant (Broncos WR, Nick Kosmider), Jalen Nai
   a manual skim of @ESPNdirocco and @adamlevitan before publishing, since the snap-count
   numbers above came to me secondhand via Jaguars Wire rather than DiRocco's own feed.
 
-STATUS: UNAPPLIED — no run has written these into the artifact yet.
+STATUS: APPLIED TO SITE 2026-08-05 (commit 494b079) — the wire cards, tracker
+logs, meter, verdicts and watchlist rows are live at
+https://stranger9977.github.io/the-side-quest/posts/camp-buzz/ and in
+the-side-quest/data/buzz/wire.json. NOT yet written to the Cowork artifact —
+when the desktop bridge is back, reconcile the artifact against the site
+rather than re-applying this entry from scratch.
 
 --------------------------------------------------------------------
 [repo-snapshot cross-check — added by head engineer, 2026-08-04]

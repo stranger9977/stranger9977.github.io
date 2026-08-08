@@ -577,6 +577,41 @@
   .jers-row .ds { display: block; font-family: system-ui, sans-serif; font-size: 0.6rem;
     font-weight: 700; letter-spacing: 0.04em; color: var(--ink-2); text-align: center;
     margin-top: 1px; font-variant-numeric: tabular-nums; }
+
+  /* ── Most talked about: recency-weighted, scrubbable back through camp ── */
+  .pw { border: 1px solid var(--grid); padding: 14px 15px; margin: 18px 0 24px; }
+  .pw-h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--honey-text); }
+  .pw-h .pw-asof { color: var(--muted); letter-spacing: 0.06em; }
+  .pw-h .pw-asof b { color: var(--ink-1); }
+  .pw-scrub { display: flex; align-items: center; gap: 10px; margin: 10px 0 14px; }
+  .pw-scrub label { font-family: system-ui, sans-serif; font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); flex: none; }
+  .pw-scrub input[type="range"] { flex: 1; min-width: 0; height: 44px; accent-color: var(--honey); }
+  .pw-cols { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 520px) { .pw-cols { grid-template-columns: 1fr; } }
+  .pw-ct { font-family: system-ui, sans-serif; font-size: 0.62rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 7px;
+    padding-bottom: 5px; border-bottom: 1px solid var(--grid); }
+  .pw-ct.up { color: var(--honey-text); }
+  .pw-ct.dn { color: var(--s-neg-text, #ef7f92); }
+  .pw-list { list-style: none; margin: 0; padding: 0; }
+  .pw-list li { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px;
+    align-items: baseline; padding: 5px 0; border-bottom: 1px dotted var(--grid); }
+  .pw-list li:last-child { border-bottom: none; }
+  .pw-nm { font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.86rem; }
+  .pw-tp { font-family: system-ui, sans-serif; font-size: 0.64rem; color: var(--muted);
+    letter-spacing: 0.06em; }
+  .pw-mt { font-family: system-ui, sans-serif; font-size: 0.62rem; color: var(--muted);
+    text-align: right; font-variant-numeric: tabular-nums; }
+  .pw-bar { grid-column: 1 / -1; height: 4px; background: var(--grid); }
+  .pw-bar i { display: block; height: 100%; }
+  .pw-list .up .pw-bar i { background: var(--honey); }
+  .pw-list .dn .pw-bar i { background: var(--s-neg-text, #ef7f92); }
+  .pw-empty { font-family: system-ui, sans-serif; font-size: 0.72rem; color: var(--muted); padding: 6px 0; }
+  .pw-note { font-family: system-ui, sans-serif; font-size: 0.7rem; line-height: 1.5;
+    color: var(--muted); margin: 12px 0 0; }
 </style>
 </head>
 <body class="viz-root">
@@ -619,10 +654,10 @@
     <h3>Is Travis Hunter a receiver or a corner this year?</h3>
     <p>Nine months after the knee injury that ended his rookie year ten games early, Hunter is a full participant, ten pounds heavier, clocked at 22.6 mph. The tell from last summer: he leaned into one side of the ball early in camp before going two-way. So the tracker watches for the lean.</p>
     <div class="trk">
-      <div class="trk-h"><span>WR ↔ CB Lean Meter</span><span class="upd">Updated Aug 4</span></div>
-      <div class="meter" style="--lean:59.4%" role="img" aria-label="Snap split through five practices: 28 offense, 41 percent; 41 defense, 59 percent. Lean: corner."><div class="side l">WR<span class="pct">41%</span></div><div class="side r">CB<span class="pct">59%</span></div><div class="needle cb"></div></div>
+      <div class="trk-h"><span>WR ↔ CB Lean Meter</span><span class="upd">Updated Aug 8</span></div>
+      <div class="meter" style="--lean:59.3%" role="img" aria-label="Snap split through six practices: 35 offense, 41 percent; 51 defense, 59 percent. Lean: corner."><div class="side l">WR<span class="pct">41%</span></div><div class="side r">CB<span class="pct">59%</span></div><div class="needle cb"></div></div>
       <div class="jers">
-        <div class="jers-h"><span>Teal vs white, by day</span><span class="upd">Through Aug 3</span></div>
+        <div class="jers-h"><span>Teal vs white, by day</span><span class="upd">Through Aug 4</span></div>
         <svg class="jsy-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
           <clipPath id="jsyClip"><path d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></clipPath>
         </defs></svg>
@@ -632,13 +667,14 @@
           <li><svg class="jsy " viewBox="0 0 40 44" role="img" aria-label="Jul 31: 7 offense, 8 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="18.67" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Jul 31</span><span class="ds">7&ndash;8</span></li>
           <li><svg class="jsy " viewBox="0 0 40 44" role="img" aria-label="Aug 2: 7 offense, 10 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="16.47" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Aug 2</span><span class="ds">7&ndash;10</span></li>
           <li><svg class="jsy " viewBox="0 0 40 44" role="img" aria-label="Aug 3: 6 offense, 7 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="18.46" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Aug 3</span><span class="ds">6&ndash;7</span></li>
+          <li><svg class="jsy " viewBox="0 0 40 44" role="img" aria-label="Aug 4: 7 offense, 10 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="16.47" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg><span class="dt">Aug 4</span><span class="ds">7&ndash;10</span></li>
         </ol>
         <div class="jers-tot">
-          <svg class="jsy big" viewBox="0 0 40 44" role="img" aria-label="Five-practice total: 28 offense, 41 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="16.23" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg>
+          <svg class="jsy big" viewBox="0 0 40 44" role="img" aria-label="Six-practice total: 35 offense, 51 defense"><g clip-path="url(#jsyClip)"><rect x="0" y="0" width="40" height="44" fill="#fbf8f0"/><rect x="0" y="0" width="16.28" height="44" fill="#006778"/></g><path class="jsy-o" d="M14 3 L10 5 L3.5 9.5 L7 16.5 L11 14.5 L11 41 L29 41 L29 14.5 L33 16.5 L36.5 9.5 L30 5 L26 3 C23.5 6.5 16.5 6.5 14 3 Z"/></svg>
           <div class="jers-tot-t">
-            <span class="jt-l"><i class="sw teal"></i>28 offense</span>
-            <span class="jt-l"><i class="sw white"></i>41 defense</span>
-            <span class="jt-n">41% offense &middot; 59% defense &middot; 69 team-period snaps</span>
+            <span class="jt-l"><i class="sw teal"></i>35 offense</span>
+            <span class="jt-l"><i class="sw white"></i>51 defense</span>
+            <span class="jt-n">41% offense &middot; 59% defense &middot; 86 team-period snaps</span>
           </div>
         </div>
         <p class="jers-note">Teal is offense, white is defense, each jersey filled to that practice&rsquo;s
@@ -646,7 +682,9 @@
         <a href="https://www.espn.com/nfl/story/_/id/49427691/jacksonville-jaguars-training-camp-2026-intel-updates" target="_blank" rel="noopener">DiRocco&rsquo;s snap tracker</a>.</p>
       </div>
       <ul class="trk-log">
-        <li><span class="d">AUG 4</span>Jeremy Fowler (ESPN): Coen says Hunter won&rsquo;t be asked to master the full offense &mdash; he&rsquo;s learning the X and F receiver roles only. The WR job is a package, not a position.</li>
+        <li><span class="d">AUG 7</span>Mock-game Friday: strong in coverage, quiet as a receiver &mdash; one designed red-zone touch for about ten yards and two other targets broken up. The day&rsquo;s star receiver was Parker Washington. (John Shipley, Jaguars On SI; John Oehser, jaguars.com)</li>
+        <li><span class="d">AUG 4</span>DiRocco&rsquo;s tracker through Day 6: 86 team-period snaps, 51 on defense and 35 on offense. Day 6 alone was 17 snaps, 10 defense to 7 offense, one catch on two targets. &ldquo;Consistent workload through the first six days of camp.&rdquo;</li>
+<li><span class="d">AUG 4</span>Jeremy Fowler (ESPN): Coen says Hunter won&rsquo;t be asked to master the full offense &mdash; he&rsquo;s learning the X and F receiver roles only. The WR job is a package, not a position.</li>
         <li><span class="d">AUG 3</span>DiRocco&rsquo;s running count through five practices: 41 team-period snaps at corner, 28 at receiver. Monday&rsquo;s lone target from Nick Mullens fell incomplete on a route miscommunication.</li>
 <li><span class="d">AUG 2</span>Two catches, one over his shoulder down the sideline and one on a deep over, plus an INT. "Maybe most impressive practice of his career." Snap tracker through four days: 34 defense, 22 offense (Michael DiRocco, ESPN). Judy Battista of NFL Network saw the same thing: "deep catches, interceptions."</li>
         <li><span class="d">AUG 2</span>"Travis Hunter day!" per Frank Frangie, the team's radio voice, from the sideline: "If you were here, you saw it. If not, you'll read plenty about it on social. But, wow." Which side of the ball made the wow? Tonight's reports will say.</li>
@@ -654,7 +692,7 @@
         <li><span class="d">JUL 30</span>Day 2: offense and defense, full participant. Coen still planning managed reps.</li>
         <li><span class="d">JUL 29</span>Day 1: practices both ways in his return from the knee. "Doesn't feel like I'm coming off an injury."</li>
       </ul>
-      <div class="trk-verdict">Current lean: <b>corner, 41 defensive snaps to 28 on offense through five practices</b>, per DiRocco&rsquo;s tracker. Coen is trimming the offensive menu too &mdash; Hunter is learning the X and F receiver spots, not the whole playbook.</div>
+      <div class="trk-verdict">Current lean: <b>corner, 51 of 86 tracked snaps on defense through six practices</b>. The scrimmage said the same thing &mdash; his loudest plays Friday were breakups, not catches.</div>
     </div>
     <div class="fp-src"><a href="https://www.jaguars.com/news/camp-wrap-day-3-hunter-feeling-a-lot-faster-entering-26" target="_blank" rel="noopener">Jaguars camp wrap</a> · <a href="https://www.profootballrumors.com/2026/07/jaguars-planning-limited-training-camp-reps-for-travis-hunter" target="_blank" rel="noopener">Limited-reps plan</a> · <a href="https://x.com/ESPNdirocco" target="_blank" rel="noopener">DiRocco's snap tracker</a> · <a href="https://x.com/Frank_Frangie" target="_blank" rel="noopener">Frangie on X</a></div>
   </div>
@@ -664,7 +702,7 @@
     <h3>Something keeps claiming 49ers players, and George Kittle blames the power grid</h3>
     <p>Kittle blames electromagnetic fields coming off the substation beside the Santa Clara facility, where the 49ers have been the league's most-injured team since 2014. The NFL's medical office waved it off. The reaper did not.</p>
     <div class="trk">
-      <div class="trk-h"><span>Reaper Board</span><span class="upd">Updated Aug 4</span></div>
+      <div class="trk-h"><span>Reaper Board</span><span class="upd">Updated Aug 8</span></div>
       <div class="safety" role="img" aria-label="Safety board: 1 day since the substation claimed a 49er.">
         <div class="sf-hd">
           <svg class="sf-cross" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z" fill="currentColor"/></svg>
@@ -677,7 +715,8 @@
         <div class="sf-ft">Report all injuries to the training staff</div>
       </div>
       <ul class="trk-log">
-        <li><span class="d">AUG 4</span>Fourteen Niners missed Monday&rsquo;s practice, about a sixth of the 90-man roster. Eric Branch (SF Chronicle): Pearsall&rsquo;s isolated PCL surgery has almost no comparable cases among pro athletes, so the rehab timeline is a guess. He is on IR. RB Kaelon Black (adductor) is out multiple weeks; Jordan James is still nursing a fractured rib.</li>
+        <li><span class="d">AUG 5</span>Roughly a fifth of the roster sat Wednesday (Noah Furtado, S.F. Chronicle). Nick Bosa and Dre Greenlaw among the DNPs, alongside Christian Kirk (calf), Mike Evans (quad), Malik Mustapha (hamstring), Jordan James (ribs), Vederian Lowe (high ankle), Kaelon Black (adductor) and Keion White (adductor). Still on PUP or IR: George Kittle (Achilles), Mykel Williams (knee), Isaac Guerendo (pec), Ricky Pearsall (knee).</li>
+<li><span class="d">AUG 4</span>Fourteen Niners missed Monday&rsquo;s practice, about a sixth of the 90-man roster. Eric Branch (SF Chronicle): Pearsall&rsquo;s isolated PCL surgery has almost no comparable cases among pro athletes, so the rehab timeline is a guess. He is on IR. RB Kaelon Black (adductor) is out multiple weeks; Jordan James is still nursing a fractured rib.</li>
         <li><span class="d">AUG 3</span>Matt Maiocco (NBC Sports Bay Area): Mike Evans sat out with a quad strain, De&rsquo;Zhaun Stribling missed a second straight practice (hamstring), and Christian Kirk still hasn&rsquo;t practiced since day one (calf). Deebo Samuel, signed to a one-year deal, had an active day in his second practice.</li>
 <li><span class="d">AUG 1</span>Brock Purdy: severe concussion. The reaper goes quarterback hunting.</li>
         <li><span class="d">DAY 1</span>Christian Kirk: calf strain, one practice into his 49ers tenure.</li>
@@ -685,7 +724,7 @@
         <li><span class="d">DAY 1</span>Gracen Halton: knee bone bruise · Andrew Farmer: back.</li>
         <li><span class="d">PRIOR</span>George Kittle: Achilles, playoffs. The theorist is also a victim.</li>
       </ul>
-      <div class="trk-verdict">Camp toll: <b>14 missed Monday</b>, about a sixth of the 90-man roster · Pearsall out for the season · Fantasy fallout: Stribling&rsquo;s path (watchlist), Mac Jones stock, Kittle discount.</div>
+      <div class="trk-verdict">Camp toll: <b>about a fifth of the roster sat Wednesday</b> &mdash; the cluster is widening, not clearing · Pearsall out for the season · Fantasy fallout: Stribling&rsquo;s path (watchlist), Mac Jones stock, Kittle discount.</div>
     </div>
     <div class="fp-src"><a href="https://brobible.com/sports/article/san-francisco-49ers-electromagnetic-substation-conspiracy-claims-victims/" target="_blank" rel="noopener">The conspiracy</a> · <a href="https://www.cbssports.com/nfl/news/nfl-addresses-49ers-injuries-viral-conspiracy-theory-electrical-substation/" target="_blank" rel="noopener">NFL response</a> · <a href="https://sports.yahoo.com/articles/49ers-look-electrical-substation-injury-004956923.html" target="_blank" rel="noopener">49ers will look into it</a></div>
   </div>
@@ -695,7 +734,7 @@
     <h3>Kyler Murray vs. J.J. McCarthy, and the tape disagrees with the talent</h3>
     <p>Murray has the pedigree; McCarthy has the completions and, per beat reporting, the locker room. Murray is learning a new offense off a foot injury, which is exactly the "established name catching negative August coverage" pattern that busted 79% of the time in the backtest.</p>
     <div class="trk">
-      <div class="trk-h"><span>Duel Scoreboard</span><span class="upd">Updated Aug 4</span></div>
+      <div class="trk-h"><span>Duel Scoreboard</span><span class="upd">Updated Aug 8</span></div>
       <div class="duel-leg"><span><span class="sw2" style="background:#b8860b"></span>McCarthy</span><span><span class="sw2" style="background:#6b4fae"></span>Murray</span></div>
       <div class="duel">
         <span class="lbl">11-on-11</span>
@@ -704,22 +743,24 @@
         <div class="bars"><div class="bar jj" style="width:83%">10/12 · 83%</div><div class="bar km" style="width:33%">4/12 · 33%</div></div>
       </div>
       <div class="dayw">
-        <div class="dayw-h"><span>Who won the day</span><span class="tally">McCarthy 2 &middot; Murray 2</span></div>
+        <div class="dayw-h"><span>Who won the day</span><span class="tally">McCarthy 2 &middot; Murray 3</span></div>
         <ol class="dayw-row">
           <li class="jj"><span class="bar" role="img" aria-label="July 30: McCarthy"><span class="num9">9</span></span><span class="dt">Jul 30</span></li>
           <li class="jj"><span class="bar" role="img" aria-label="July 31: McCarthy"><span class="num9">9</span></span><span class="dt">Jul 31</span></li>
           <li class="km"><span class="bar" role="img" aria-label="August 1: Murray"><svg class="prest" viewBox="0 0 56 40" width="34" height="26" aria-hidden="true" focusable="false"><path d="M19 9C10 12 4 19 4 29c5-2 9-7 10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M37 9c9 3 15 10 15 20-5-2-9-7-10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.6-7.8-4.1-7.8 4.1 1.5-8.6-6.3-6.1 8.7-1.3z" fill="currentColor"/><path d="M18 33l10 4.5 10-4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pname">Murray</span></span><span class="dt">Aug 1</span></li>
           <li class="km"><span class="bar" role="img" aria-label="August 4: Murray"><svg class="prest" viewBox="0 0 56 40" width="34" height="26" aria-hidden="true" focusable="false"><path d="M19 9C10 12 4 19 4 29c5-2 9-7 10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M37 9c9 3 15 10 15 20-5-2-9-7-10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.6-7.8-4.1-7.8 4.1 1.5-8.6-6.3-6.1 8.7-1.3z" fill="currentColor"/><path d="M18 33l10 4.5 10-4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pname">Murray</span></span><span class="dt">Aug 4</span></li>
+          <li class="km"><span class="bar" role="img" aria-label="August 7: Murray"><svg class="prest" viewBox="0 0 56 40" width="34" height="26" aria-hidden="true" focusable="false"><path d="M19 9C10 12 4 19 4 29c5-2 9-7 10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M37 9c9 3 15 10 15 20-5-2-9-7-10-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.6-7.8-4.1-7.8 4.1 1.5-8.6-6.3-6.1 8.7-1.3z" fill="currentColor"/><path d="M18 33l10 4.5 10-4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pname">Murray</span></span><span class="dt">Aug 7</span></li>
         </ol>
         <p class="dayw-note">One column per practice day the log below attributes a winner to.</p>
       </div>
       <ul class="trk-log">
-        <li><span class="d">AUG 4</span>Star Tribune&rsquo;s Tuesday practice report: McCarthy struggled early, then finished strong. O&rsquo;Connell keeps saying the evaluation is ongoing, but Murray remains the favorite.</li>
+        <li><span class="d">AUG 7</span>The rep math has tipped: Murray has out-snapped McCarthy 63&ndash;33 with the first team over the last four practices (Judd Zulgad, SKOR North), and Kevin Seifert (ESPN) puts Murray at about two-thirds of first-team work. Friday: Murray 17 first-team reps to McCarthy&rsquo;s 10, 8-of-10 with a pick to Byron Murphy Jr.; McCarthy 12-of-14, mostly against the twos. Ben Solak (ESPN): McCarthy &ldquo;appears to be trying not to lose the job rather than win it.&rdquo;</li>
+<li><span class="d">AUG 4</span>Star Tribune&rsquo;s Tuesday practice report: McCarthy struggled early, then finished strong. O&rsquo;Connell keeps saying the evaluation is ongoing, but Murray remains the favorite.</li>
 <li><span class="d">AUG 1</span>Saturday belonged to Murray. Alec Lewis (The Athletic): &ldquo;very sharp&hellip; the operation looked clean.&rdquo; Will Ragatz: &ldquo;Clear, decisive win for Kyler Murray in the QB competition today&hellip; It wasn&rsquo;t very close.&rdquo;</li>
         <li><span class="d">JUL 31</span>Charted periods through two days favor McCarthy across the board.</li>
         <li><span class="d">JUL 30</span>Beat reporting: "early vibes" say the locker room leans McCarthy.</li>
       </ul>
-      <div class="trk-verdict">Current lean: <b>Murray</b>, the clear Week 1 favorite &mdash; though O&rsquo;Connell keeps calling the evaluation ongoing, so the competition is not closed.</div>
+      <div class="trk-verdict">Current lean: <b>Murray</b>, and it is no longer close on reps &mdash; 63 first-team snaps to 33 over the last four practices.</div>
     </div>
     <div class="fp-src"><a href="https://thecomeback.com/nfl/vikings-kyler-murray-behind-jj-mccarthy-training-camp.html" target="_blank" rel="noopener">Rep-count report</a> · <a href="https://www.startribune.com/minnesota-vikings-training-camp-practice-live-updates-august-1-fans-kyler-murray-jj-mccarthy/601873240" target="_blank" rel="noopener">Star Tribune</a></div>
   </div>
@@ -760,7 +801,13 @@
 <div class="wire" id="wire">
 <div class="wire-head"><span class="t">The Camp Wire</span><span class="live">Live · 2026</span></div>
 <div class="wire-sub">Every buzz mention in the study, newest first. The 2026 feed now folds in beat-reporter tweets, harvested from liveblogs and roundups that embed them, with the reporter credited on each item. Tap a year to open it, tap a headline to read the source. Inside each year, "Team by team" collects each club's buzz with how the season actually ended. One note on method: these items aggregate headlines and the short quote that came with them, so whatever nuance the reporter put in the body of the article is probably missed here. This is a read on overall sentiment, not a deep read of any one story.</div>
-<details class="yr" open><summary><span class="ys">2026 <span class="yr-live">LIVE</span></span><span class="yn">145 mentions · 101▲ 44▼</span></summary>
+<details class="yr" open><summary><span class="ys">2026 <span class="yr-live">LIVE</span></span><span class="yn">151 mentions · 105▲ 46▼</span></summary>
+<div class="wi" style="--wc:#006778"><div class="date">Aug 7</div><div class="card"><div class="who"><span class="pl">Parker Washington</span><span class="meta2">JAX WR</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">Six catches in the mock game, two of them on third down and one a touchdown from Trevor Lawrence &mdash; the day&rsquo;s clear number one target</div><div class="hl"><a href="https://www.jaguars.com/news/jaguars-2026-training-camp-snapshot-day-8-mock-game-a-good-day" target="_blank" rel="noopener">Day 8 mock game snapshot</a><span class="pub2"> · Jaguars.com &middot; Oehser and Shipley</span></div></div></div>
+<div class="wi" style="--wc:#0B2265"><div class="card"><div class="who"><span class="pl">Malachi Fields</span><span class="meta2">NYG WR</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">Making an &ldquo;early claim for the number two receiver spot&rdquo;</div><div class="hl"><a href="https://www.rotowire.com/football/news.php" target="_blank" rel="noopener">Dan Duggan on the Giants</a><span class="pub2"> · The Athletic, via RotoWire</span></div></div></div>
+<div class="wi" style="--wc:#E31837"><div class="card"><div class="who"><span class="pl">Cyrus Allen</span><span class="meta2">KC WR</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">Back at practice Friday after a shin issue, days after the report that he has &ldquo;already earned Mahomes&rsquo; trust&rdquo; and been taking first-team snaps</div><div class="hl"><a href="https://sports.yahoo.com/fantasy/article/cyrus-allen-leads-2026-nfl-rookies-already-generating-fantasy-football-buzz-in-training-camps-145843770.html" target="_blank" rel="noopener">Sam McDowell; Ray Garvin on the rookie buzz</a><span class="pub2"> · Kansas City Star and Yahoo</span></div></div></div>
+<div class="wi" style="--wc:#E31837"><div class="card"><div class="who"><span class="pl">Emmett Johnson</span><span class="meta2">KC RB</span><span class="dirb dn">▼ STUNG</span></div><div class="ph">Sitting fourth in the running back order, behind Kenneth Walker, Emari Demercado and Brashard Smith</div><div class="hl"><a href="https://www.rotowire.com/football/news.php" target="_blank" rel="noopener">Jesse Newell on the Chiefs</a><span class="pub2"> · The Athletic, via RotoWire</span></div></div></div>
+<div class="wi" style="--wc:#0B2265"><div class="card"><div class="who"><span class="pl">Cam Skattebo</span><span class="meta2">NYG RB</span><span class="dirb dn">▼ STUNG</span></div><div class="ph">Left Friday&rsquo;s practice early; the team called it nothing serious</div><div class="hl"><a href="https://www.rotowire.com/football/news.php" target="_blank" rel="noopener">Dan Duggan on the Giants</a><span class="pub2"> · The Athletic, via RotoWire</span></div></div></div>
+<div class="wi" style="--wc:#002244"><div class="card"><div class="who"><span class="pl">Jadarian Price</span><span class="meta2">SEA RB</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">Mike Macdonald praised his decisiveness and pass protection, with Kenneth Walker III gone to Kansas City and Zach Charbonnet still working back from the ACL</div><div class="hl"><a href="https://sports.yahoo.com/fantasy/article/cyrus-allen-leads-2026-nfl-rookies-already-generating-fantasy-football-buzz-in-training-camps-145843770.html" target="_blank" rel="noopener">Ray Garvin on the rookie buzz</a><span class="pub2"> · Yahoo Sports</span></div></div></div>
 <div class="wi" style="--wc:#97233F"><div class="date">Aug 4</div><div class="card"><div class="who"><span class="pl">Carson Beck</span><span class="meta2">ARI QB</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">“Looking more and more comfortable” &mdash; the most impressive Cardinals quarterback by the end of Monday&rsquo;s practice, and he starts Thursday&rsquo;s Hall of Fame game</div><div class="hl"><a href="https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3" target="_blank" rel="noopener">Johnny Venerable&rsquo;s camp report</a><span class="pub2"> · PHNX, via B/R live blog</span></div></div></div>
 <div class="wi" style="--wc:#311D00"><div class="date">Aug 3</div><div class="card"><div class="who"><span class="pl">Denzel Boston</span><span class="meta2">CLE WR</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">Cleveland&rsquo;s rookie wideouts are “galaxies ahead” of the rest of the receiver room, with Boston and Concepcion penciled in as the top two by Week 1</div><div class="hl"><a href="https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3" target="_blank" rel="noopener">Zac Jackson on the Browns receiver room</a><span class="pub2"> · The Athletic, via B/R live blog</span></div></div></div>
 <div class="wi" style="--wc:#008E97"><div class="card"><div class="who"><span class="pl">Malik Washington</span><span class="meta2">MIA WR</span><span class="dirb up">▲ BUZZING</span></div><div class="ph">Trending as Malik Willis&rsquo;s top target, with a “great connection” showing up daily</div><div class="hl"><a href="https://bleacherreport.com/liveblogs/25461050-2026-nfl-training-camp-live-updates-rumors-and-highlights-august-3" target="_blank" rel="noopener">Joe Schad&rsquo;s camp notes</a><span class="pub2"> · Palm Beach Post, via B/R live blog</span></div></div></div>
@@ -1126,6 +1173,22 @@
 <h2 class="sec" id="watchlist"><span class="num">06</span> The watchlist, right now</h2>
 
 <p>Here's the part you can use tonight. Same filter, applied live: non-projected starters generating positive buzz one week into 2026 camp, coverage through August 1. History's rate card says about three of these eighteen finish startable. History also says one week of practice reports is the noisy early read, and it's already claimed a victim: Chris Brazzell II popped in Carolina's first week, then tore his LCL. This list wants a late-August refresh before you draft on it, and we keep adding to it as more reports come in. We have a lot more sources feeding the pipeline now, so expect it to grow, and to get sorted by how strong the buzz is as the sample fills out.</p>
+<div class="pw" id="pw" hidden>
+  <div class="pw-h"><span>Most talked about</span><span class="pw-asof">as of <b id="pw-date">&mdash;</b></span></div>
+  <div class="pw-scrub">
+    <label for="pw-range">Rewind camp</label>
+    <input type="range" id="pw-range" min="0" max="0" step="1" value="0"
+           aria-label="Choose a camp day to see the list as it stood then">
+  </div>
+  <div class="pw-cols">
+    <div class="pw-col"><h4 class="pw-ct up">Rising</h4><ol class="pw-list" id="pw-up"></ol></div>
+    <div class="pw-col"><h4 class="pw-ct dn">Slipping</h4><ol class="pw-list" id="pw-dn"></ol></div>
+  </div>
+  <p class="pw-note">Ranked by how loud a player is <em>now</em>: a mention counts full on the day it lands and
+  halves every three days after, so a name nobody has written about in a week fades out on its own. Drag the
+  slider to see where the list stood on any day of camp. The curated table below is the hand-picked version.</p>
+</div>
+
 <!-- TODO: needs data: a per-player buzz-strength score (mention count and sentiment weight for the 2026 names) is not in this file, so the watchlist below is not ranked by sentiment yet. -->
 
 <div class="chips">
@@ -3845,6 +3908,80 @@ if (tt) document.querySelectorAll('.hv').forEach(g => {
       "Safety board: " + days + (days === 1 ? " day" : " days") +
       " since the substation claimed a 49er.");
   }
+})();
+</script>
+
+<script>
+/* "Most talked about": ranks the 2026 wire by recency-weighted buzz and lets you
+   scrub back through camp. Enhancement only -- the block ships hidden and is
+   revealed once the data loads, so the curated chips and table below remain the
+   no-JS view. */
+(function () {
+  "use strict";
+  var box = document.getElementById("pw");
+  if (!box || !window.fetch) return;
+  var HALFLIFE = 3, TOP = 6, DAY = 86400000;
+  var elDate = document.getElementById("pw-date"),
+      elRange = document.getElementById("pw-range"),
+      elUp = document.getElementById("pw-up"), elDn = document.getElementById("pw-dn");
+
+  function esc(s) { return String(s == null ? "" : s)
+    .replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function parse(iso) { var p = String(iso).split("-");
+    return p.length === 3 ? new Date(+p[0], +p[1] - 1, +p[2]) : null; }
+  function label(d) { return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()] + " " + d.getDate(); }
+
+  fetch("/the-side-quest/data/buzz/wire.json", { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (data) {
+      var rows = (data.entries || []).filter(function (e) {
+        return e.season === 2026 && e.date_precision === "day" && parse(e.date);
+      });
+      if (!rows.length) return;
+      var dates = rows.map(function (e) { return e.date; })
+        .filter(function (v, i, a) { return a.indexOf(v) === i; }).sort();
+
+      function render(idx) {
+        var asOf = parse(dates[idx]);
+        elDate.textContent = label(asOf);
+        var agg = {};
+        rows.forEach(function (e) {
+          var d = parse(e.date);
+          if (d > asOf) return;
+          var age = Math.round((asOf - d) / DAY);
+          var w = Math.pow(0.5, age / HALFLIFE);
+          var k = e.player;
+          if (!agg[k]) agg[k] = { player: e.player, team: e.team, pos: e.position, score: 0, n: 0, last: e.date };
+          agg[k].score += (e.direction === "negative" ? -w : w);
+          agg[k].n += 1;
+          if (e.date > agg[k].last) agg[k].last = e.date;
+        });
+        var all = Object.keys(agg).map(function (k) { return agg[k]; });
+        var up = all.filter(function (r) { return r.score > 0.01; }).sort(function (a, b) { return b.score - a.score; }).slice(0, TOP);
+        var dn = all.filter(function (r) { return r.score < -0.01; }).sort(function (a, b) { return a.score - b.score; }).slice(0, TOP);
+
+        function draw(list, mount, cls) {
+          if (!list.length) { mount.innerHTML = '<li class="pw-empty">Nothing yet on this day.</li>'; return; }
+          var max = Math.abs(list[0].score) || 1;
+          mount.innerHTML = list.map(function (r) {
+            var pct = Math.max(4, Math.round(Math.abs(r.score) / max * 100));
+            return '<li class="' + cls + '">' +
+              '<span class="pw-nm">' + esc(r.player) + ' <span class="pw-tp">' + esc(r.team) + " " + esc(r.pos) + '</span></span>' +
+              '<span class="pw-mt">' + r.n + (r.n === 1 ? " mention" : " mentions") + ' &middot; ' + label(parse(r.last)) + '</span>' +
+              '<span class="pw-bar"><i style="width:' + pct + '%"></i></span></li>';
+          }).join("");
+        }
+        draw(up, elUp, "up");
+        draw(dn, elDn, "dn");
+      }
+
+      elRange.max = String(dates.length - 1);
+      elRange.value = String(dates.length - 1);
+      elRange.addEventListener("input", function () { render(+elRange.value); });
+      render(dates.length - 1);
+      box.hidden = false;
+    })
+    .catch(function () { /* leave the curated chips and table as the view */ });
 })();
 </script>
 </body>

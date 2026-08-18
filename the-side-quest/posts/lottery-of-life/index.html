@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lottery of Life: How a Birthday Bends Who Makes It</title>
+<meta name="description" content="A companion to Michael MacKelvie's video: how something as arbitrary as your birth month quietly shapes who reaches the top. Interactive marbles, a Galton board, and the data behind the relative age effect.">
+<style>
+  :root { color-scheme: light dark; }
+
+  /* ─────────────────────────────────────────────────────────────
+     No. 006 — split theme: dark "marble table" hero, light paper read.
+     Reading body tokens track the shared site chrome; the hero is its
+     own dark world. Sport palette matches the charts (Wong, colorblind-safe).
+     ───────────────────────────────────────────────────────────── */
+  .viz-root {
+    --page:#fbfaf5; --surface:#ffffff; --card:#ffffff;
+    --ink:#16150f; --ink-2:#48463d; --muted:#6f6c60;
+    --border:#c9c6b8; --grid:#e7e4d7; --rule:#16150f;
+    --link:#2a2ac0; --visited:#5a2a9b;
+    --accent:#3f3ab5; --accent-text:#332f9a; --accent-soft:rgba(63,58,181,.10);
+    /* sport palette (same as the charts) */
+    --nfl:#0072B2; --mlb:#D55E00; --nhl:#009E73; --nba:#CC79A7;
+    --over:#0072B2; --short:#D55E00;
+    /* hero is always dark */
+    --hero-bg:#0e0d0b; --hero-ink:#f6f3ea; --hero-ink-2:#b9b4a4; --hero-rule:#2c2a24;
+    --hero-accent:#c9a227;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      --page:#131311; --surface:#1c1c19; --card:#f6f4ec;
+      --ink:#ecebe3; --ink-2:#b7b4a8; --muted:#8b887c;
+      --border:#3a3933; --grid:#2a2926; --rule:#ecebe3;
+      --link:#9db2ff; --visited:#cba6f5;
+      --accent:#a8a3ff; --accent-text:#b9b5ff; --accent-soft:rgba(120,114,235,.14);
+    }
+  }
+
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body.viz-root {
+    margin:0; background:var(--page); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-size:17px; line-height:1.66;
+    overflow-wrap:break-word; overflow-x:hidden;
+  }
+  .sans { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .mono { font-family:"Courier New",Courier,monospace; }
+  .wrap { max-width:720px; margin:0 auto; padding:0 20px; }
+
+  a { color:var(--link); }
+  a:visited { color:var(--visited); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* ── Masthead (mirrors the site chrome) ─────────────────────── */
+  .masthead { text-align:center; padding-top:24px; }
+  .masthead .kicker { font-family:"Courier New",Courier,monospace; font-size:.7rem;
+    letter-spacing:.28em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; }
+  .masthead .wordmark { font-family:Georgia,"Times New Roman",serif; font-weight:700;
+    font-size:clamp(1.9rem,8vw,2.9rem); line-height:1.02; letter-spacing:-.02em; margin:0; }
+  .masthead .wordmark a { color:inherit; text-decoration:none;
+    display:inline-block; padding:6px 8px; margin:-6px -8px; }
+  .masthead .tagline { font-style:italic; font-size:.95rem; color:var(--ink-2); margin:6px 0 0; }
+  .rule-double { border-top:3px double var(--rule); margin-top:14px; }
+  .rule-thin { border-top:1px solid var(--rule); margin-top:4px; }
+  .nav { display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+    gap:2px 4px; margin-top:10px; font-family:"Courier New",Courier,monospace; font-size:.86rem; }
+  .nav a { display:inline-flex; align-items:center; min-height:44px; padding:0 .55em;
+    color:var(--link); text-decoration:none; border:1px solid transparent; }
+  .nav a::before { content:"[ "; } .nav a::after { content:" ]"; }
+  .nav a:hover { border-color:currentColor; outline:1px solid currentColor; outline-offset:2px; }
+  .nav .sep { color:var(--muted); }
+  @media (max-width:520px){ .nav .sep{ display:none; } }
+
+  /* ── Dark hero (full-bleed marble table) ────────────────────── */
+  .hero { background:var(--hero-bg); color:var(--hero-ink); margin-top:22px;
+    border-top:3px double var(--hero-rule); border-bottom:3px double var(--hero-rule); }
+  .hero-inner { max-width:720px; margin:0 auto; padding:34px 20px 26px; }
+  .hero .eyebrow { font-family:"Courier New",Courier,monospace; font-size:.7rem;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--hero-accent); margin:0 0 16px; }
+  .hero h1 { font-family:Georgia,"Times New Roman",serif; font-weight:700;
+    font-size:clamp(2.5rem,9vw,4.2rem); line-height:1.0; letter-spacing:-.025em;
+    margin:0 0 16px; color:var(--hero-ink); }
+  .hero .deck { font-size:1.16rem; line-height:1.5; color:var(--hero-ink-2); margin:0 0 20px; max-width:38ch; }
+  .hero .byline { font-family:"Courier New",Courier,monospace; font-size:.72rem;
+    letter-spacing:.06em; color:var(--hero-ink-2); border-top:1px solid var(--hero-rule);
+    padding-top:12px; margin-top:4px; }
+  .hero .byline a { color:var(--hero-accent); }
+
+  /* population canvas */
+  .pop { margin:20px 0 6px; }
+  .pop-stage { position:relative; width:100%; aspect-ratio:16/7; border:1px solid var(--hero-rule);
+    background:#000; overflow:hidden; }
+  .pop-stage canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .pop-cap { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; margin-top:10px;
+    font-family:"Courier New",Courier,monospace; font-size:.7rem; letter-spacing:.04em;
+    color:var(--hero-ink-2); }
+  .pop-cap b { color:var(--hero-ink); }
+  .btn { font-family:"Courier New",Courier,monospace; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; cursor:pointer; background:transparent; color:var(--hero-accent);
+    border:1px solid var(--hero-accent); padding:8px 12px; border-radius:0; min-height:40px; }
+  .btn:hover { outline:1px solid var(--hero-accent); outline-offset:2px; }
+
+  /* ── Article body ───────────────────────────────────────────── */
+  article { padding-top:8px; }
+  .standfirst { font-size:1.12rem; color:var(--ink-2); font-style:italic;
+    margin:26px 0 8px; }
+  p { margin:0 0 17px; }
+  .dropcap::first-letter { font-family:Georgia,serif; font-weight:700; float:left;
+    font-size:3.5em; line-height:.82; padding:6px 10px 0 0; color:var(--accent-text); }
+  em { font-style:italic; }
+  sup.fn { font-size:.66em; line-height:0; vertical-align:super; }
+  sup.fn a { text-decoration:none; font-family:"Courier New",Courier,monospace;
+    font-weight:700; color:var(--accent-text); }
+
+  h2.sec { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:800;
+    font-size:.92rem; letter-spacing:.14em; text-transform:uppercase;
+    margin:56px 0 6px; display:flex; align-items:center; gap:12px; color:var(--ink); }
+  h2.sec::after { content:""; flex:1; height:0; border-top:1px solid var(--accent); opacity:.7; }
+  h2.sec .num { color:var(--accent-text); font-variant-numeric:tabular-nums; }
+  .sec-dek { font-family:system-ui,sans-serif; font-size:1.28rem; font-weight:750;
+    line-height:1.22; letter-spacing:-.01em; margin:0 0 20px; color:var(--ink); }
+
+  /* pull quote */
+  .pull { font-family:system-ui,sans-serif; font-weight:750; font-size:1.4rem; line-height:1.28;
+    letter-spacing:-.01em; border-top:3px solid var(--accent); border-bottom:1px solid var(--border);
+    padding:16px 0; margin:32px 0; color:var(--ink); }
+
+  /* figures */
+  figure.fig { margin:30px 0; }
+  figure.fig .plate { background:#fff; border:1px solid var(--border); padding:10px; }
+  figure.fig img { display:block; width:100%; height:auto; }
+  figure.fig figcaption { font-family:system-ui,sans-serif; font-size:.8rem; line-height:1.5;
+    color:var(--muted); margin-top:9px; }
+  figure.fig figcaption b { color:var(--ink-2); font-weight:700; }
+
+  /* interactive widget shell */
+  .viz { margin:30px 0; border:1px solid var(--border); background:var(--surface); }
+  .viz .viz-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px;
+    padding:12px 15px; border-bottom:1px solid var(--grid); }
+  .viz .viz-title { font-family:system-ui,sans-serif; font-weight:800; font-size:.72rem;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--accent-text); }
+  .viz .viz-sub { font-family:system-ui,sans-serif; font-size:.82rem; color:var(--muted); }
+  .viz .viz-body { padding:14px 15px 16px; }
+  .viz canvas { display:block; width:100%; }
+  .viz .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:12px;
+    font-family:system-ui,sans-serif; }
+  .viz .ctl { font-family:"Courier New",Courier,monospace; font-size:.74rem; letter-spacing:.05em;
+    text-transform:uppercase; cursor:pointer; background:var(--accent-soft); color:var(--accent-text);
+    border:1px solid var(--accent); padding:9px 13px; border-radius:0; min-height:42px; }
+  .viz .ctl:hover { outline:1px solid var(--accent); outline-offset:2px; }
+  .viz .ctl[aria-pressed="true"] { background:var(--accent); color:#fff; }
+  .viz .readout { font-family:"Courier New",Courier,monospace; font-size:.76rem; color:var(--ink-2);
+    margin-left:auto; }
+  .viz .legend { display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:12px;
+    font-family:system-ui,sans-serif; font-size:.78rem; color:var(--ink-2); }
+  .viz .legend span { display:inline-flex; align-items:center; gap:7px; }
+  .viz .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
+  .viz .note { font-family:system-ui,sans-serif; font-size:.78rem; color:var(--muted); margin-top:11px; }
+
+  /* references + stub + footer */
+  .refs { margin:56px 0 0; padding-top:16px; border-top:1px solid var(--rule); }
+  .refs h2 { font-family:system-ui,sans-serif; font-weight:800; font-size:.74rem;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 12px; }
+  .refs ol { margin:0; padding-left:1.4em; font-size:.86rem; line-height:1.55; color:var(--ink-2); }
+  .refs li { margin-bottom:9px; }
+  .refs li:target { background:var(--accent-soft); }
+
+  .comingsoon { border:1px dashed var(--border); padding:16px 18px; margin:34px 0 0;
+    font-family:system-ui,sans-serif; font-size:.9rem; color:var(--ink-2); background:var(--accent-soft); }
+  .comingsoon b { color:var(--accent-text); font-family:"Courier New",Courier,monospace;
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; display:block; margin-bottom:6px; }
+
+  .postnav { display:flex; flex-wrap:wrap; gap:10px; margin:40px 0 0;
+    border-top:1px solid var(--grid); padding-top:20px; font-family:system-ui,sans-serif; }
+  .postnav a { display:inline-flex; align-items:center; min-height:44px; padding:0 15px;
+    border:1px solid var(--border); font-size:.82rem; font-weight:650; color:var(--accent-text);
+    text-decoration:none; }
+  .postnav a:hover { border-color:var(--accent); }
+  .foot { margin-top:36px; border-top:1px solid var(--rule); padding:16px 0 60px;
+    font-family:"Courier New",Courier,monospace; font-size:.74rem; color:var(--muted); }
+  .foot a { display:inline-flex; align-items:center; min-height:44px; }
+
+  /* two-up figure (film stills) */
+  figure.fig .plate.two { display:flex; gap:10px; background:#0e0d0b; }
+  figure.fig .plate.two img { width:50%; }
+  @media (max-width:520px){ figure.fig .plate.two { flex-direction:column; } figure.fig .plate.two img { width:100%; } }
+
+  /* decade control: tappable segmented buttons + a drag scrubber */
+  .viz .decades{ display:flex; gap:6px; margin-top:14px; }
+  .viz .decbtn{ flex:1 1 0; font-family:"Courier New",Courier,monospace; font-size:.74rem;
+    letter-spacing:.04em; padding:10px 6px; text-align:center; cursor:pointer; background:var(--surface);
+    border:1px solid var(--border); color:var(--ink-2); border-radius:0; min-height:42px; }
+  .viz .decbtn[aria-selected=true]{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .viz .scrub-hint{ display:block; font-family:"Courier New",Courier,monospace; font-size:.64rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); text-align:center; margin:12px 0 0; }
+  .viz input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:6px;
+    background:var(--border); border-radius:3px; outline:none; margin:6px 0 2px; cursor:pointer; }
+  .viz input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:26px; height:26px;
+    border-radius:50%; background:var(--accent); border:3px solid var(--surface);
+    box-shadow:0 0 0 1px var(--accent); cursor:grab; }
+  .viz input[type=range]::-moz-range-thumb{ width:26px; height:26px; border-radius:50%;
+    background:var(--accent); border:3px solid var(--surface); box-shadow:0 0 0 1px var(--accent); cursor:grab; }
+
+  /* head-start decay stepper (DOM, no canvas) */
+  .decay{ font-family:system-ui,-apple-system,sans-serif; }
+  .decay .stages{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+  .decay .stg{ flex:1 1 70px; font-family:"Courier New",Courier,monospace; font-size:.7rem;
+    text-transform:uppercase; letter-spacing:.04em; padding:10px 6px; text-align:center; cursor:pointer;
+    background:var(--surface); border:1px solid var(--border); color:var(--ink-2); border-radius:0; }
+  .decay .stg[aria-selected=true]{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .decay .gaplab{ text-align:center; margin-bottom:8px; }
+  .decay .gaplab .big{ font-size:2.4rem; font-weight:800; color:var(--accent-text); letter-spacing:-.02em;
+    font-family:Georgia,serif; }
+  .decay .gaplab .lab{ font-size:.86rem; color:var(--muted); }
+  .decay .bar{ height:22px; background:var(--grid); position:relative; overflow:hidden; border:1px solid var(--border); }
+  .decay .fill{ height:100%; width:100%; background:linear-gradient(90deg,var(--over),var(--accent));
+    transition:width .55s cubic-bezier(.4,0,.2,1); }
+  @media (prefers-reduced-motion: reduce){ .decay .fill{ transition:none; } }
+
+  @media (prefers-reduced-motion: reduce) { .bee { display:none; } }
+</style>
+</head>
+<body class="viz-root">
+
+  <header class="masthead wrap">
+    <p class="kicker">Est. 2026 &middot; No. 006</p>
+    <p class="wordmark"><a href="../../index.html">The Side Quest</a></p>
+    <p class="tagline">Interactive sports analytics, one rabbit hole at a time.</p>
+    <div class="rule-double"></div>
+    <div class="rule-thin"></div>
+    <nav class="nav" aria-label="Primary">
+      <a href="../../index.html">home</a>
+      <span class="sep" aria-hidden="true">&middot;</span>
+      <a href="../../blog/index.html">blog</a>
+      <span class="sep" aria-hidden="true">&middot;</span>
+      <a href="../../tools/index.html">tools</a>
+      <span class="sep" aria-hidden="true">&middot;</span>
+      <a href="../../prior-work/index.html">prior work</a>
+      <span class="sep" aria-hidden="true">&middot;</span>
+      <a href="mailto:nickgurol@gmail.com">contact</a>
+    </nav>
+  </header>
+
+  <!-- ── HERO ─────────────────────────────────────────────────── -->
+  <section class="hero" aria-label="Title">
+    <div class="hero-inner">
+      <p class="eyebrow">Nature vs. nurture &middot; A companion essay</p>
+      <h1>The Lottery of Life</h1>
+      <p class="deck">There are more than 8.3&nbsp;billion of us, and no two are the same. We all inherit a little nature. We inherit a lot more nurture. This is how the small stuff compounds into the big stuff.</p>
+
+      <div class="pop">
+        <div class="pop-stage">
+          <canvas id="pop-canvas" role="img"
+            aria-label="A field of 8,300 colored marbles, each standing for one million people."></canvas>
+        </div>
+        <div class="pop-cap">
+          <span><b>8,300</b> marbles</span>
+          <span>1 marble = <b>1,000,000</b> people</span>
+          <span>= <b>8.3 billion</b> of us</span>
+          <button class="btn" id="pop-replay" type="button">Release the marbles</button>
+        </div>
+      </div>
+
+      <p class="byline">A companion to Michael MacKelvie&rsquo;s video <em>The Lottery of Life</em>.
+        Data, charts &amp; interactives by <a href="../../index.html">Nick Gurol</a>. August 2026.</p>
+    </div>
+  </section>
+
+  <!-- ── ARTICLE ──────────────────────────────────────────────── -->
+  <article class="wrap">
+
+    <p class="standfirst">A story about how the smallest, most arbitrary circumstances of your birth quietly decide more than they should, starting with the day itself.</p>
+
+    <p class="dropcap">This is roughly how many people walk the earth. Each marble stands for a million of us, and there are more than 8.3&nbsp;billion. And yet none of us are the same.</p>
+
+    <figure class="fig">
+      <div class="plate two">
+        <img loading="lazy" src="../../assets/img/lottery-04.webp" alt="Film still: a wall of tens of thousands of marbles behind the text '4,000,000,000 Men, 40,000 Marbles.'">
+        <img loading="lazy" src="../../assets/img/lottery-05.webp" alt="Film still: marbles arranged into the shape of a country, labeled 537 marbles and a population of 57,630,323.">
+      </div>
+      <figcaption><b>From the film.</b> In Michael MacKelvie&rsquo;s video, the count is physical: one marble per million people, poured out and pushed into shape by hand. The charts below are the data underneath the demo.</figcaption>
+    </figure>
+
+    <p>We know we inherit some of who we are: a strand of DNA, a build, a predisposition. But we inherit circumstance too: experiences and accidents, big and small, and those turn out to matter more than they look. This is a story about how the small compounds into the big, and how, when you zoom out far enough, a room full of strangers gets surprisingly predictable.</p>
+
+    <p>Here is what &ldquo;surprisingly predictable&rdquo; looks like. Drop a marble through a field of pegs and every bounce is a coin flip, left or right, pure chance. Drop enough of them and the randomness cancels out. They pile into the same curve, every single time.</p>
+
+    <div class="viz" aria-label="Interactive Galton board">
+      <div class="viz-head">
+        <span class="viz-title">Galton board</span>
+        <span class="viz-sub">many random nudges &rarr; one predictable shape</span>
+      </div>
+      <div class="viz-body">
+        <canvas id="galton-canvas" height="360"></canvas>
+        <div class="controls">
+          <button class="ctl" id="galton-drop" type="button">Drop 150 marbles</button>
+          <button class="ctl" id="galton-reset" type="button">Reset</button>
+          <span class="readout" id="galton-read">0 marbles settled</span>
+        </div>
+        <p class="note">Each marble takes an independent coin-flip at every row. No marble is aimed at the middle, yet the middle is where they stack. This is the bell curve, built from nothing but chance.</p>
+      </div>
+    </div>
+
+    <p>But not every bounce is a coin flip. Some nudges are dealt to you before you can walk, and they all push the same direction. Start with the one that feels the most arbitrary of all: the day you were born.</p>
+
+    <!-- SECTION 01 -->
+    <h2 class="sec"><span class="num">01</span> The birthday</h2>
+    <p class="sec-dek">Something as arbitrary as your birth month can decide who reaches the top of a sport. It already has.</p>
+
+    <p>There are 365 days in a year, and once a year one of them is yours. Unless you&rsquo;re into astrology, it probably feels arbitrary. Like your name, it means something, but only to you.</p>
+
+    <p>In 1985, two psychologists poked a hole in that. Roger and Paula Barnsley were at a junior hockey game; Paula was reading down the program and noticed how many players were born in January, February and March.<sup class="fn"><a href="#ref1" id="cite1">1</a></sup> It wasn&rsquo;t a fluke. Line the NHL up by birth month and the early months win, in order.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-01.webp"
+        alt="Line chart from the original 1985 study: percentage of 1982-83 NHL players falls from about 32% in the first birth quarter to about 14% in the fourth."></div>
+      <figcaption><b>The original finding.</b> Share of 1982&ndash;83 NHL players by birth quarter, from the first-quarter peak down to the fourth. Barnsley, Thompson &amp; Barnsley (1985).<sup class="fn"><a href="#ref1">1</a></sup></figcaption>
+    </figure>
+
+    <p>Forty years later, the shape is basically identical. In our own data, players born January to March make up 32% of the NHL; players born October to December make up 19%.<sup class="fn"><a href="#ref2" id="cite2">2</a></sup> Real birth seasonality is close to even, nowhere near enough to explain a gap like that. Flip the toggle and watch the even world bend into the real one.</p>
+
+    <div class="viz" aria-label="Interactive: NHL players by birth quarter">
+      <div class="viz-head">
+        <span class="viz-title">NHL by birth quarter</span>
+        <span class="viz-sub">an even world vs. the real one</span>
+      </div>
+      <div class="viz-body">
+        <canvas id="bq-canvas" height="330"></canvas>
+        <div class="controls">
+          <button class="ctl" id="bq-toggle" type="button" aria-pressed="true">Flip to an even world</button>
+          <span class="readout" id="bq-read">Jan&ndash;Mar 32% &middot; Oct&ndash;Dec 19%</span>
+        </div>
+        <div class="legend">
+          <span><i class="dot" style="background:var(--over)"></i> Born earlier in the year (over-represented)</span>
+          <span><i class="dot" style="background:var(--short)"></i> Born later (short)</span>
+        </div>
+        <p class="note">The dashed line is an even 25% per quarter, what you&rsquo;d expect if the month you were born in didn&rsquo;t matter.</p>
+      </div>
+    </div>
+
+    <p>It is not just hockey, and it is not just the pros&rsquo; imagination. But it is also not universal: line up the four big North American leagues side by side and only hockey slides.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-02.webp"
+        alt="Four small charts, one per league. NHL drops from 32% in Q1 to 19% in Q4; NFL, MLB and NBA stay flat near 25% across all four quarters."></div>
+      <figcaption><b>Only hockey slides.</b> Share of players born in each birth quarter, four leagues. The NHL falls from Q1 to Q4; the NFL, MLB and NBA stay flat near an even 25%.<sup class="fn"><a href="#ref2">2</a></sup></figcaption>
+    </figure>
+
+    <p>There is nothing athletic about being a January baby. The mechanism is the calendar. Most youth hockey sorts kids by a hard age cutoff, and in Canada that cutoff is January 1. A kid born on January&nbsp;1 can be almost a full year older than a teammate born the previous December&nbsp;31, and at eight years old, a year is enormous. The older kids look better, get picked for the stronger teams, get better coaching and more ice time. The small head start compounds. Researchers borrowed a name for it from the Gospel of Matthew: to those who have, more is given.<sup class="fn"><a href="#ref3" id="cite3">3</a></sup></p>
+
+    <p class="pull">Roster spots are fixed, so removing the birthday effect wouldn&rsquo;t add players to the NHL. It would swap them.</p>
+
+    <p>You can&rsquo;t help wondering how many kids would have made it if they&rsquo;d been born a few months earlier. Line the league up against an even birth distribution and about one in ten players sits in the late-born deficit: the talents screened out young for showing up small. Scaled to a present-day roster of roughly 700, that is on the order of 70 different people wearing NHL sweaters, not more of them.<sup class="fn"><a href="#ref2">2</a></sup></p>
+
+    <p>Now look back at the three leagues that stayed flat. In the NFL, NBA and MLB, birth month barely moves the needle, and that fits: American football, basketball and baseball group kids by grade, not by birth year. A late birthday there can mean repeating a grade and playing down a level, and by college the rosters run well into players&rsquo; mid-20s. The age gap washes out.</p>
+
+    <p>To be sure it&rsquo;s the cutoff and not something about ice, check two more sports that also run on a January calendar. Soccer players and competitive swimmers born early in the year are over-represented in exactly the same way, and when US Soccer moved to a January&nbsp;1 birth-year cutoff in 2016, the tilt followed the new rule.<sup class="fn"><a href="#ref4" id="cite4">4</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-03.webp"
+        alt="Bar charts showing January-born players over-represented among soccer players and swimmers, with the soccer tilt shifting after the 2016 cutoff change."></div>
+      <figcaption><b>Same fingerprint, different rink.</b> Birth-month representation for soccer players and swimmers against an even baseline; soccer is split by the 2016 US cutoff change.<sup class="fn"><a href="#ref4">4</a></sup></figcaption>
+    </figure>
+
+    <p>So a birthday, something no one picks and no one earns, can help decide who reaches the top of a sport. If a difference that small can move who becomes a pro athlete, what else does it quietly move? Grades, test scores, careers, who ends up rich.</p>
+
+    <!-- SECTION 02 -->
+    <h2 class="sec"><span class="num">02</span> The classroom</h2>
+    <p class="sec-dek">The same head start shows up in school. This time it fades, and that turns out to be the good news.</p>
+
+    <p>If a birthday can bend a hockey roster, the obvious next question is whether it bends the thing that decides far more lives: school. It does, at least at the start. A Florida study followed more than 100,000 kids through the system.<sup class="fn"><a href="#ref5" id="cite5">5</a></sup> In most of the US the cutoff runs the opposite way from hockey, so a September baby is the oldest in the class, and in kindergarten those September kids showed up about 10 percentile points more &ldquo;ready&rdquo; than their August classmates. That gap was more than five times larger than any other month-to-month comparison.</p>
+
+    <p>Then it melts. By third grade the September edge was down to about 8 points, by eighth grade about 4.5, and by age 18 it was 1.3.<sup class="fn"><a href="#ref5">5</a></sup> Being a year older at five is a big deal. Being a year older at eighteen is almost nothing. Step through it:</p>
+
+    <div class="viz" aria-label="Interactive: the head start shrinking through school">
+      <div class="viz-head">
+        <span class="viz-title">The head start melts</span>
+        <span class="viz-sub">oldest-vs-youngest gap, by stage of school</span>
+      </div>
+      <div class="viz-body">
+        <div class="decay">
+          <div class="stages" role="tablist" aria-label="School stage">
+            <button class="stg" role="tab" data-i="0" aria-selected="true">Kindergarten</button>
+            <button class="stg" role="tab" data-i="1">3rd grade</button>
+            <button class="stg" role="tab" data-i="2">8th grade</button>
+            <button class="stg" role="tab" data-i="3">Age 18</button>
+          </div>
+          <div class="gaplab"><span class="big" id="decay-num">+10</span> <span class="lab">percentile points ahead</span></div>
+          <div class="bar"><div class="fill" id="decay-fill"></div></div>
+          <p class="note">The oldest kids in a grade start about 10 points ahead. Click forward and watch the advantage shrink toward nothing by graduation.</p>
+        </div>
+      </div>
+    </div>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-06.webp"
+        alt="Line falling from a +10 percentile head start in kindergarten to about +1.3 by college entry."></div>
+      <figcaption><b>The oldest kids start ahead, and it shrinks.</b> How far ahead the relatively oldest students are, at four stages of school. It fades toward zero but never quite gets there.<sup class="fn"><a href="#ref5">5</a></sup></figcaption>
+    </figure>
+
+    <p>It leaves a faint mark on the finish line: September-born students were about 1 to 1.5 percentage points more likely to earn a college degree, and a little more likely to land at a selective one.<sup class="fn"><a href="#ref5">5</a></sup> Real, but small. And by the time these kids are adults earning a paycheck, the gap is gone. Several of the largest studies land in the same place: by your late 20s or early 30s, the month you were born in stops predicting your income.<sup class="fn"><a href="#ref6" id="cite6">6</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-07.webp"
+        alt="Earnings gap tied to school starting age, plotted by age, closing to zero and crossing into no-difference by about age 30."></div>
+      <figcaption><b>By 30, the earnings gap is gone.</b> The effect of starting school a year older on men&rsquo;s earnings, measured age by age (Norway). The band crosses zero around 30.<sup class="fn"><a href="#ref6">6</a></sup></figcaption>
+    </figure>
+
+    <p>That is the reverse of the hockey story. There, a tiny early edge compounded into a career. Here, a real early edge in something we care about a lot, school readiness, quietly evaporates. So how many advantages that feel decisive stop mattering once you follow them far enough?</p>
+
+    <!-- SECTION 03 -->
+    <h2 class="sec"><span class="num">03</span> Where you&rsquo;re born</h2>
+    <p class="sec-dek">Move from when you were born to where. Sports draw a surprisingly sharp map of the country.</p>
+
+    <p>So the birthday is mostly a false alarm. Where you&rsquo;re born is not. The US is a stack of different regions, cultures and climates, and sports give you a clean, countable window into them.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-08.webp"
+        alt="County map of the US shaded by NFL players produced per million residents; the Deep South is darkest."></div>
+      <figcaption><b>The Deep South makes the most NFL players per capita.</b> NFL players per million residents by hometown county, rookie seasons 1990&ndash;2025.<sup class="fn"><a href="#ref7" id="cite7">7</a></sup></figcaption>
+    </figure>
+
+    <p>&ldquo;It just means more&rdquo; is the slogan of the Southeastern Conference, and it turns out to be almost literally true. Per million residents, the South produces roughly double the NFL players of the other three regions, about 60 to the low 30s. Louisiana by itself makes NFL players at more than three times the national rate. The Northeast, for its part, is not big on contact.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-09.webp"
+        alt="Bar chart: South 60 NFL players per million, Midwest 39, West 34, Northeast 23."></div>
+      <figcaption><b>Double the national rate.</b> NFL players per million residents by region, already adjusted for each region&rsquo;s population.<sup class="fn"><a href="#ref7">7</a></sup></figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-10.webp"
+        alt="State bar chart with Louisiana at 134.8 NFL players per million, far above the 43-per-million national average, and Vermont lowest."></div>
+      <figcaption><b>Louisiana runs the table.</b> NFL players per million residents by home state, the 12 highest and 8 lowest.<sup class="fn"><a href="#ref7">7</a></sup></figcaption>
+    </figure>
+
+    <p>The pattern is cultural, not genetic. The South also produces the most NBA players, led by Mississippi, with hoops-history states Kentucky and Indiana in the top five. The state where Little League was born, Pennsylvania, makes more baseball players than anywhere else. And all of it flips for hockey, where a single state, Minnesota, produces about twelve times the national rate.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-11.webp"
+        alt="Three per-capita leaderboards: Pennsylvania leads baseball, Mississippi leads basketball, Minnesota leads hockey."></div>
+      <figcaption><b>Every sport has its heartland.</b> US-born players per million residents by birth state, top eight per sport, 1990s&ndash;2020s pooled.<sup class="fn"><a href="#ref7">7</a></sup></figcaption>
+    </figure>
+
+    <p>Where the lakes freeze, kids skate. Where Little League started, kids play baseball. Down south, they play football. The best athletes pursue whatever sport their place cares about most. That much is comfortable. What is less comfortable is what happens when you take one more step in, and go back in time.</p>
+
+    <!-- SECTION 04 -->
+    <h2 class="sec"><span class="num">04</span> The price of admission</h2>
+    <p class="sec-dek">Rewind three decades and the same sports quietly change who they let in. The door is tilting toward money.</p>
+
+    <p>Go back to the 1990s. About 43% of NFL players came from the poorest quarter of American zip codes. That share has fallen every decade since, down to 33%. Over the same stretch, the share coming from the richest quarter climbed from 10% to 25%. Two and a half times as many NFL players now come from the wealthiest zip codes.<sup class="fn"><a href="#ref8" id="cite8">8</a></sup> Drag the slider and watch the richest-quarter share rise across all four leagues.</p>
+
+    <div class="viz" aria-label="Interactive: the share of players from the richest hometowns, by decade">
+      <div class="viz-head">
+        <span class="viz-title">The richest quarter takes over</span>
+        <span class="viz-sub">share of each league from the wealthiest hometowns</span>
+      </div>
+      <div class="viz-body">
+        <canvas id="wealth-canvas" height="340"></canvas>
+        <div class="decades" id="wealth-decades" role="tablist" aria-label="Pick a decade">
+          <button class="decbtn" type="button" role="tab" data-d="0">1990s</button>
+          <button class="decbtn" type="button" role="tab" data-d="1">2000s</button>
+          <button class="decbtn" type="button" role="tab" data-d="2">2010s</button>
+          <button class="decbtn" type="button" role="tab" data-d="3" aria-selected="true">2020s</button>
+        </div>
+        <label class="scrub-hint" for="wealth-range">&#9664; or drag through the decades &#9654;</label>
+        <input type="range" id="wealth-range" min="0" max="3" step="1" value="3" aria-label="Decade">
+        <div class="controls">
+          <span class="readout" id="wealth-read">2020s &middot; NHL 48% &middot; MLB 30% &middot; NFL 25% &middot; NBA 15%</span>
+        </div>
+        <p class="note">Dashed line is a proportional 25%. Values are from the hometown-income data, rounded; the NHL sample is small, so read its exact heights loosely.</p>
+      </div>
+    </div>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-13.webp"
+        alt="Bars showing NFL players from the richest hometown quartile rising from about 10% in the 1990s to 25% in the 2020s."></div>
+      <figcaption><b>NFL: 10% to 25%.</b> Share of players from the richest hometown quartile, by rookie era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p>Football should be the hardest sport to price out. You don&rsquo;t need a country-club membership to play Pop Warner, and the genetic lottery only hands out so many enormous humans. So the tell is where the shift runs biggest: the positions that reward coaching and reps. Quarterbacks now draw heavily from wealthy hometowns, near 38%, and kickers and punters even more, around 43%.<sup class="fn"><a href="#ref8">8</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-14.webp"
+        alt="Lines by position: kickers/punters and quarterbacks come from the richest hometowns most, and rose the most since the 1990s."></div>
+      <figcaption><b>The skill positions moved most.</b> Share of NFL players from richest-quartile hometowns, by position group and era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p>It is not that the South got priced out. The South makes more NFL players than ever. They just come from the richer parts of the South now.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-12.webp"
+        alt="Two panels: the South's share of NFL players rises across decades while the median hometown income of Southern players also rises."></div>
+      <figcaption><b>Same region, richer hometowns.</b> Southern players as a share of the NFL, and the median hometown income of those players, by decade.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-15.webp"
+        alt="Lines by birthplace-density decile showing the most-urban tenth shrinking as a source of NFL players over time."></div>
+      <figcaption><b>The most-urban hometowns are fading as a source.</b> Share of each era&rsquo;s NFL players by how urban their birthplace was.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p>Basketball tells a softer version of the same story. You have to be tall, and tall can come from anywhere, but increasingly it comes from wealthier areas: over 44% of NBA players came from the poorest zip codes in the 1990s, down to 33% today, while the richest share more than doubled.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-16.webp"
+        alt="NBA players by hometown income quartile across eras; most still come from below-median hometowns but the richest share is rising."></div>
+      <figcaption><b>NBA: still working-class, but drifting.</b> Share of players by hometown income quartile, population-weighted, by era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p>The shift is sharpest in the heavy-skill sports. In baseball, the share of MLB players from the richest American zip codes has climbed to roughly 30%, more than double where it sat in the 1990s.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-17.webp"
+        alt="MLB players from the richest hometown quartile roughly doubling since the 1990s."></div>
+      <figcaption><b>MLB: the richest share doubled.</b> Share of players by hometown income quartile, by era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p>And then there is the sport on skates. In the 1990s hockey was close to even, with more than 30% of NHL players coming from the poorest zip codes. Today just 10% do, and nearly half come from the wealthiest.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-18.webp"
+        alt="NHL players by hometown income quartile; the richest quartile balloons to nearly half in the 2020s."></div>
+      <figcaption><b>NHL: nearly half from the richest quarter.</b> Share of recent US-born NHL players by hometown income quartile, by era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p class="pull">Hockey has become a rich kids&rsquo; talent show. Half the league comes from the wealthiest zip codes, and the kids from the poorest ones are disappearing.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-19.webp"
+        alt="One chart, four leagues: share of players from the richest quarter of hometowns rising over four decades, NHL highest at 48%, then MLB 30, NFL 25, NBA 15."></div>
+      <figcaption><b>All four leagues, one direction.</b> Share of each league&rsquo;s US-born players from the richest quarter of hometowns, by decade.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
+    </figure>
+
+    <p>None of this says wealthy kids like sports more, or that they are better athletes. Sports were supposed to be the level field, the one place any background could meet. The leagues themselves still don&rsquo;t care what your parents earn. The path to reaching them increasingly does.</p>
+
+    <!-- SECTION 05 -->
+    <h2 class="sec"><span class="num">05</span> Steph, Bronny, and what money shouldn&rsquo;t buy</h2>
+    <p class="sec-dek">Here it gets uncomfortable, and also more interesting. Not every advantage is corruption.</p>
+
+    <p>Before writing this off as pure rot, sit with the other reading. If money and training can manufacture talent, that is also proof nurture is stubborn, that it can fight nature and win. Is Steph Curry a villain because his father played in the NBA? Of course not. The man shoots a basketball better than anyone who has lived. Hard work, aimed in the right direction, pays off. A world where only the genetic lottery mattered, where effort was pointless, would be a worse one.</p>
+
+    <p>So why does the drift of athletes toward money feel wrong? Look at the player who became the biggest story of the 2024 NBA draft as the 55th overall pick. Less than 3% of players taken that late ever hold a rotation spot, and under 1% become multi-year starters. The 55th pick is usually a warm body. This one was the son of the greatest player alive. Bronny James is good at basketball. He is genuinely good. He is just not Los-Angeles-Lakers good.</p>
+
+    <p>We disagree about almost everything. Asked whether race should factor into college admissions, only 14% of Republicans say yes, against 54% of Democrats.<sup class="fn"><a href="#ref9" id="cite9">9</a></sup> There is more agreement here than it looks.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-20.webp"
+        alt="Pew Research chart of Americans' support for considering race in college admissions, split sharply by political party."></div>
+      <figcaption><b>We split hard on what&rsquo;s fair.</b> Views on whether selective colleges should consider race and ethnicity in admissions, by group.<sup class="fn"><a href="#ref9">9</a></sup></figcaption>
+    </figure>
+
+    <p>Remember Varsity Blues, the families paying millions to buy their kids into elite schools? As the legal scholar Daniel Markovits put it, Americans found a strikingly broad consensus that spots at top colleges shouldn&rsquo;t be for sale.<sup class="fn"><a href="#ref10" id="cite10">10</a></sup> Those kids didn&rsquo;t earn their seats, and, in the public&rsquo;s gut, Bronny didn&rsquo;t earn his roster spot. We argue about a lot. We mostly agree that some things money shouldn&rsquo;t buy, and that it stings most when what it buys is a young person&rsquo;s opportunity.</p>
+
+    <p>The trouble is that most cases aren&rsquo;t Bronny. They&rsquo;re Steph. Did Steph benefit from a rich, gifted father? Clearly. Is that corruption? Not at all. That is the hard part.</p>
+
+    <!-- SECTION 06 -->
+    <h2 class="sec"><span class="num">06</span> Money buys the starting line</h2>
+    <p class="sec-dek">Leave sports. The same tilt runs through school, and it shows up long before anyone competes.</p>
+
+    <p>Consider Oxford, which, unlike the American Ivies, does not weigh legacy or family wealth in admissions. It is supposedly blind to both. And its students still come from money: the average Oxford student comes from a family earning roughly twice the UK average.<sup class="fn"><a href="#ref11" id="cite11">11</a></sup> The advantage isn&rsquo;t at the admissions desk. It was built upstream, years before anyone applied.</p>
+
+    <p>Back in the US, SAT scores don&rsquo;t just rise with family income. They climb at every single step. The gap between a family in poverty and one earning over $200k is 388 points. Even across the middle of the range it is 179.<sup class="fn"><a href="#ref12" id="cite12">12</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-21.webp"
+        alt="Average SAT score climbing steadily at every family income band, from about 1326 under $20k to 1714 over $200k."></div>
+      <figcaption><b>SAT scores climb at every income step.</b> Average total SAT by family income band, 2013 college-bound seniors.<sup class="fn"><a href="#ref12">12</a></sup></figcaption>
+    </figure>
+
+    <p>You might not care about the SAT. Life isn&rsquo;t a bubble sheet. Unfortunately the bubble sheet cares about plenty you do care about, income chief among them.</p>
+
+    <!-- SECTION 07 -->
+    <h2 class="sec"><span class="num">07</span> The ladder is getting stickier</h2>
+    <p class="sec-dek">Zoom out to the whole economy, over time, and the picture gets harder to shrug off.</p>
+
+    <p>Has it always been like this? For decades after World War II, the test-score gap between rich and poor kids was roughly flat. In the mid-1970s it began widening, and today it is about 40% bigger than a generation ago.<sup class="fn"><a href="#ref13" id="cite13">13</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-22.webp"
+        alt="Reading-score gap between richest and poorest families, flat through the 1950s-60s then widening from the mid-1970s to about 1.25 standard deviations."></div>
+      <figcaption><b>The rich-poor test gap keeps widening.</b> Reading-score gap between children from the richest and poorest tenth of families, by birth cohort.<sup class="fn"><a href="#ref13">13</a></sup></figcaption>
+    </figure>
+
+    <p>Absolute mobility, the plain question of whether you out-earn your parents by 30, has fallen from about 90% for kids born in 1940 to about 50% for kids born in the 1980s.<sup class="fn"><a href="#ref14" id="cite14">14</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-23.webp"
+        alt="Share of children who out-earn their parents falling from about 90% for the 1940 birth cohort to about 50% by the 1980s."></div>
+      <figcaption><b>Fewer kids out-earn their parents.</b> Share of US children who earn more than their parents did at the same age, adjusted for inflation, by birth year.<sup class="fn"><a href="#ref14">14</a></sup></figcaption>
+    </figure>
+
+    <p>Some of that is arithmetic. If your parents lived through the Depression, clearing their bar is easy, and as a country gets richer and steadier, out-earning the last generation naturally gets harder. So the sharper measure, as Scott Winship argues, is relative mobility: whether you can actually climb the ladder, whatever your parents earned.<sup class="fn"><a href="#ref15" id="cite15">15</a></sup> In a perfectly fair world, a kid born in the bottom fifth would have about a 20% shot at each rung. That is not what happens.</p>
+
+    <div class="viz" aria-label="Interactive: where kids born in the poorest fifth end up">
+      <div class="viz-head">
+        <span class="viz-title">The sticky floor</span>
+        <span class="viz-sub">born in the poorest fifth: where you land as an adult</span>
+      </div>
+      <div class="viz-body">
+        <canvas id="mob-canvas" height="330"></canvas>
+        <div class="controls">
+          <button class="ctl" id="mob-toggle" type="button" aria-pressed="true">Flip to a fair world</button>
+          <span class="readout" id="mob-read">Stayed poorest 34% &middot; reached richest 8%</span>
+        </div>
+        <p class="note">Dashed line is a fair 20% per rung. A third stay stuck at the bottom; fewer than one in twelve climb to the top.</p>
+      </div>
+    </div>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-24.webp"
+        alt="Bar chart: chance of reaching the richest fifth climbs from 7.5% for kids born poorest to 36.5% for kids born richest."></div>
+      <figcaption><b>Born rich, five times as likely to end rich.</b> Chance of reaching the top fifth of income as an adult, by parents&rsquo; income fifth.<sup class="fn"><a href="#ref15">15</a></sup></figcaption>
+    </figure>
+
+    <p>A kid born in the bottom fifth has about a one-in-three chance of staying there and roughly a 7% shot at the top. A kid born at the top has about a 37% chance of staying on top.<sup class="fn"><a href="#ref15">15</a></sup> There is a sticky floor and a sticky ceiling, and both are getting tighter. One thing to flag: this is all wages. Wealth has pulled even further ahead of wages, especially lately, so on a relative basis the gap is worse than income alone shows.</p>
+
+    <!-- SECTION 08 -->
+    <h2 class="sec"><span class="num">08</span> Two true things</h2>
+    <p class="sec-dek">Meritocracy promised that success is earned. One of its three ingredients is quietly for sale.</p>
+
+    <p>Daniel Markovits frames accomplishment as three inputs: effort, talent, and training. The problem is that last one. Training works, and training is the one money buys. Even in sports, the closest thing we have to a pure meritocracy, wealthy kids are increasingly the ones who make it.<sup class="fn"><a href="#ref10">10</a></sup></p>
+
+    <p>To be fair, hierarchies are not the enemy. Nobody would watch a six-foot-and-under NBA, so the ruthless selection that makes the league worth watching is the point. We want a high bar to become a surgeon, too. Two things can be true at once: inequality can be large, and everyone can still be better off. The pie has grown. It is not zero-sum. By plenty of absolute measures, life has improved: less absolute poverty, less violent crime, less child poverty than most of human history, no drafting millions of men off to war.</p>
+
+    <p>The unease is about relative inequality, your standing next to the people around you. That turns out to matter a great deal. As societies grow more unequal they tend to grow less stable, which is bad for everyone. We have blown past the old 80/20 rule on wealth, and no one has a clean answer for how to slow it, or how to get the Matthew effect working for a few more people who didn&rsquo;t win the parent lottery.</p>
+
+    <!-- SECTION 09 -->
+    <h2 class="sec"><span class="num">09</span> What actually moves the needle</h2>
+    <p class="sec-dek">If money is the problem, spend more, right? The evidence is stranger than that.</p>
+
+    <p>The obvious fix is money: pour it into schools and into elite access. The evidence is more nuanced. Stacy Dale and Alan Krueger studied college choice about as carefully as anyone.<sup class="fn"><a href="#ref16" id="cite16">16</a></sup> Picture two students with the same grades and the same SATs. One goes to an Ivy, the other to a strong public school. The Ivy carries real perks: smaller classes, a famous alumni network, and a name that opens doors in any interview. So how different are their incomes at 35? In the first cohort of more than 14,000 students, there was no difference. In a follow-up of about 9,000, again none. The student who went to the elite school wasn&rsquo;t out-earning the one who didn&rsquo;t.</p>
+
+    <p>The finding is counterintuitive, and it has been challenged. Caroline Hoxby argued the sample was skewed because almost no admitted student picks the less selective school. Except they do: 38% chose the less selective option.<sup class="fn"><a href="#ref16">16</a></sup> A few groups did benefit from the fancier school, non-Asian minorities and women, but the general result held. Outside the bumper sticker, college choice barely moved income, which cuts against the intuition that simply making elite colleges cheaper would change much.</p>
+
+    <p>So where does money help? Start with the state that looks like it shouldn&rsquo;t work. New York spends about $32,000 per student, near the top. Mississippi, the cheapest state to live in, spends about $12,324, near the bottom.<sup class="fn"><a href="#ref17" id="cite17">17</a></sup></p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-25.webp"
+        alt="Text panel listing per-student spending: national average about $17,840; New York $32,370 highest; Idaho, Tennessee, Arizona lowest."></div>
+      <figcaption><b>Spending runs three-to-one across states.</b> Per-student expenditure, 2024&ndash;25.<sup class="fn"><a href="#ref17">17</a></sup></figcaption>
+    </figure>
+
+    <p>And yet. Adjusted for demographics, Mississippi ranks 1st in fourth-grade reading and 1st in fourth-grade math. For eighth graders, 4th in reading and 1st in math.<sup class="fn"><a href="#ref18" id="cite18">18</a></sup> A Black child in Mississippi is about two and a half times as likely to read proficiently in fourth grade as a Black child in California.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-26.webp"
+        alt="Scatter of states: spending per pupil against low-income fourth-grade reading proficiency, essentially flat; Mississippi high with low spending, New York low with high spending."></div>
+      <figcaption><b>Spending more buys no edge in low-income reading.</b> Each dot is a state: current spending per pupil against the share of low-income fourth graders proficient in reading, 2024.<sup class="fn"><a href="#ref18">18</a></sup></figcaption>
+    </figure>
+
+    <p class="pull">Mississippi rebuilt its reading scores without a spending spree. It bought accountability, not tutors.</p>
+
+    <p>Mississippi didn&rsquo;t buy that turnaround with a pile of money. Starting in 2013 it retrained teachers on the &ldquo;science of reading,&rdquo; and, just as important, it built in relentless measurement: an office that publicly names the districts with the lowest graduation rates, and that pushes kids who miss class into Saturday school.<sup class="fn"><a href="#ref19" id="cite19">19</a></sup> The result is that arguably the poorest state in the country rebuilt its reading and math scores. A couple of neighbors, Alabama and Louisiana, copied the model and are already posting gains.</p>
+
+    <!-- SECTION 10 -->
+    <h2 class="sec"><span class="num">10</span> A quick one: birth order</h2>
+    <p class="sec-dek">One more circumstance you didn&rsquo;t choose, and a rare case where it barely matters.</p>
+
+    <p>While we&rsquo;re on things you didn&rsquo;t pick: birth order. Are first-borns really smarter? A little. Two large Norwegian studies agree on about 2 to 3 IQ points over the second-born, and roughly 2% higher adult earnings.<sup class="fn"><a href="#ref20" id="cite20">20</a></sup> Real, measurable, and small enough to be the exception that proves the rule. Most of these accidents of birth matter more than this one.</p>
+
+    <figure class="fig">
+      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-27.webp"
+        alt="Bars showing a first-born advantage of about 2 to 3 IQ points and about 2% higher adult earnings over second-borns."></div>
+      <figcaption><b>The first-born edge is real but small.</b> First-born minus second-born, from two large Norwegian studies.<sup class="fn"><a href="#ref20">20</a></sup></figcaption>
+    </figure>
+
+    <!-- CONCLUSION -->
+    <h2 class="sec"><span class="num">&#9679;</span> The December babies</h2>
+
+    <p>You can&rsquo;t delete the Matthew effect, and you might not want to. It is the reason small good choices pay off out of proportion. If you&rsquo;re sedentary, an hour of walking can buy back several hours of life. Little inputs, nonlinear returns. That&rsquo;s a good trade.</p>
+
+    <p>But the same math that&rsquo;s exhilarating is what makes comparison so brutal. We get so busy measuring ourselves against everyone else that we forget how much a small nudge can change a life, our own or someone else&rsquo;s. We shouldn&rsquo;t resent the people who won the parent lottery. We do have to notice that money is quietly nurturing a new kind of nature, engineering the advantages that used to look innate.</p>
+
+    <p>Mississippi and Minnesota point the same direction: targeted human capital, a little funding aimed well, can move outcomes across a whole population. Whether that&rsquo;s enough against compounding private wealth is the open question. Elite colleges that took 30% of applicants a few decades ago now take under 10%. The University of Chicago admitted 71% in 1995 and under 6% in 2019. The finish line keeps moving out.</p>
+
+    <p>Nurture is kicking the shit out of nature. Talent winning the race was never the problem. The problem is that the training behind the talent is increasingly something you can buy. And because of that, we&rsquo;re probably missing some of the December babies.</p>
+
+    <!-- REFERENCES -->
+    <section class="refs" aria-label="References">
+      <h2>Sources</h2>
+      <ol>
+        <li id="ref1">Barnsley, R.&nbsp;H., Thompson, A.&nbsp;H., &amp; Barnsley, P.&nbsp;E. (1985). Hockey success and birthdate: The relative age effect. <em>CAHPER Journal</em>, 51, 23&ndash;28. <a href="#cite1">&#8617;</a></li>
+        <li id="ref2">Modern NHL birth dates: the <em>hometown-effect</em> dataset (n&nbsp;=&nbsp;6,106 players with a known birth date), Nick Gurol, 2026. Birth quarters cut on the January&nbsp;1 minor-hockey age cutoff; &ldquo;deficit&rdquo; is the count of late-born players below an even 25%-per-quarter line, scaled to a &tilde;700-player active league. <a href="#cite2">&#8617;</a></li>
+        <li id="ref3">Musch, J., &amp; Grondin, S. (2001). Unequal competition as an impediment to personal development: A review of the relative age effect in sport. <em>Developmental Review</em>, 21(2), 147&ndash;167. On the &ldquo;Matthew effect&rdquo; framing, see also Merton, R.&nbsp;K. (1968), <em>Science</em>, 159, 56&ndash;63. <a href="#cite3">&#8617;</a></li>
+        <li id="ref4">Player birth months compiled from Wikidata (soccer, swimming); cutoff change per US Soccer Federation birth-year registration, effective 2016. Author&rsquo;s calculations. <a href="#cite4">&#8617;</a></li>
+        <li id="ref5">Bedard, K., &amp; Dhuey, E. (2006). The persistence of early childhood maturity: International evidence of long-run age effects. <em>Quarterly Journal of Economics</em>, 121(4), 1437&ndash;1472; Figlio, D., Karbownik, K., &amp; Roth, J. (2017), NBER Working Paper 23660 (Florida school records). <a href="#cite5">&#8617;</a></li>
+        <li id="ref6">Black, S.&nbsp;E., Devereux, P.&nbsp;J., &amp; Salvanes, K.&nbsp;G. (2008). Too young to leave the nest? The effects of school starting age. NBER Working Paper 13969 (Norway). Consistent with several US and European studies. <a href="#cite6">&#8617;</a></li>
+        <li id="ref7">Player production by region and state: the <em>hometown-effect</em> dataset (nflverse, ESPN, Sleeper, MLB/NBA/NHL rosters matched to US Census county and state populations), Nick Gurol, 2026. <a href="#cite7">&#8617;</a></li>
+        <li id="ref8">Players by hometown median-household-income quartile, population-weighted with era-matched income vintages (2000 Census for 1990s&ndash;2000s cohorts, ACS 2023 for later): the <em>hometown-effect</em> dataset, 2026. NHL cells are small; read exact shares loosely. <a href="#cite8">&#8617;</a></li>
+        <li id="ref9">Pew Research Center (2023). Americans&rsquo; views on considering race and ethnicity in college admissions. <a href="#cite9">&#8617;</a></li>
+        <li id="ref10">Markovits, D. (2019). <em>The Meritocracy Trap</em>. Penguin Press. <a href="#cite10">&#8617;</a></li>
+        <li id="ref11">On Oxford&rsquo;s socioeconomic intake, see the University of Oxford Undergraduate Admissions Statistical Report. Oxford does not publish an average family income; the &ldquo;twice the UK average&rdquo; figure is not from Oxford&rsquo;s own data, which tracks school type, free-school-meal eligibility and area deprivation. <a href="#cite11">&#8617;</a></li>
+        <li id="ref12">College Board (2013), SAT scores by family income band, College-Bound Seniors Total Group Profile Report; author&rsquo;s chart. <a href="#cite12">&#8617;</a></li>
+        <li id="ref13">Reardon, S.&nbsp;F. (2011). The widening academic achievement gap between the rich and the poor. In <em>Whither Opportunity?</em> (Duncan &amp; Murnane, eds.). <a href="#cite13">&#8617;</a></li>
+        <li id="ref14">Chetty, R., Grusky, D., Hell, M., Hendren, N., Manduca, R., &amp; Narang, J. (2017). The fading American dream: Trends in absolute income mobility since 1940. <em>Science</em>, 356(6336), 398&ndash;406. <a href="#cite14">&#8617;</a></li>
+        <li id="ref15">Chetty, R., Hendren, N., Kline, P., &amp; Saez, E. (2014). Where is the land of opportunity? <em>Quarterly Journal of Economics</em>, 129(4); relative-mobility framing per Scott Winship. Transition figures are the author&rsquo;s calculation from the released copula. <a href="#cite15">&#8617;</a></li>
+        <li id="ref16">Dale, S.&nbsp;B., &amp; Krueger, A.&nbsp;B. (2002), <em>Quarterly Journal of Economics</em>, 117(4); and (2014), <em>Journal of Human Resources</em>, 49(2). <a href="#cite16">&#8617;</a></li>
+        <li id="ref17">Per-pupil spending: US Census Bureau, Annual Survey of School System Finances, FY2024, and NCES. <a href="#cite17">&#8617;</a></li>
+        <li id="ref18">Reading and math rankings (demographically adjusted): NAEP 2024, via the Urban Institute&rsquo;s adjustment and reporting by Nicholas Kristof, <em>The New York Times</em>. Spending-vs-outcome scatter: author&rsquo;s calculation. <a href="#cite18">&#8617;</a></li>
+        <li id="ref19">Kristof, N., <em>The New York Times</em>, on Mississippi&rsquo;s literacy reforms; Mississippi Department of Education. <a href="#cite19">&#8617;</a></li>
+        <li id="ref20">Kristensen, P., &amp; Bjerkedal, T. (2007). Explaining the relation between birth order and intelligence. <em>Science</em>, 316(5832), 1717; Black, S.&nbsp;E., Devereux, P.&nbsp;J., &amp; Salvanes, K.&nbsp;G. (2007), NBER Working Paper 13237. <a href="#cite20">&#8617;</a></li>
+      </ol>
+    </section>
+
+    <nav class="postnav" aria-label="Post">
+      <a href="../../blog/index.html">&larr; All posts</a>
+      <a href="../../index.html">The Side Quest home</a>
+    </nav>
+
+    <div class="foot">
+      Companion to Michael MacKelvie&rsquo;s <em>The Lottery of Life</em> &middot;
+      Say hi: <a href="mailto:nickgurol@gmail.com">nickgurol@gmail.com</a> &middot;
+      <a href="https://x.com/run_the_sims">@run_the_sims</a> &middot; &copy; 2026 The Side Quest
+    </div>
+
+  </article>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var PAL = ["#0072B2","#D55E00","#009E73","#CC79A7","#E69F00","#56B4E9","#F0E442","#9C6ADE","#EF6F6C"];
+
+  function fitCanvas(cv, cssH) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = cv.clientWidth || cv.parentNode.clientWidth;
+    var h = cssH || cv.clientHeight || Math.round(w * 0.5);
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    cv.style.height = h + "px";
+    var ctx = cv.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+
+  /* ── 1. Population field ──────────────────────────────────── */
+  (function () {
+    var cv = document.getElementById("pop-canvas");
+    if (!cv) return;
+    var N = 8300, marbles = [], dim, raf = null;
+
+    function build() {
+      dim = fitCanvas(cv, cv.parentNode.clientHeight);
+      marbles = [];
+      // packed jittered grid so the field reads as dense, not clumpy
+      var area = dim.w * dim.h, cell = Math.sqrt(area / N);
+      var cols = Math.max(1, Math.floor(dim.w / cell));
+      var rows = Math.ceil(N / cols);
+      var r = Math.max(1.3, cell * 0.32);
+      for (var i = 0; i < N; i++) {
+        var cx = (i % cols + 0.5) * (dim.w / cols);
+        var cy = (Math.floor(i / cols) + 0.5) * (dim.h / rows);
+        marbles.push({
+          x: cx + (Math.random() - 0.5) * cell * 0.9,
+          y: cy + (Math.random() - 0.5) * cell * 0.9,
+          r: r * (0.8 + Math.random() * 0.5),
+          c: PAL[(Math.random() * PAL.length) | 0],
+          t: cy / dim.h  // pour order: top rows first
+        });
+      }
+    }
+    function draw(one) {
+      var ctx = dim.ctx;
+      ctx.globalAlpha = 0.92;
+      ctx.beginPath();
+      ctx.arc(one.x, one.y, one.r, 0, 6.2832);
+      ctx.fillStyle = one.c;
+      ctx.fill();
+      // tiny gloss
+      ctx.globalAlpha = 0.5;
+      ctx.beginPath();
+      ctx.arc(one.x - one.r * 0.3, one.y - one.r * 0.3, one.r * 0.34, 0, 6.2832);
+      ctx.fillStyle = "rgba(255,255,255,.8)";
+      ctx.fill();
+    }
+    function run() {
+      dim.ctx.clearRect(0, 0, dim.w, dim.h);
+      if (reduce) { marbles.forEach(draw); return; }
+      var start = null, dur = 1500;
+      var order = marbles.slice().sort(function (a, b) { return a.t - b.t; });
+      var idx = 0;
+      function frame(ts) {
+        if (start === null) start = ts;
+        var prog = Math.min(1, (ts - start) / dur);
+        var target = Math.floor(prog * order.length);
+        while (idx < target) { draw(order[idx]); idx++; }
+        if (prog < 1) raf = requestAnimationFrame(frame);
+        else { while (idx < order.length) { draw(order[idx]); idx++; } }
+      }
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(frame);
+    }
+    function boot() { build(); run(); }
+    var started = false;
+    var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && !started) { started = true; boot(); } });
+    }, { threshold: 0.25 }) : null;
+    if (io) io.observe(cv); else { started = true; boot(); }
+    document.getElementById("pop-replay").addEventListener("click", boot);
+    var rz;
+    window.addEventListener("resize", function () {
+      clearTimeout(rz); rz = setTimeout(function () { if (started) { build(); run(); } }, 200);
+    });
+  })();
+
+  /* ── 2. Galton board ──────────────────────────────────────── */
+  (function () {
+    var cv = document.getElementById("galton-canvas");
+    if (!cv) return;
+    var ROWS = 11, BINS = ROWS + 1;
+    var dim, bins, balls, settled, raf = null, glow;
+
+    function reset() {
+      dim = fitCanvas(cv, 360);
+      bins = new Array(BINS).fill(0);
+      balls = []; settled = 0; glow = null;
+      render();
+      document.getElementById("galton-read").textContent = "0 marbles settled";
+    }
+    function geom() {
+      var topY = 34, botY = dim.h - 74;
+      var spanY = botY - topY;
+      var pitch = Math.min(dim.w / (BINS + 1), spanY / (ROWS + 1));
+      var cx = dim.w / 2;
+      return { topY: topY, botY: botY, pitch: pitch, cx: cx };
+    }
+    function pegXY(row, k, g) {
+      // row r has r+1 pegs, centered
+      var y = g.topY + row * g.pitch;
+      var x = g.cx + (k - row / 2) * g.pitch;
+      return { x: x, y: y };
+    }
+    function spawn(n) {
+      var g = geom();
+      for (var i = 0; i < n; i++) {
+        var path = [];
+        var k = 0;
+        for (var r = 0; r < ROWS; r++) { k += (Math.random() < 0.5 ? 0 : 1); path.push(k); }
+        balls.push({ row: -1, k: 0, path: path, bin: k, delay: i * 2, c: PAL[(Math.random() * PAL.length) | 0], done: false });
+      }
+      if (reduce) { balls.forEach(function (b) { bins[b.bin]++; settled++; balls = []; }); render(); readout(); return; }
+      if (!raf) raf = requestAnimationFrame(step);
+    }
+    function readout() {
+      document.getElementById("galton-read").textContent = settled + (settled === 1 ? " marble settled" : " marbles settled");
+    }
+    var tick = 0;
+    function step() {
+      tick++;
+      var g = geom();
+      var moving = false;
+      for (var i = 0; i < balls.length; i++) {
+        var b = balls[i];
+        if (b.done) continue;
+        moving = true;
+        if (b.delay > 0) { b.delay--; continue; }
+        // advance one peg-row every 3 ticks
+        if (tick % 2 === 0) {
+          b.row++;
+          if (b.row >= ROWS) {
+            b.done = true;
+            bins[b.bin]++; settled++; glow = { bin: b.bin, life: 12 };
+            readout();
+          } else {
+            b.k = b.path[b.row];
+          }
+        }
+      }
+      render(g);
+      balls = balls.filter(function (b) { return !b.done; });
+      if (glow && glow.life > 0) glow.life--; else glow = null;
+      if (moving || balls.length) raf = requestAnimationFrame(step);
+      else raf = null;
+    }
+    function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+    function render(g) {
+      g = g || geom();
+      var ctx = dim.ctx, ink = css("--ink"), grid = css("--grid"), acc = css("--accent");
+      ctx.clearRect(0, 0, dim.w, dim.h);
+      // pegs
+      ctx.fillStyle = grid;
+      for (var r = 1; r < ROWS; r++) {
+        for (var k = 0; k <= r; k++) {
+          var p = pegXY(r, k, g);
+          ctx.beginPath(); ctx.arc(p.x, p.y, 2.4, 0, 6.2832); ctx.fill();
+        }
+      }
+      // shared vertical scale for bars + the expected curve
+      var maxc = Math.max(1, Math.max.apply(null, bins));
+      var binW = dim.w / BINS, floorY = dim.h - 6;
+      var availH = floorY - g.topY - 26;
+      var scale = availH / maxc;
+      // expected binomial (normal-approx) curve for however many have settled
+      if (settled > 0) {
+        var mu = ROWS / 2, sd = Math.sqrt(ROWS) / 2;
+        ctx.strokeStyle = acc; ctx.globalAlpha = 0.55; ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (var xc = 0; xc <= BINS - 1; xc += 0.2) {
+          var pdf = Math.exp(-0.5 * Math.pow((xc - mu) / sd, 2)) / (sd * Math.sqrt(2 * Math.PI));
+          var expected = settled * pdf;
+          var px = (xc + 0.5) * binW, py = floorY - Math.min(expected * scale, availH);
+          if (xc === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke(); ctx.globalAlpha = 1;
+      }
+      // bins as bars with a marble-colored cap
+      for (var bi = 0; bi < BINS; bi++) {
+        var bh = bins[bi] * scale;
+        var bx = bi * binW + binW * 0.16, bw = binW * 0.68;
+        ctx.fillStyle = css("--accent-soft"); ctx.fillRect(bx, floorY - bh, bw, bh);
+        ctx.fillStyle = (bi === glowBin()) ? acc : css("--nhl");
+        ctx.fillRect(bx, floorY - bh, bw, Math.min(bh, 5));
+        if (bins[bi] > 0) {
+          ctx.fillStyle = ink; ctx.font = "600 10px system-ui,sans-serif"; ctx.textAlign = "center";
+          ctx.fillText(bins[bi], bx + bw / 2, floorY - bh - 4);
+        }
+      }
+      // falling balls
+      for (var i = 0; i < balls.length; i++) {
+        var b = balls[i];
+        if (b.delay > 0 || b.row < 0) {
+          var pTop = { x: g.cx, y: g.topY - 10 };
+          drawBall(ctx, pTop.x, pTop.y, b.c);
+        } else {
+          var pp = pegXY(b.row, b.k, g);
+          drawBall(ctx, pp.x, pp.y - g.pitch * 0.5, b.c);
+        }
+      }
+    }
+    function glowBin() { return glow ? glow.bin : -1; }
+    function drawBall(ctx, x, y, c) {
+      ctx.beginPath(); ctx.arc(x, y, 5, 0, 6.2832); ctx.fillStyle = c; ctx.fill();
+      ctx.beginPath(); ctx.arc(x - 1.6, y - 1.6, 1.7, 0, 6.2832); ctx.fillStyle = "rgba(255,255,255,.75)"; ctx.fill();
+    }
+
+    reset();
+    document.getElementById("galton-drop").addEventListener("click", function () { spawn(150); });
+    document.getElementById("galton-reset").addEventListener("click", function () {
+      if (raf) { cancelAnimationFrame(raf); raf = null; } reset();
+    });
+    var rz;
+    window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(reset, 200); });
+  })();
+
+  /* ── 3. Birth-quarter toggle ──────────────────────────────── */
+  (function () {
+    var cv = document.getElementById("bq-canvas");
+    if (!cv) return;
+    var Q = [
+      { lab: "Jan–Mar", actual: 32, side: "over" },
+      { lab: "Apr–Jun", actual: 28, side: "over" },
+      { lab: "Jul–Sep", actual: 22, side: "short" },
+      { lab: "Oct–Dec", actual: 19, side: "short" }
+    ];
+    var dim, mix = 1, target = 1, raf = null;
+
+    function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+    function draw() {
+      dim = dim || fitCanvas(cv, 330);
+      var ctx = dim.ctx, w = dim.w, h = dim.h;
+      ctx.clearRect(0, 0, w, h);
+      var padL = 8, padR = 8, padT = 20, padB = 42;
+      var plotH = h - padT - padB, plotW = w - padL - padR;
+      var colW = plotW / 4;
+      var maxPct = 40;
+      function yFor(pct) { return padT + plotH * (1 - pct / maxPct); }
+      // even 25% baseline
+      var yb = yFor(25);
+      ctx.strokeStyle = css("--muted"); ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL, yb); ctx.lineTo(w - padR, yb); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = css("--muted"); ctx.font = "600 10px system-ui,sans-serif"; ctx.textAlign = "right";
+      ctx.fillText("even 25%", w - padR - 2, yb - 5);
+
+      for (var i = 0; i < 4; i++) {
+        var pct = 25 + (Q[i].actual - 25) * mix;
+        var cx = padL + colW * i + colW / 2;
+        var top = yFor(pct);
+        var col = css(Q[i].side === "over" ? "--over" : "--short");
+        // marble stack: fill the column with circles up to `top`
+        var mr = Math.max(6, Math.min(11, colW * 0.13));
+        var gap = mr * 2 + 3;
+        var perRow = Math.max(1, Math.floor((colW - 10) / gap));
+        var yy = h - padB - mr;
+        var placed = 0, totalH = (h - padB) - top;
+        var rowsN = Math.max(0, Math.round(totalH / gap));
+        for (var rrow = 0; rrow < rowsN; rrow++) {
+          for (var cc = 0; cc < perRow; cc++) {
+            var mx = cx - (perRow - 1) * gap / 2 + cc * gap;
+            var my = yy - rrow * gap;
+            ctx.beginPath(); ctx.arc(mx, my, mr, 0, 6.2832); ctx.fillStyle = col; ctx.globalAlpha = 0.92; ctx.fill();
+            ctx.beginPath(); ctx.arc(mx - mr * 0.32, my - mr * 0.32, mr * 0.32, 0, 6.2832);
+            ctx.fillStyle = "rgba(255,255,255,.75)"; ctx.globalAlpha = 1; ctx.fill();
+          }
+        }
+        // pct label
+        ctx.globalAlpha = 1; ctx.fillStyle = css("--ink"); ctx.textAlign = "center";
+        ctx.font = "700 15px Georgia,serif";
+        ctx.fillText(Math.round(pct) + "%", cx, top - 12);
+        // quarter label
+        ctx.fillStyle = css("--ink-2"); ctx.font = "600 11px system-ui,sans-serif";
+        ctx.fillText(Q[i].lab, cx, h - padB + 22);
+      }
+    }
+    function animate() {
+      var d = target - mix;
+      if (Math.abs(d) < 0.01) { mix = target; draw(); raf = null; return; }
+      mix += d * 0.14; draw(); raf = requestAnimationFrame(animate);
+    }
+    function setTarget(t) {
+      target = t;
+      if (reduce) { mix = t; draw(); return; }
+      if (!raf) raf = requestAnimationFrame(animate);
+    }
+    var btn = document.getElementById("bq-toggle");
+    var read = document.getElementById("bq-read");
+    var showActual = true;
+    btn.addEventListener("click", function () {
+      showActual = !showActual;
+      btn.setAttribute("aria-pressed", showActual ? "true" : "false");
+      btn.textContent = showActual ? "Flip to an even world" : "Flip to the actual NHL";
+      read.textContent = showActual ? "Jan–Mar 32% · Oct–Dec 19%" : "Every quarter at an even 25%";
+      setTarget(showActual ? 1 : 0);
+    });
+    // start in even world, then animate to actual once on screen
+    dim = fitCanvas(cv, 330); mix = 0; draw();
+    var seen = false;
+    var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && !seen) { seen = true; setTarget(1); } });
+    }, { threshold: 0.4 }) : null;
+    if (io) io.observe(cv); else setTarget(1);
+    var rz;
+    window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { dim = fitCanvas(cv, 330); draw(); }, 200); });
+  })();
+
+  /* ── 4. Head-start decay (DOM stepper) ────────────────────── */
+  (function () {
+    var stages = document.querySelectorAll(".decay .stg");
+    if (!stages.length) return;
+    var gaps = [10, 8, 4.5, 1.3];
+    var numEl = document.getElementById("decay-num");
+    var fillEl = document.getElementById("decay-fill");
+    function set(i) {
+      stages.forEach(function (s, j) { s.setAttribute("aria-selected", j === i ? "true" : "false"); });
+      numEl.textContent = "+" + gaps[i];
+      fillEl.style.width = (gaps[i] / 10 * 100) + "%";
+    }
+    stages.forEach(function (s, i) { s.addEventListener("click", function () { set(i); }); });
+    set(0);
+  })();
+
+  /* ── 5. Wealth: richest-quarter share by decade ───────────── */
+  (function () {
+    var cv = document.getElementById("wealth-canvas");
+    if (!cv) return;
+    var decades = ["1990s", "2000s", "2010s", "2020s"];
+    var L = [
+      { k: "NHL", col: "--nhl", v: [27, 37, 36, 48] },
+      { k: "MLB", col: "--mlb", v: [14, 16, 26, 30] },
+      { k: "NFL", col: "--nfl", v: [10, 13, 19, 25] },
+      { k: "NBA", col: "--nba", v: [6, 8, 16, 15] }
+    ];
+    var dim, cur = L.map(function (l) { return l.v[3]; }), tgt = cur.slice(), raf = null;
+    function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+    function draw() {
+      dim = dim || fitCanvas(cv, 340);
+      var ctx = dim.ctx, w = dim.w, h = dim.h;
+      ctx.clearRect(0, 0, w, h);
+      var padT = 22, padB = 40, plotH = h - padT - padB, colW = w / 4, maxPct = 55;
+      function yFor(p) { return padT + plotH * (1 - p / maxPct); }
+      var yb = yFor(25);
+      ctx.strokeStyle = css("--muted"); ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(4, yb); ctx.lineTo(w - 4, yb); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = css("--muted"); ctx.font = "600 10px system-ui,sans-serif"; ctx.textAlign = "right";
+      ctx.fillText("25%", w - 6, yb - 5);
+      for (var i = 0; i < 4; i++) {
+        var pct = cur[i], cx = colW * i + colW / 2, top = yFor(pct), col = css(L[i].col);
+        var mr = Math.max(6, Math.min(11, colW * 0.12)), gap = mr * 2 + 3;
+        var perRow = Math.max(1, Math.floor((colW - 12) / gap));
+        var yy = h - padB - mr, rowsN = Math.max(0, Math.round(((h - padB) - top) / gap));
+        for (var r = 0; r < rowsN; r++) for (var c = 0; c < perRow; c++) {
+          var mx = cx - (perRow - 1) * gap / 2 + c * gap, my = yy - r * gap;
+          ctx.beginPath(); ctx.arc(mx, my, mr, 0, 6.2832); ctx.fillStyle = col; ctx.globalAlpha = 0.92; ctx.fill();
+          ctx.beginPath(); ctx.arc(mx - mr * 0.32, my - mr * 0.32, mr * 0.32, 0, 6.2832);
+          ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.globalAlpha = 1; ctx.fill();
+        }
+        ctx.globalAlpha = 1; ctx.fillStyle = css("--ink"); ctx.textAlign = "center"; ctx.font = "700 15px Georgia,serif";
+        ctx.fillText(Math.round(pct) + "%", cx, top - 11);
+        ctx.fillStyle = css("--ink-2"); ctx.font = "700 11px system-ui,sans-serif";
+        ctx.fillText(L[i].k, cx, h - padB + 22);
+      }
+    }
+    function animate() {
+      var moving = false;
+      for (var i = 0; i < 4; i++) { var d = tgt[i] - cur[i]; if (Math.abs(d) > 0.1) { cur[i] += d * 0.18; moving = true; } else cur[i] = tgt[i]; }
+      draw(); if (moving) raf = requestAnimationFrame(animate); else raf = null;
+    }
+    function go(di) {
+      tgt = L.map(function (l) { return l.v[di]; });
+      document.getElementById("wealth-read").textContent =
+        decades[di] + " · NHL " + L[0].v[di] + "% · MLB " + L[1].v[di] + "% · NFL " + L[2].v[di] + "% · NBA " + L[3].v[di] + "%";
+      var rng = document.getElementById("wealth-range"); if (+rng.value !== di) rng.value = di;
+      document.querySelectorAll("#wealth-decades .decbtn").forEach(function (b, j) {
+        b.setAttribute("aria-selected", j === di ? "true" : "false");
+      });
+      if (reduce) { cur = tgt.slice(); draw(); return; }
+      if (!raf) raf = requestAnimationFrame(animate);
+    }
+    dim = fitCanvas(cv, 340); draw();
+    document.getElementById("wealth-range").addEventListener("input", function (e) { go(+e.target.value); });
+    document.querySelectorAll("#wealth-decades .decbtn").forEach(function (b) {
+      b.addEventListener("click", function () { go(+b.getAttribute("data-d")); });
+    });
+    var rz; window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { dim = fitCanvas(cv, 340); draw(); }, 200); });
+  })();
+
+  /* ── 6. Sticky floor: born poorest, where you land ────────── */
+  (function () {
+    var cv = document.getElementById("mob-canvas");
+    if (!cv) return;
+    var labs = ["Stayed\npoorest", "Lower-\nmid", "Middle", "Upper-\nmid", "Reached\nrichest"];
+    var real = [33.7, 28.0, 18.4, 12.4, 7.5];
+    var colr = ["--short", "--muted", "--muted", "--muted", "--over"];
+    var dim, mix = 1, target = 1, raf = null;
+    function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+    function draw() {
+      dim = dim || fitCanvas(cv, 330);
+      var ctx = dim.ctx, w = dim.w, h = dim.h, padT = 20, padB = 48, plotH = h - padT - padB, colW = w / 5, maxPct = 40;
+      ctx.clearRect(0, 0, w, h);
+      function yFor(p) { return padT + plotH * (1 - p / maxPct); }
+      var yb = yFor(20);
+      ctx.strokeStyle = css("--muted"); ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(4, yb); ctx.lineTo(w - 4, yb); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = css("--muted"); ctx.font = "600 10px system-ui,sans-serif"; ctx.textAlign = "right";
+      ctx.fillText("fair 20%", w - 6, yb - 5);
+      for (var i = 0; i < 5; i++) {
+        var pct = 20 + (real[i] - 20) * mix, cx = colW * i + colW / 2, top = yFor(pct), col = css(colr[i]);
+        var mr = Math.max(5, Math.min(9, colW * 0.11)), gap = mr * 2 + 3, perRow = Math.max(1, Math.floor((colW - 8) / gap));
+        var yy = h - padB - mr, rowsN = Math.max(0, Math.round(((h - padB) - top) / gap));
+        for (var r = 0; r < rowsN; r++) for (var c = 0; c < perRow; c++) {
+          var mx = cx - (perRow - 1) * gap / 2 + c * gap, my = yy - r * gap;
+          ctx.beginPath(); ctx.arc(mx, my, mr, 0, 6.2832); ctx.fillStyle = col; ctx.globalAlpha = 0.9; ctx.fill();
+          ctx.beginPath(); ctx.arc(mx - mr * 0.3, my - mr * 0.3, mr * 0.3, 0, 6.2832);
+          ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.globalAlpha = 1; ctx.fill();
+        }
+        ctx.globalAlpha = 1; ctx.fillStyle = css("--ink"); ctx.textAlign = "center"; ctx.font = "700 14px Georgia,serif";
+        ctx.fillText(Math.round(pct) + "%", cx, top - 10);
+        ctx.fillStyle = css("--ink-2"); ctx.font = "600 10px system-ui,sans-serif";
+        var parts = labs[i].split("\n");
+        ctx.fillText(parts[0], cx, h - padB + 20);
+        if (parts[1]) ctx.fillText(parts[1], cx, h - padB + 32);
+      }
+    }
+    function animate() { var d = target - mix; if (Math.abs(d) < 0.01) { mix = target; draw(); raf = null; return; } mix += d * 0.14; draw(); raf = requestAnimationFrame(animate); }
+    function setT(t) { target = t; if (reduce) { mix = t; draw(); return; } if (!raf) raf = requestAnimationFrame(animate); }
+    var btn = document.getElementById("mob-toggle"), read = document.getElementById("mob-read"), real0 = true;
+    btn.addEventListener("click", function () {
+      real0 = !real0; btn.setAttribute("aria-pressed", real0 ? "true" : "false");
+      btn.textContent = real0 ? "Flip to a fair world" : "Flip to the real world";
+      read.textContent = real0 ? "Stayed poorest 34% · reached richest 8%" : "A fair world: 20% to every rung";
+      setT(real0 ? 1 : 0);
+    });
+    dim = fitCanvas(cv, 330); mix = 0; draw();
+    var seen = false;
+    var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && !seen) { seen = true; setT(1); } });
+    }, { threshold: 0.4 }) : null;
+    if (io) io.observe(cv); else setT(1);
+    var rz; window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { dim = fitCanvas(cv, 330); draw(); }, 200); });
+  })();
+})();
+</script>
+</body></html>

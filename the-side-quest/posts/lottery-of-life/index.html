@@ -180,10 +180,25 @@
     font-family:"Courier New",Courier,monospace; font-size:.74rem; color:var(--muted); }
   .foot a { display:inline-flex; align-items:center; min-height:44px; }
 
-  /* two-up figure (film stills) */
-  figure.fig .plate.two { display:flex; gap:10px; background:#0e0d0b; }
-  figure.fig .plate.two img { width:50%; }
-  @media (max-width:520px){ figure.fig .plate.two { flex-direction:column; } figure.fig .plate.two img { width:100%; } }
+  /* video embed placeholder (intro) */
+  .videoembed { margin:30px 0; }
+  .videoembed .frame { position:relative; aspect-ratio:16/9; background:#0e0d0b;
+    border:1px solid var(--border); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:12px; text-align:center; padding:16px; overflow:hidden; }
+  .videoembed .frame::before { content:""; position:absolute; inset:0; opacity:.5;
+    background:radial-gradient(circle at 30% 30%, rgba(0,114,178,.28), transparent 45%),
+      radial-gradient(circle at 70% 62%, rgba(213,94,0,.24), transparent 45%),
+      radial-gradient(circle at 52% 82%, rgba(0,158,115,.22), transparent 45%); }
+  .videoembed .play { position:relative; width:72px; height:72px; border-radius:50%;
+    border:2px solid rgba(246,243,234,.85); display:flex; align-items:center; justify-content:center; }
+  .videoembed .play::after { content:""; margin-left:5px; border-style:solid;
+    border-width:12px 0 12px 21px; border-color:transparent transparent transparent rgba(246,243,234,.92); }
+  .videoembed .vlab { position:relative; font-family:"Courier New",Courier,monospace; font-size:.68rem;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--hero-ink-2); }
+  .videoembed .vtitle { position:relative; font-family:Georgia,"Times New Roman",serif; font-size:1.1rem;
+    color:#f6f3ea; }
+  .videoembed .vcap { font-family:system-ui,-apple-system,sans-serif; font-size:.8rem; line-height:1.5;
+    color:var(--muted); margin-top:9px; }
 
   /* decade control: tappable segmented buttons + a drag scrubber */
   .viz .decades{ display:flex; gap:6px; margin-top:14px; }
@@ -273,13 +288,19 @@
 
     <p class="dropcap">This is roughly how many people walk the earth. Each marble stands for a million of us, and there are more than 8.3&nbsp;billion. And yet none of us are the same.</p>
 
-    <figure class="fig">
-      <div class="plate two">
-        <img loading="lazy" src="../../assets/img/lottery-04.webp" alt="Film still: a wall of tens of thousands of marbles behind the text '4,000,000,000 Men, 40,000 Marbles.'">
-        <img loading="lazy" src="../../assets/img/lottery-05.webp" alt="Film still: marbles arranged into the shape of a country, labeled 537 marbles and a population of 57,630,323.">
+    <div class="videoembed">
+      <div class="frame" role="img" aria-label="Placeholder for the embedded video, The Lottery of Life by Michael MacKelvie">
+        <span class="play" aria-hidden="true"></span>
+        <span class="vlab">Watch the film</span>
+        <span class="vtitle">The Lottery of Life &middot; Michael MacKelvie</span>
+        <!-- EMBED: replace this .frame's contents with the player, e.g.
+             <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="The Lottery of Life"
+               loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"
+               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+               allowfullscreen></iframe> -->
       </div>
-      <figcaption><b>From the film.</b> In Michael MacKelvie&rsquo;s video, the count is physical: one marble per million people, poured out and pushed into shape by hand. The charts below are the data underneath the demo.</figcaption>
-    </figure>
+      <p class="vcap">Michael&rsquo;s film is the marble version of everything below. The charts here are the data underneath the demo.</p>
+    </div>
 
     <p>We know we inherit some of who we are: a strand of DNA, a build, a predisposition. But we inherit circumstance too: experiences and accidents, big and small, and those turn out to matter more than they look. This is a story about how the small compounds into the big, and how, when you zoom out far enough, a room full of strangers gets surprisingly predictable.</p>
 

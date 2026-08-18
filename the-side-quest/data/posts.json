@@ -7,7 +7,7 @@
     "featured",
     "archive"
   ],
-  "count": 5,
+  "count": 6,
   "path_convention": "href / fallback_href / data entries are site-root-absolute so the same record works from the landing page and from blog/index.html.",
   "posts": [
     {
@@ -314,6 +314,63 @@
           "--tile-fg": "#4dffa0",
           "--tile-fg-dim": "#22b368",
           "--tile-rule": "#0a3122"
+        }
+      }
+    },
+    {
+      "slug": "lottery-of-life",
+      "number": "006",
+      "kind": "blog",
+      "title": "The Lottery of Life",
+      "title_long": "The Lottery of Life: How a Birthday Bends Who Makes It",
+      "kicker": "No. 006 · Nature vs. Nurture",
+      "dek": "How something as arbitrary as your birth month quietly shapes who reaches the top. A companion to Michael MacKelvie's video, with interactive marbles.",
+      "status": "featured",
+      "accent": "#c9a227",
+      "accent_text": "#8a6d12",
+      "href": "/the-side-quest/posts/lottery-of-life/index.html",
+      "updated": "2026-08-18",
+      "updated_precision": "day",
+      "headline_stat": {
+        "value": "32% vs 19%",
+        "label": "NHL players born Jan–Mar vs Oct–Dec · the birthday effect"
+      },
+      "tools": [
+        "vanilla JS",
+        "HTML canvas",
+        "R",
+        "hometown-effect data"
+      ],
+      "data": [],
+      "tile_theme": {
+        "id": "indigo-marble",
+        "label": "Marble table",
+        "prompt_prefix": null,
+        "vars": {
+          "--tile-bg": "#0e0d0b",
+          "--tile-surface": "#181713",
+          "--tile-fg": "#f6f3ea",
+          "--tile-fg-dim": "#c9c4b4",
+          "--tile-muted": "#8f8b7d",
+          "--tile-accent": "#c9a227",
+          "--tile-accent-text": "#e0be4a",
+          "--tile-on-accent": "#0e0d0b",
+          "--tile-rule": "#33302a",
+          "--tile-font": "Georgia, \"Times New Roman\", serif",
+          "--tile-display-font": "Georgia, \"Times New Roman\", serif",
+          "--tile-mono-font": "ui-monospace, SFMono-Regular, Menlo, Consolas, \"Courier New\", monospace",
+          "--tile-kicker-tracking": ".2em",
+          "--tile-radius": "0",
+          "--tile-texture": "repeating-linear-gradient(to bottom, rgba(201,162,39,.12) 0 1px, transparent 1px 5px)",
+          "--tile-texture-opacity": "1"
+        },
+        "vars_dark": {
+          "--tile-bg": "#0a0908",
+          "--tile-surface": "#15140f",
+          "--tile-fg": "#f6f3ea",
+          "--tile-fg-dim": "#c9c4b4",
+          "--tile-accent-text": "#e0be4a",
+          "--tile-rule": "#2c2a24"
         }
       }
     }

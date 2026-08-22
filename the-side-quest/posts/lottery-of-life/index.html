@@ -236,6 +236,30 @@
 
   @media (prefers-reduced-motion: reduce) { .bee { display:none; } }
   .fig .plot{ width:100%; min-height:340px; }
+  /* interactive county map */
+  .usmap{ position:relative; margin:30px 0 0; --usmap-nodata:#e7e4d7; }
+  .usmap-svg{ display:block; width:100%; height:auto; touch-action:none; cursor:grab; background:transparent; }
+  .usmap-svg:active{ cursor:grabbing; }
+  .county{ stroke:none; }
+  .county.hot{ stroke:var(--ink); stroke-width:1; vector-effect:non-scaling-stroke; }
+  .usmap-states{ stroke:rgba(140,140,140,.55); stroke-width:.5; vector-effect:non-scaling-stroke; }
+  .usmap-nation{ stroke:var(--border); stroke-width:.8; vector-effect:non-scaling-stroke; }
+  .usmap-hint{ min-height:280px; display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:system-ui,sans-serif; font-size:.85rem; color:var(--muted); border:1px dashed var(--border); padding:16px; }
+  .usmap-tip{ position:absolute; pointer-events:none; z-index:5; background:var(--surface); color:var(--ink);
+    border:1px solid var(--border); border-radius:6px; padding:7px 10px; font-family:system-ui,sans-serif;
+    font-size:.8rem; line-height:1.35; max-width:200px; box-shadow:0 2px 12px rgba(0,0,0,.20); transition:opacity .1s; }
+  .usmap-ctl{ position:absolute; top:8px; right:8px; display:flex; flex-direction:column; gap:4px; }
+  .usmap-ctl button{ width:32px; height:32px; font-size:1rem; line-height:1; cursor:pointer;
+    background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:0;
+    font-family:system-ui,sans-serif; }
+  .usmap-ctl button:hover{ border-color:var(--accent); color:var(--accent-text); }
+  .usmap-legend{ margin-top:12px; font-family:system-ui,sans-serif; }
+  .usmap-legend-lab{ font-size:.78rem; color:var(--muted); margin-bottom:5px; }
+  .usmap-legend-bar{ height:12px; border:1px solid var(--border); }
+  .usmap-legend-ticks{ display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted);
+    font-family:"Courier New",monospace; margin-top:3px; }
+  @media (prefers-color-scheme:dark){ .usmap{ --usmap-nodata:#2a2926; } }
 </style>
 </head>
 <body class="viz-root">
@@ -434,8 +458,7 @@
     <p>So the birthday is mostly a false alarm. Where you&rsquo;re born is not. The US is a stack of different regions, cultures and climates, and sports give you a clean, countable window into them.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-08.webp"
-        alt="County map of the US shaded by NFL players produced per million residents; the Deep South is darkest."></div>
+      <div class="usmap" id="usmap"><div class="usmap-hint">Scroll down to load the interactive map — hover a county for its rate, scroll or drag to zoom.</div></div>
       <figcaption><b>The Deep South makes the most NFL players per capita.</b> NFL players per million residents by hometown county, rookie seasons 1990&ndash;2025.<sup class="fn"><a href="#ref7" id="cite7">7</a></sup></figcaption>
     </figure>
 
@@ -1175,4 +1198,6 @@
 </script>
 <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
 <script src="../../assets/charts-lottery.js"></script>
+<script defer src="../../assets/county-rates-lottery.js"></script>
+<script defer src="../../assets/usmap-lottery.js"></script>
 </body></html>

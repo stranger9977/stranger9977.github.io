@@ -248,7 +248,10 @@
     font-family:system-ui,sans-serif; font-size:.85rem; color:var(--muted); border:1px dashed var(--border); padding:16px; }
   .usmap-tip{ position:absolute; pointer-events:none; z-index:5; background:var(--surface); color:var(--ink);
     border:1px solid var(--border); border-radius:6px; padding:7px 10px; font-family:system-ui,sans-serif;
-    font-size:.8rem; line-height:1.35; max-width:200px; box-shadow:0 2px 12px rgba(0,0,0,.20); transition:opacity .1s; }
+    font-size:.8rem; line-height:1.35; max-width:240px; box-shadow:0 2px 12px rgba(0,0,0,.20); transition:opacity .1s; }
+  .usmap-tip-pl{ margin-top:5px; padding-top:5px; border-top:1px solid var(--border); }
+  .usmap-tip-pl i{ display:block; font-style:normal; font-size:.62rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin-bottom:2px; }
+  .usmap-tip-pl span{ display:block; font-size:.78rem; }
   .usmap-ctl{ position:absolute; top:8px; right:8px; display:flex; flex-direction:column; gap:4px; }
   .usmap-ctl button{ width:32px; height:32px; font-size:1rem; line-height:1; cursor:pointer;
     background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:0;
@@ -1199,5 +1202,6 @@
 <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
 <script src="../../assets/charts-lottery.js"></script>
 <script defer src="../../assets/county-rates-lottery.js"></script>
+<script defer src="../../assets/county-players-lottery.js"></script>
 <script defer src="../../assets/usmap-lottery.js"></script>
 </body></html>

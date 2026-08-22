@@ -233,6 +233,7 @@
   @media (prefers-reduced-motion: reduce){ .decay .fill{ transition:none; } }
 
   @media (prefers-reduced-motion: reduce) { .bee { display:none; } }
+  .fig .plot{ width:100%; min-height:340px; }
 </style>
 </head>
 <body class="viz-root">
@@ -333,8 +334,7 @@
     <p>In 1985, two psychologists poked a hole in that. Roger and Paula Barnsley were at a junior hockey game; Paula was reading down the program and noticed how many players were born in January, February and March.<sup class="fn"><a href="#ref1" id="cite1">1</a></sup> It wasn&rsquo;t a fluke. Line the NHL up by birth month and the early months win, in order.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-01.webp"
-        alt="Line chart from the original 1985 study: percentage of 1982-83 NHL players falls from about 32% in the first birth quarter to about 14% in the fourth."></div>
+      <div class="plate"><div class="plot" id="plot-01"></div></div>
       <figcaption><b>The original finding.</b> Share of 1982&ndash;83 NHL players by birth quarter, from the first-quarter peak down to the fourth. Barnsley, Thompson &amp; Barnsley (1985).<sup class="fn"><a href="#ref1">1</a></sup></figcaption>
     </figure>
 
@@ -362,8 +362,7 @@
     <p>It is not just hockey, and it is not just the pros&rsquo; imagination. But it is also not universal: line up the four big North American leagues side by side and only hockey slides.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-02.webp"
-        alt="Four small charts, one per league. NHL drops from 32% in Q1 to 19% in Q4; NFL, MLB and NBA stay flat near 25% across all four quarters."></div>
+      <div class="plate"><div class="plot" id="plot-02"></div></div>
       <figcaption><b>Only hockey slides.</b> Share of players born in each birth quarter, four leagues. The NHL falls from Q1 to Q4; the NFL, MLB and NBA stay flat near an even 25%.<sup class="fn"><a href="#ref2">2</a></sup></figcaption>
     </figure>
 
@@ -378,8 +377,7 @@
     <p>To be sure it&rsquo;s the cutoff and not something about ice, check two more sports that also run on a January calendar. Soccer players and competitive swimmers born early in the year are over-represented in exactly the same way, and when US Soccer moved to a January&nbsp;1 birth-year cutoff in 2016, the tilt followed the new rule.<sup class="fn"><a href="#ref4" id="cite4">4</a></sup></p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-03.webp"
-        alt="Bar charts showing January-born players over-represented among soccer players and swimmers, with the soccer tilt shifting after the 2016 cutoff change."></div>
+      <div class="plate"><div class="plot" id="plot-03"></div></div>
       <figcaption><b>Same fingerprint, different rink.</b> Birth-month representation for soccer players and swimmers against an even baseline; soccer is split by the 2016 US cutoff change.<sup class="fn"><a href="#ref4">4</a></sup></figcaption>
     </figure>
 
@@ -414,16 +412,14 @@
     </div>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-06.webp"
-        alt="Line falling from a +10 percentile head start in kindergarten to about +1.3 by college entry."></div>
+      <div class="plate"><div class="plot" id="plot-06"></div></div>
       <figcaption><b>The oldest kids start ahead, and it shrinks.</b> How far ahead the relatively oldest students are, at four stages of school. It fades toward zero but never quite gets there.<sup class="fn"><a href="#ref5">5</a></sup></figcaption>
     </figure>
 
     <p>It leaves a faint mark on the finish line: September-born students were about 1 to 1.5 percentage points more likely to earn a college degree, and a little more likely to land at a selective one.<sup class="fn"><a href="#ref5">5</a></sup> Real, but small. And by the time these kids are adults earning a paycheck, the gap is gone. Several of the largest studies land in the same place: by your late 20s or early 30s, the month you were born in stops predicting your income.<sup class="fn"><a href="#ref6" id="cite6">6</a></sup></p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-07.webp"
-        alt="Earnings gap tied to school starting age, plotted by age, closing to zero and crossing into no-difference by about age 30."></div>
+      <div class="plate"><div class="plot" id="plot-07"></div></div>
       <figcaption><b>By 30, the earnings gap is gone.</b> The effect of starting school a year older on men&rsquo;s earnings, measured age by age (Norway). The band crosses zero around 30.<sup class="fn"><a href="#ref6">6</a></sup></figcaption>
     </figure>
 
@@ -444,22 +440,19 @@
     <p>&ldquo;It just means more&rdquo; is the slogan of the Southeastern Conference, and it turns out to be almost literally true. Per million residents, the South produces roughly double the NFL players of the other three regions, about 60 to the low 30s. Louisiana by itself makes NFL players at more than three times the national rate. The Northeast, for its part, is not big on contact.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-09.webp"
-        alt="Bar chart: South 60 NFL players per million, Midwest 39, West 34, Northeast 23."></div>
+      <div class="plate"><div class="plot" id="plot-09"></div></div>
       <figcaption><b>Double the national rate.</b> NFL players per million residents by region, already adjusted for each region&rsquo;s population.<sup class="fn"><a href="#ref7">7</a></sup></figcaption>
     </figure>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-10.webp"
-        alt="State bar chart with Louisiana at 134.8 NFL players per million, far above the 43-per-million national average, and Vermont lowest."></div>
+      <div class="plate"><div class="plot" id="plot-10"></div></div>
       <figcaption><b>Louisiana runs the table.</b> NFL players per million residents by home state, the 12 highest and 8 lowest.<sup class="fn"><a href="#ref7">7</a></sup></figcaption>
     </figure>
 
     <p>The pattern is cultural, not genetic. The South also produces the most NBA players, led by Mississippi, with hoops-history states Kentucky and Indiana in the top five. The state where Little League was born, Pennsylvania, makes more baseball players than anywhere else. And all of it flips for hockey, where a single state, Minnesota, produces about twelve times the national rate.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-11.webp"
-        alt="Three per-capita leaderboards: Pennsylvania leads baseball, Mississippi leads basketball, Minnesota leads hockey."></div>
+      <div class="plate"><div class="plot" id="plot-11"></div></div>
       <figcaption><b>Every sport has its heartland.</b> US-born players per million residents by birth state, top eight per sport, 1990s&ndash;2020s pooled.<sup class="fn"><a href="#ref7">7</a></sup></figcaption>
     </figure>
 
@@ -494,62 +487,54 @@
     </div>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-13.webp"
-        alt="Bars showing NFL players from the richest hometown quartile rising from about 10% in the 1990s to 25% in the 2020s."></div>
+      <div class="plate"><div class="plot" id="plot-13"></div></div>
       <figcaption><b>NFL: 10% to 25%.</b> Share of players from the richest hometown quartile, by rookie era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <p>Football should be the hardest sport to price out. You don&rsquo;t need a country-club membership to play Pop Warner, and the genetic lottery only hands out so many enormous humans. So the tell is where the shift runs biggest: the positions that reward coaching and reps. Quarterbacks now draw heavily from wealthy hometowns, near 38%, and kickers and punters even more, around 43%.<sup class="fn"><a href="#ref8">8</a></sup></p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-14.webp"
-        alt="Lines by position: kickers/punters and quarterbacks come from the richest hometowns most, and rose the most since the 1990s."></div>
+      <div class="plate"><div class="plot" id="plot-14"></div></div>
       <figcaption><b>The skill positions moved most.</b> Share of NFL players from richest-quartile hometowns, by position group and era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <p>It is not that the South got priced out. The South makes more NFL players than ever. They just come from the richer parts of the South now.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-12.webp"
-        alt="Two panels: the South's share of NFL players rises across decades while the median hometown income of Southern players also rises."></div>
+      <div class="plate"><div class="plot" id="plot-12"></div></div>
       <figcaption><b>Same region, richer hometowns.</b> Southern players as a share of the NFL, and the median hometown income of those players, by decade.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-15.webp"
-        alt="Lines by birthplace-density decile showing the most-urban tenth shrinking as a source of NFL players over time."></div>
+      <div class="plate"><div class="plot" id="plot-15"></div></div>
       <figcaption><b>The most-urban hometowns are fading as a source.</b> Share of each era&rsquo;s NFL players by how urban their birthplace was.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <p>Basketball tells a softer version of the same story. You have to be tall, and tall can come from anywhere, but increasingly it comes from wealthier areas: over 44% of NBA players came from the poorest zip codes in the 1990s, down to 33% today, while the richest share more than doubled.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-16.webp"
-        alt="NBA players by hometown income quartile across eras; most still come from below-median hometowns but the richest share is rising."></div>
+      <div class="plate"><div class="plot" id="plot-16"></div></div>
       <figcaption><b>NBA: still working-class, but drifting.</b> Share of players by hometown income quartile, population-weighted, by era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <p>The shift is sharpest in the heavy-skill sports. In baseball, the share of MLB players from the richest American zip codes has climbed to roughly 30%, more than double where it sat in the 1990s.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-17.webp"
-        alt="MLB players from the richest hometown quartile roughly doubling since the 1990s."></div>
+      <div class="plate"><div class="plot" id="plot-17"></div></div>
       <figcaption><b>MLB: the richest share doubled.</b> Share of players by hometown income quartile, by era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <p>And then there is the sport on skates. In the 1990s hockey was close to even, with more than 30% of NHL players coming from the poorest zip codes. Today just 10% do, and nearly half come from the wealthiest.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-18.webp"
-        alt="NHL players by hometown income quartile; the richest quartile balloons to nearly half in the 2020s."></div>
+      <div class="plate"><div class="plot" id="plot-18"></div></div>
       <figcaption><b>NHL: nearly half from the richest quarter.</b> Share of recent US-born NHL players by hometown income quartile, by era.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
     <p class="pull">Hockey has become a rich kids&rsquo; talent show. Half the league comes from the wealthiest zip codes, and the kids from the poorest ones are disappearing.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-19.webp"
-        alt="One chart, four leagues: share of players from the richest quarter of hometowns rising over four decades, NHL highest at 48%, then MLB 30, NFL 25, NBA 15."></div>
+      <div class="plate"><div class="plot" id="plot-19"></div></div>
       <figcaption><b>All four leagues, one direction.</b> Share of each league&rsquo;s US-born players from the richest quarter of hometowns, by decade.<sup class="fn"><a href="#ref8">8</a></sup></figcaption>
     </figure>
 
@@ -584,8 +569,7 @@
     <p>Back in the US, SAT scores don&rsquo;t just rise with family income. They climb at every single step. The gap between a family in poverty and one earning over $200k is 388 points. Even across the middle of the range it is 179.<sup class="fn"><a href="#ref12" id="cite12">12</a></sup></p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-21.webp"
-        alt="Average SAT score climbing steadily at every family income band, from about 1326 under $20k to 1714 over $200k."></div>
+      <div class="plate"><div class="plot" id="plot-21"></div></div>
       <figcaption><b>SAT scores climb at every income step.</b> Average total SAT by family income band, 2013 college-bound seniors.<sup class="fn"><a href="#ref12">12</a></sup></figcaption>
     </figure>
 
@@ -598,16 +582,14 @@
     <p>Has it always been like this? For decades after World War II, the test-score gap between rich and poor kids was roughly flat. In the mid-1970s it began widening, and today it is about 40% bigger than a generation ago.<sup class="fn"><a href="#ref13" id="cite13">13</a></sup></p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-22.webp"
-        alt="Reading-score gap between richest and poorest families, flat through the 1950s-60s then widening from the mid-1970s to about 1.25 standard deviations."></div>
+      <div class="plate"><div class="plot" id="plot-22"></div></div>
       <figcaption><b>The rich-poor test gap keeps widening.</b> Reading-score gap between children from the richest and poorest tenth of families, by birth cohort.<sup class="fn"><a href="#ref13">13</a></sup></figcaption>
     </figure>
 
     <p>Absolute mobility, the plain question of whether you out-earn your parents by 30, has fallen from about 90% for kids born in 1940 to about 50% for kids born in the 1980s.<sup class="fn"><a href="#ref14" id="cite14">14</a></sup></p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-23.webp"
-        alt="Share of children who out-earn their parents falling from about 90% for the 1940 birth cohort to about 50% by the 1980s."></div>
+      <div class="plate"><div class="plot" id="plot-23"></div></div>
       <figcaption><b>Fewer kids out-earn their parents.</b> Share of US children who earn more than their parents did at the same age, adjusted for inflation, by birth year.<sup class="fn"><a href="#ref14">14</a></sup></figcaption>
     </figure>
 
@@ -629,8 +611,7 @@
     </div>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-24.webp"
-        alt="Bar chart: chance of reaching the richest fifth climbs from 7.5% for kids born poorest to 36.5% for kids born richest."></div>
+      <div class="plate"><div class="plot" id="plot-24"></div></div>
       <figcaption><b>Born rich, five times as likely to end rich.</b> Chance of reaching the top fifth of income as an adult, by parents&rsquo; income fifth.<sup class="fn"><a href="#ref15">15</a></sup></figcaption>
     </figure>
 
@@ -665,8 +646,7 @@
     <p>And yet. Adjusted for demographics, Mississippi ranks 1st in fourth-grade reading and 1st in fourth-grade math. For eighth graders, 4th in reading and 1st in math.<sup class="fn"><a href="#ref18" id="cite18">18</a></sup> A Black child in Mississippi is about two and a half times as likely to read proficiently in fourth grade as a Black child in California.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-26.webp"
-        alt="Scatter of states: spending per pupil against low-income fourth-grade reading proficiency, essentially flat; Mississippi high with low spending, New York low with high spending."></div>
+      <div class="plate"><div class="plot" id="plot-26"></div></div>
       <figcaption><b>Spending more buys no edge in low-income reading.</b> Each dot is a state: current spending per pupil against the share of low-income fourth graders proficient in reading, 2024.<sup class="fn"><a href="#ref18">18</a></sup></figcaption>
     </figure>
 
@@ -681,8 +661,7 @@
     <p>While we&rsquo;re on things you didn&rsquo;t pick: birth order. Are first-borns really smarter? A little. Two large Norwegian studies agree on about 2 to 3 IQ points over the second-born, and roughly 2% higher adult earnings.<sup class="fn"><a href="#ref20" id="cite20">20</a></sup> Real, measurable, and small enough to be the exception that proves the rule. Most of these accidents of birth matter more than this one.</p>
 
     <figure class="fig">
-      <div class="plate"><img loading="lazy" src="../../assets/img/lottery-27.webp"
-        alt="Bars showing a first-born advantage of about 2 to 3 IQ points and about 2% higher adult earnings over second-borns."></div>
+      <div class="plate"><div class="plot" id="plot-27"></div></div>
       <figcaption><b>The first-born edge is real but small.</b> First-born minus second-born, from two large Norwegian studies.<sup class="fn"><a href="#ref20">20</a></sup></figcaption>
     </figure>
 
@@ -1192,4 +1171,6 @@
   })();
 })();
 </script>
+<script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
+<script src="../../assets/charts-lottery.js"></script>
 </body></html>

@@ -263,6 +263,12 @@
   .usmap-legend-ticks{ display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted);
     font-family:"Courier New",monospace; margin-top:3px; }
   @media (prefers-color-scheme:dark){ .usmap{ --usmap-nodata:#2a2926; } }
+  /* Desktop: let the visuals break out wider than the reading column; prose stays ~720px for readability. */
+  @media (min-width:1080px){
+    article > figure.fig, article > .viz, article > .usmap, article > .videoembed {
+      width:min(1100px,94vw); margin-left:50%; transform:translateX(-50%);
+    }
+  }
 </style>
 </head>
 <body class="viz-root">

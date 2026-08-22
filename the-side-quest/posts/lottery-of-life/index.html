@@ -128,6 +128,8 @@
   /* figures */
   figure.fig { margin:30px 0; }
   figure.fig .plate { background:#fff; border:1px solid var(--border); padding:10px; }
+  /* Plotly charts are theme-aware and transparent, so they blend into the page. */
+  figure.fig .plate:has(.plot) { background:transparent; border:0; padding:0; }
   figure.fig img { display:block; width:100%; height:auto; }
   figure.fig figcaption { font-family:system-ui,sans-serif; font-size:.8rem; line-height:1.5;
     color:var(--muted); margin-top:9px; }

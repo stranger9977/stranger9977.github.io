@@ -87,10 +87,14 @@
         var d = rates[f.id];
         var name = (f.properties && f.properties.name) ? f.properties.name : "County";
         var st = STATE[String(f.id).slice(0, 2)] || "";
+        var pl = (window.COUNTY_PLAYERS && window.COUNTY_PLAYERS[f.id]) || null;
+        var plHtml = pl ? "<div class='usmap-tip-pl'><i>most notable</i>" +
+          pl.map(function (x) { return "<span>" + x + "</span>"; }).join("") + "</div>" : "";
+        var head = "<b>" + name + (st ? ", " + st : "") + "</b>";
         var body = d
-          ? "<b>" + name + (st ? ", " + st : "") + "</b><br>" + Math.round(d[0]) + " per million" +
-            (d[1] ? " · " + d[1] + " player" + (d[1] === 1 ? "" : "s") : "")
-          : "<b>" + name + (st ? ", " + st : "") + "</b><br>no matched players";
+          ? head + "<br>" + Math.round(d[0]) + " per million" +
+            (d[1] ? " · " + d[1] + " player" + (d[1] === 1 ? "" : "s") : "") + plHtml
+          : head + "<br>no matched players";
         var rect = hostEl.getBoundingClientRect();
         var x = ev.clientX - rect.left, y = ev.clientY - rect.top;
         tip.html(body)

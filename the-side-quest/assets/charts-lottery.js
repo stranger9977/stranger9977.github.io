@@ -1,9 +1,27 @@
 (function () {
-  var INK = '#16150f', MUTED = '#6f6c60', GRID = '#e7e4d7', LINE = '#c9c6b8';
   var FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
   var SPORT = { NFL: '#0072B2', MLB: '#D55E00', NHL: '#009E73', NBA: '#CC79A7' };
-  var ACCENT = '#3f3ab5';
   var ERA = ['#b8c4e8', '#7f93d6', '#4f68c0', '#2c3f9e'];
+
+  // The charts blend into the page in BOTH themes: backgrounds are transparent
+  // and the ink/grid/line/accent colours track the site's light or dark tokens.
+  // Every per-chart call below is authored in the LIGHT palette; the render step
+  // swaps those exact colours for their dark equivalents when the page is dark,
+  // and re-renders live when the OS theme flips.
+  var LIGHT = { INK:'#16150f', MUTED:'#6f6c60', GRID:'#e7e4d7', LINE:'#c9c6b8', ACCENT:'#3f3ab5', PAGE:'#fbfaf5', HOVER:'#ffffff' };
+  var DARK  = { INK:'#ecebe3', MUTED:'#a3a094', GRID:'#2f2e2a', LINE:'#3a3933', ACCENT:'#a8a3ff', PAGE:'#131311', HOVER:'#232320' };
+
+  // Light -> dark colour swaps, applied only in dark mode. Keys are the exact
+  // literals used in the per-chart specs below. Sport + era palettes are
+  // colourblind-safe and read on either background, so they are left untouched.
+  var SWAP = {
+    '#16150f': DARK.INK,   '#6f6c60': DARK.MUTED, '#e7e4d7': DARK.GRID,
+    '#c9c6b8': DARK.LINE,  '#3f3ab5': DARK.ACCENT,
+    'white':   DARK.PAGE,  // open/hollow marker fills (plot-07)
+    '#d8d5c8': '#3d3c36',  // faint background scatter (plot-26)
+    '#b0ada0': '#7c7a70',  // de-emphasised lines (plot-14)
+    '#8a8779': '#a3a094'   // de-emphasised end-labels (plot-14)
+  };
 
   function isObj(v) {
     return v && typeof v === 'object' && !Array.isArray(v);
@@ -20,33 +38,70 @@
     return out;
   }
 
-  function axisBase() {
+  // Deep-clone a spec, swapping light colours for dark ones when dark === true.
+  function themed(v, dark) {
+    if (!dark) return v;
+    if (Array.isArray(v)) return v.map(function (x) { return themed(x, dark); });
+    if (isObj(v)) { var o = {}, k; for (k in v) if (v.hasOwnProperty(k)) o[k] = themed(v[k], dark); return o; }
+    if (typeof v === 'string' && SWAP.hasOwnProperty(v)) return SWAP[v];
+    return v;
+  }
+
+  function axisBase(T) {
     return {
-      gridcolor: GRID, zeroline: false, linecolor: LINE,
-      ticks: 'outside', tickcolor: LINE, automargin: true,
-      titlefont: { size: 11.5, color: MUTED }, tickfont: { color: MUTED }
+      gridcolor: T.GRID, zeroline: false, linecolor: T.LINE,
+      ticks: 'outside', tickcolor: T.LINE, automargin: true,
+      titlefont: { size: 11.5, color: T.MUTED }, tickfont: { color: T.MUTED }
     };
   }
 
-  function baseLayout() {
+  function baseLayout(T) {
     return {
-      font: { family: FONT, size: 12.5, color: INK },
-      paper_bgcolor: 'white', plot_bgcolor: 'white',
+      font: { family: FONT, size: 12.5, color: T.INK },
+      paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
       height: 380, margin: { l: 52, r: 18, t: 14, b: 40 },
       hovermode: 'closest',
-      hoverlabel: { bgcolor: 'white', bordercolor: LINE, font: { family: FONT, color: INK } },
-      colorway: [ACCENT, SPORT.NFL, SPORT.MLB, SPORT.NHL, SPORT.NBA],
+      hoverlabel: { bgcolor: T.HOVER, bordercolor: T.LINE, font: { family: FONT, color: T.INK } },
+      colorway: [T.ACCENT, SPORT.NFL, SPORT.MLB, SPORT.NHL, SPORT.NBA],
       legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 11 } },
-      xaxis: axisBase(), yaxis: axisBase()
+      xaxis: axisBase(T), yaxis: axisBase(T)
     };
+  }
+
+  var CONFIG = { responsive: true, displayModeBar: false };
+  var REG = {};
+
+  function isDark() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+
+  function render(divId) {
+    var e = REG[divId];
+    if (!e || typeof Plotly === 'undefined') return;
+    var dark = isDark(), T = dark ? DARK : LIGHT;
+    var layout = deepMerge(baseLayout(T), themed(e.layout, dark));
+    var traces = themed(e.traces, dark);
+    if (e.init) return Plotly.react(divId, traces, layout, CONFIG);
+    e.init = true;
+    return Plotly.newPlot(divId, traces, layout, CONFIG);
   }
 
   function plot(divId, traces, layoutOverrides) {
-    var merged = deepMerge(baseLayout(), layoutOverrides || {});
-    return Plotly.newPlot(divId, traces, merged, { responsive: true, displayModeBar: false });
+    REG[divId] = { traces: traces, layout: layoutOverrides || {}, init: false };
+    return render(divId);
   }
 
-  window.LOL = { plot: plot, deepMerge: deepMerge, SPORT: SPORT, ACCENT: ACCENT, ERA: ERA, INK: INK, MUTED: MUTED, GRID: GRID };
+  // Live-swap the palette when the OS theme changes.
+  if (window.matchMedia) {
+    try {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var onChange = function () { Object.keys(REG).forEach(function (id) { render(id); }); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+      else if (mq.addListener) mq.addListener(onChange);
+    } catch (e) { /* no-op */ }
+  }
+
+  window.LOL = { plot: plot, deepMerge: deepMerge, SPORT: SPORT, ACCENT: LIGHT.ACCENT, ERA: ERA, INK: LIGHT.INK, MUTED: LIGHT.MUTED, GRID: LIGHT.GRID };
 })();
 /* plot-01 */
 LOL.plot('plot-01', [{ type:'scatter', mode:'lines+markers+text', x:['Q1','Q2','Q3','Q4'], y:[31.5,29,20,14], line:{color:LOL.ACCENT, width:2.5}, marker:{color:LOL.ACCENT, size:8}, text:[31.5,29,20,14].map(v=>v+'%'), textposition:'top center', textfont:{color:LOL.INK, size:11}, cliponaxis:false, hovertemplate:'%{x}: %{y}%<extra></extra>' }], { showlegend:false, margin:{l:52,r:24,t:20,b:40}, xaxis:{ gridcolor:LOL.GRID, zeroline:false, linecolor:'#c9c6b8', ticks:'outside', tickcolor:'#c9c6b8' }, yaxis:{ gridcolor:LOL.GRID, zeroline:false, linecolor:'#c9c6b8', ticks:'outside', tickcolor:'#c9c6b8', ticksuffix:'%', range:[0,36], title:{text:'% of players', font:{size:11.5,color:LOL.MUTED}} } });
@@ -57,13 +112,13 @@ var quarters=['Q1','Q2','Q3','Q4']; var series=[{name:'Soccer 1985-1999',color:L
 /* plot-06 */
 LOL.plot('plot-06', [{ type:'scatter', mode:'lines+markers', x:['Kindergarten','Grade 4','Grade 8','College entry'], y:[10,8,4.5,1.3], line:{color:LOL.ACCENT, width:2.5}, marker:{color:LOL.ACCENT, size:10}, hovertemplate:'%{x}: +%{y} pts<extra></extra>' }], { showlegend:false, margin:{l:52,r:24,t:14,b:40}, xaxis:{ gridcolor:LOL.GRID, zeroline:false, linecolor:'#c9c6b8', ticks:'outside', tickcolor:'#c9c6b8' }, yaxis:{ gridcolor:LOL.GRID, zeroline:false, linecolor:'#c9c6b8', ticks:'outside', tickcolor:'#c9c6b8', range:[0,12], title:{text:'Oldest kids\' advantage', font:{size:11.5,color:LOL.MUTED}} } });
 /* plot-07 */
-(function(){var age=[24,25,26,27,28,29,30,31,32,33,34,35];var y=[-9.3,-10.0,-9.6,-6.4,-4.4,-2.4,-1.3,-0.8,-0.3,0.6,0.4,0.6];var upper=[-6.3,-7.0,-6.7,-3.7,-2.2,-0.5,0.4,0.8,1.3,2.4,2.1,2.2];var lower=[-12.2,-13.0,-12.5,-9.0,-6.6,-4.3,-3.0,-2.4,-1.9,-1.2,-1.3,-1.0];var solid=[true,true,true,true,true,true,false,false,false,true,false,false];var traces=[{type:'scatter',mode:'lines',x:age,y:lower,line:{width:0},showlegend:false,hoverinfo:'skip'},{type:'scatter',mode:'lines',x:age,y:upper,fill:'tonexty',fillcolor:'rgba(0,114,178,0.15)',line:{width:0},showlegend:false,hoverinfo:'skip'},{type:'scatter',mode:'lines+markers',x:age,y:y,line:{color:LOL.SPORT.NFL,width:2.5},marker:{color:age.map(function(a,i){return solid[i]?LOL.SPORT.NFL:'white'}),size:8,line:{color:LOL.SPORT.NFL,width:2}},showlegend:false,hovertemplate:'Age %{x}: %{y:.1f}%<extra></extra>'}];LOL.plot('plot-07',traces,{margin:{l:56,r:70,t:14,b:40},shapes:[{type:'line',x0:24,x1:35,y0:0,y1:0,line:{color:LOL.MUTED,width:1,dash:'dash'}}],annotations:[{x:35,y:0,xanchor:'left',xshift:8,text:'no earnings difference',showarrow:false,font:{color:LOL.MUTED,size:10.5}}],xaxis:{gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',dtick:1,range:[23.5,35.5],title:{text:'Age when earnings are measured',font:{size:11.5,color:LOL.MUTED}}},yaxis:{gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',ticksuffix:'%',title:{text:'% earnings effect',font:{size:11.5,color:LOL.MUTED}}}});})();
+(function(){var age=[24,25,26,27,28,29,30,31,32,33,34,35];var y=[-9.3,-10.0,-9.6,-6.4,-4.4,-2.4,-1.3,-0.8,-0.3,0.6,0.4,0.6];var upper=[-6.3,-7.0,-6.7,-3.7,-2.2,-0.5,0.4,0.8,1.3,2.4,2.1,2.2];var lower=[-12.2,-13.0,-12.5,-9.0,-6.6,-4.3,-3.0,-2.4,-1.9,-1.2,-1.3,-1.0];var solid=[true,true,true,true,true,true,false,false,false,true,false,false];var traces=[{type:'scatter',mode:'lines',x:age,y:lower,line:{width:0},showlegend:false,hoverinfo:'skip'},{type:'scatter',mode:'lines',x:age,y:upper,fill:'tonexty',fillcolor:'rgba(0,114,178,0.15)',line:{width:0},showlegend:false,hoverinfo:'skip'},{type:'scatter',mode:'lines+markers',x:age,y:y,line:{color:LOL.SPORT.NFL,width:2.5},marker:{color:age.map(function(a,i){return solid[i]?LOL.SPORT.NFL:'white'}),size:8,line:{color:LOL.SPORT.NFL,width:2}},showlegend:false,hovertemplate:'Age %{x}: %{y:.1f}%<extra></extra>'}];LOL.plot('plot-07',traces,{margin:{l:56,r:132,t:14,b:40},shapes:[{type:'line',x0:24,x1:35,y0:0,y1:0,line:{color:LOL.MUTED,width:1,dash:'dash'}}],annotations:[{x:35,y:0,xanchor:'left',xshift:8,text:'no earnings difference',showarrow:false,font:{color:LOL.MUTED,size:10.5}}],xaxis:{gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',dtick:1,range:[23.5,35.5],title:{text:'Age when earnings are measured',font:{size:11.5,color:LOL.MUTED}}},yaxis:{gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',ticksuffix:'%',title:{text:'% earnings effect',font:{size:11.5,color:LOL.MUTED}}}});})();
 /* plot-09 */
 (function(){var rows=[['South',60],['Midwest',39],['West',34],['Northeast',23]];rows.reverse();LOL.plot('plot-09',[{type:'bar',orientation:'h',y:rows.map(function(r){return r[0]}),x:rows.map(function(r){return r[1]}),marker:{color:LOL.SPORT.NFL},text:rows.map(function(r){return r[1]}),textposition:'outside',textfont:{color:LOL.INK,size:12.5},cliponaxis:false,hovertemplate:'%{y}: %{x}<extra></extra>'}],{margin:{l:96,r:60,t:30,b:44},xaxis:{gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',automargin:true,title:{text:'NFL players per million residents',font:{size:11.5,color:LOL.MUTED}}},yaxis:{automargin:true,ticks:'',showgrid:false,linecolor:'#c9c6b8'},shapes:[{type:'line',x0:43,x1:43,xref:'x',y0:0,y1:1,yref:'paper',line:{color:LOL.MUTED,width:1,dash:'dash'}}],annotations:[{x:43,yref:'paper',y:1,yanchor:'bottom',yshift:4,text:'US average 43',showarrow:false,font:{color:LOL.MUTED,size:11}}]});})();
 /* plot-10 */
 (function(){var rows=[['Louisiana',134.8],['Mississippi',114.5],['Alabama',88.8],['Georgia',86.4],['Florida',66.9],['South Carolina',62.4],['Hawaii',60.2],['Ohio',56.5],['Texas',51.7],['Iowa',48.7],['Nebraska',47.4],['Maryland',46.9],['New York',17.0],['Massachusetts',13.6],['New Mexico',12.7],['Alaska',10.8],['Rhode Island',5.4],['New Hampshire',4.3],['Maine',3.6],['Vermont',3.1]];rows.reverse();LOL.plot('plot-10',[{type:'bar',orientation:'h',y:rows.map(function(r){return r[0]}),x:rows.map(function(r){return r[1]}),marker:{color:LOL.SPORT.NFL},text:rows.map(function(r){return r[1]}),textposition:'outside',textfont:{color:LOL.INK,size:11.5},cliponaxis:false,hovertemplate:'%{y}: %{x}<extra></extra>'}],{height:560,margin:{l:110,r:60,t:30,b:44},xaxis:{gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',automargin:true,title:{text:'NFL players per million residents',font:{size:11.5,color:LOL.MUTED}}},yaxis:{automargin:true,ticks:'',showgrid:false,linecolor:'#c9c6b8',tickfont:{size:10.5}},shapes:[{type:'line',x0:43.1,x1:43.1,xref:'x',y0:0,y1:1,yref:'paper',line:{color:LOL.MUTED,width:1,dash:'dash'}}],annotations:[{x:43.1,yref:'paper',y:1,yanchor:'bottom',yshift:4,text:'US average 43.1',showarrow:false,font:{color:LOL.MUTED,size:11}}]});})();
 /* plot-11 */
-(function(){var panels=[{sport:'MLB',color:LOL.SPORT.MLB,rows:[['Pennsylvania',112],['Missouri',101],['Massachusetts',95],['Ohio',90],['Illinois',87],['Kansas',76],['Mississippi',75],['Rhode Island',72]]},{sport:'NBA',color:LOL.SPORT.NBA,rows:[['Mississippi',34],['Louisiana',29],['Kentucky',28],['Indiana',27],['Illinois',25],['New York',23],['Arkansas',20],['Alabama',20]]},{sport:'NHL',color:LOL.SPORT.NHL,rows:[['Minnesota',55],['Massachusetts',33],['North Dakota',26],['Michigan',22],['Rhode Island',21],['Alaska',20],['New Hampshire',13],['Connecticut',10]]}];var traces=[],anns=[],lay={grid:{rows:1,columns:3,pattern:'independent',xgap:0.12},showlegend:false,height:440,margin:{l:52,r:18,t:36,b:40}};panels.forEach(function(p,i){var n=i===0?'':(i+1);var ax='x'+n,ay='y'+n;var rows=p.rows.slice().reverse();traces.push({type:'bar',orientation:'h',xaxis:ax,yaxis:ay,y:rows.map(function(r){return r[0]}),x:rows.map(function(r){return r[1]}),marker:{color:p.color},text:rows.map(function(r){return r[1]}),textposition:'outside',textfont:{color:LOL.INK,size:10.5},cliponaxis:false,hovertemplate:'%{y}: %{x}<extra></extra>'});lay['xaxis'+n]={gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',automargin:true};lay['yaxis'+n]={automargin:true,ticks:'',showgrid:false,linecolor:'#c9c6b8',tickfont:{size:10.5}};anns.push({text:p.sport,xref:ax+' domain',yref:ay+' domain',x:0.5,y:1.08,xanchor:'center',showarrow:false,font:{size:13,color:LOL.INK}});});lay.annotations=anns;LOL.plot('plot-11',traces,lay);})();
+(function(){var panels=[{sport:'MLB',color:LOL.SPORT.MLB,rows:[['Pennsylvania',112],['Missouri',101],['Massachusetts',95],['Ohio',90],['Illinois',87],['Kansas',76],['Mississippi',75],['Rhode Island',72]]},{sport:'NBA',color:LOL.SPORT.NBA,rows:[['Mississippi',34],['Louisiana',29],['Kentucky',28],['Indiana',27],['Illinois',25],['New York',23],['Arkansas',20],['Alabama',20]]},{sport:'NHL',color:LOL.SPORT.NHL,rows:[['Minnesota',55],['Massachusetts',33],['North Dakota',26],['Michigan',22],['Rhode Island',21],['Alaska',20],['New Hampshire',13],['Connecticut',10]]}];var traces=[],anns=[],lay={grid:{rows:1,columns:3,pattern:'independent',xgap:0.32},showlegend:false,height:450,margin:{l:52,r:14,t:36,b:40}};panels.forEach(function(p,i){var n=i===0?'':(i+1);var ax='x'+n,ay='y'+n;var rows=p.rows.slice().reverse();traces.push({type:'bar',orientation:'h',xaxis:ax,yaxis:ay,y:rows.map(function(r){return r[0]}),x:rows.map(function(r){return r[1]}),marker:{color:p.color},text:rows.map(function(r){return r[1]}),textposition:'inside',insidetextanchor:'end',constraintext:'none',textfont:{color:'#ffffff',size:10.5},cliponaxis:false,hovertemplate:'%{y}: %{x}<extra></extra>'});lay['xaxis'+n]={gridcolor:LOL.GRID,zeroline:false,linecolor:'#c9c6b8',ticks:'outside',tickcolor:'#c9c6b8',automargin:true,rangemode:'tozero'};lay['yaxis'+n]={automargin:true,ticks:'',showgrid:false,linecolor:'#c9c6b8',tickfont:{size:10}};anns.push({text:p.sport,xref:ax+' domain',yref:ay+' domain',x:0.5,y:1.08,xanchor:'center',showarrow:false,font:{size:13,color:LOL.INK}});});lay.annotations=anns;LOL.plot('plot-11',traces,lay);})();
 /* plot-12 */
 LOL.plot('plot-12', [
   {type:'scatter', mode:'lines+markers+text', x:['1990s','2000s','2010s','2020s'], y:[52,51,55,57], xaxis:'x', yaxis:'y', line:{color:LOL.SPORT.NFL, width:2.5}, marker:{color:LOL.SPORT.NFL, size:7}, text:['52%','51%','55%','57%'], textposition:'top center', textfont:{color:LOL.INK, size:11}, hovertemplate:'%{x}: %{y}%<extra></extra>'},
